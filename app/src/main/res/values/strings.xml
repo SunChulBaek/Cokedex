@@ -1,0 +1,4 @@
+<resources>
+    <!-- 앱네임은 properties로 뺄 수가 없네 (ISO-8859-1)-->
+    <string name="app_name">Cokedex</string>
+</resources>
