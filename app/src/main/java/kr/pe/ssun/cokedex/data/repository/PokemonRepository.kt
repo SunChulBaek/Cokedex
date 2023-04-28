@@ -6,6 +6,8 @@ import kr.pe.ssun.cokedex.network.model.NetworkPokemon
 import kr.pe.ssun.cokedex.network.model.asExternalModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kr.pe.ssun.cokedex.data.model.PokemonDetail
+import kr.pe.ssun.cokedex.network.model.NetworkPokemonDetail
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -22,5 +24,11 @@ class PokemonRepository @Inject constructor(
             limit = limit,
             offset = offset
         ).results.map(NetworkPokemon::asExternalModel))
+    }
+
+    fun getPokemonDetail(
+        id: Int,
+    ): Flow<PokemonDetail> = flow {
+        emit(network.getPokemonDetail(id).asExternalModel())
     }
 }

@@ -10,7 +10,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import kr.pe.ssun.cokedex.ui.detail.PokemonDetailScreen
+import kr.pe.ssun.cokedex.ui.detail.PokemonDetailRoute
 import com.google.accompanist.navigation.animation.composable
 import kr.pe.ssun.cokedex.data.model.Pokemon
 
@@ -50,6 +50,6 @@ fun NavGraphBuilder.pokemonDetailScreen(
         popEnterTransition = { popEnterTransition },
         popExitTransition = { popExitTransition },
     ) {
-        PokemonDetailScreen()
+        PokemonDetailRoute()
     }
 }
