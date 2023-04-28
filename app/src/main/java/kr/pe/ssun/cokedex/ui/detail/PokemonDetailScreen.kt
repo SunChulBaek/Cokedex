@@ -7,18 +7,43 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.SubcomposeAsyncImage
+import kr.pe.ssun.cokedex.ui.common.DefaultScreen
 
 @Composable
-fun PhotoDetailScreen(title: String?, url: String?) {
-    ConstraintLayout(modifier = Modifier
-        .fillMaxSize()
-        .background(MaterialTheme.colorScheme.background)) {
-        val (imageRef, titleRef) = createRefs()
+fun PokemonDetailScreen(
+    viewModel: PokemonDetailViewModel = hiltViewModel()
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    DefaultScreen(
+        isLoading = uiState is PokemonUiState.Loading,
+        isError = uiState is PokemonUiState.Error,
+    ) {
+        PokemonDetailScreen(
+            uiState = uiState,
+        )
+    }
+}
+
+@Composable
+fun PokemonDetailScreen(
+    uiState: PokemonUiState,
+) {
+    val pokemon = (uiState as PokemonUiState.Success)
+
+    ConstraintLayout(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+    ) {
+        val (imageRef, nameRef) = createRefs()
         SubcomposeAsyncImage(
             modifier = Modifier.constrainAs(imageRef) {
                 top.linkTo(parent.top)
@@ -27,7 +52,7 @@ fun PhotoDetailScreen(title: String?, url: String?) {
                 width = Dimension.fillToConstraints
                 height = Dimension.ratio("1:1")
             },
-            model = url,
+            model = pokemon.imageUrl,
             loading = {
                 CircularProgressIndicator(
                     modifier = Modifier.padding(25.dp),
@@ -37,12 +62,12 @@ fun PhotoDetailScreen(title: String?, url: String?) {
             contentDescription = "thumbnail"
         )
         Text(
-            modifier = Modifier.constrainAs(titleRef) {
+            modifier = Modifier.constrainAs(nameRef) {
                 top.linkTo(imageRef.bottom)
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
             },
-            text = title ?: "",
+            text = pokemon.name,
             color = MaterialTheme.colorScheme.onBackground
         )
     }

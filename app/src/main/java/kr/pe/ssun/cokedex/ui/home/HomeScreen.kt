@@ -10,9 +10,14 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import kr.pe.ssun.cokedex.R
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import kr.pe.ssun.cokedex.domain.GetPokemonListParam
+import kr.pe.ssun.cokedex.navigation.pokemonDetailNavigationRoute
+import kr.pe.ssun.cokedex.ui.common.DefaultScreen
 
 // 백 키 관련
 const val BACK_PRESS_DELAY_TIME: Long = 2000
@@ -23,12 +28,13 @@ var toast: Toast? = null
 @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
+    viewModel: HomeViewModel = hiltViewModel(),
     navigate: (String, Any?) -> Unit,
     showToast: (String) -> Toast,
     onBack: () -> Unit
 ) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val navController = rememberAnimatedNavController()
-    val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
     // 백키 2회에 종료 처리
@@ -39,8 +45,20 @@ fun HomeScreen(
         topBar = { MyTopAppBar() },
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { innerPadding ->
-        Box(modifier = Modifier.padding(innerPadding)) {
-            HomeContent()
+        DefaultScreen(
+            modifier = Modifier.padding(innerPadding),
+            isLoading = uiState is HomeUiState.Loading,
+            isError = uiState is HomeUiState.Error
+        ) {
+            HomeContent(
+                uiState = uiState,
+                onClick = { pokemon ->
+                    navigate(pokemonDetailNavigationRoute, pokemon)
+                },
+                onLoadMore = { offset ->
+                    viewModel.param.value = GetPokemonListParam(offset = offset)
+                }
+            )
         }
     }
 }

@@ -7,6 +7,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.navigation.NavGraphBuilder
 import kr.pe.ssun.cokedex.ui.home.HomeScreen
 import com.google.accompanist.navigation.animation.composable
+import timber.log.Timber
 
 const val homeNavigationRoute = "home"
 
@@ -27,6 +28,6 @@ fun NavGraphBuilder.homeScreen(
         popEnterTransition = { popEnterTransition },
         popExitTransition = { popExitTransition }
     ) {
-        HomeScreen(navigate, showToast, onBack)
+        HomeScreen(navigate = navigate, showToast = showToast, onBack = onBack)
     }
 }

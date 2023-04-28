@@ -2,7 +2,7 @@ package kr.pe.ssun.cokedex.di
 
 import kr.pe.ssun.cokedex.BuildConfig
 import kr.pe.ssun.cokedex.network.retrofit.RetrofitSsunNetwork
-import kr.pe.ssun.cokedex.data.repository.FakeRepository
+import kr.pe.ssun.cokedex.data.repository.PokemonRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -39,7 +39,7 @@ object ApiModule {
     @Provides
     fun providesFakeRepository(
         apiService: RetrofitSsunNetwork
-    ): FakeRepository {
-        return FakeRepository(apiService)
+    ): PokemonRepository {
+        return PokemonRepository(apiService)
     }
 }

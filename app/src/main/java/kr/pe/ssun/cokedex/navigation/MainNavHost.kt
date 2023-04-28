@@ -18,6 +18,7 @@ import kr.pe.ssun.cokedex.ui.common.MyWebView
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import kr.pe.ssun.cokedex.data.model.Pokemon
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -36,7 +37,13 @@ fun MainNavHost(
         // 홈
         homeScreen(
             enterTransition = defaultEnterTransition(),
-            exitTransition = defaultExitTransition(),
+            exitTransition = slideOutHorizontally(
+                targetOffsetX = { fullWidth -> -fullWidth },
+                animationSpec = tween(
+                    durationMillis = 300,
+                    easing = FastOutSlowInEasing
+                )
+            ),
             popEnterTransition = defaultPopEnterTransition(),
             popExitTransition = defaultPopExitTransition(),
             navigate = { route, params -> navigate(navController, route, params) },
@@ -44,7 +51,7 @@ fun MainNavHost(
             onBack = onBack
         )
         // 포토
-        photoDetailScreen(
+        pokemonDetailScreen(
             enterTransition = defaultEnterTransition(),
             exitTransition = defaultExitTransition(),
             popEnterTransition = defaultPopEnterTransition(),
@@ -80,7 +87,7 @@ fun defaultEnterTransition(): EnterTransition = slideInHorizontally(
 )
 
 fun defaultExitTransition(): ExitTransition = slideOutHorizontally(
-    targetOffsetX = { fullHeight -> fullHeight },
+    targetOffsetX = { fullWidth -> -fullWidth },
     animationSpec = tween(
         durationMillis = 300,
         easing = FastOutSlowInEasing
@@ -109,9 +116,7 @@ fun navigate(
     params: Any? = null,
 ) {
     when (dest) {
-        photoDetailNavigationRoute -> (params as? Pair<*, *>)?.let { (title, url) ->
-            navController.navigateToPhotoDetail(title as String, url as String)
-        }
+        pokemonDetailNavigationRoute -> navController.navigateToPokemonDetail(params as Pokemon)
         else -> TODO()
     }
 }

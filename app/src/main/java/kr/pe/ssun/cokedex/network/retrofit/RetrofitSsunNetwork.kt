@@ -1,26 +1,31 @@
 package kr.pe.ssun.cokedex.network.retrofit
 
-import kr.pe.ssun.cokedex.network.SsunNetworkDataSource
-import kr.pe.ssun.cokedex.network.model.NetworkPhoto
+import kr.pe.ssun.cokedex.network.PokemonNetworkDataSource
+import kr.pe.ssun.cokedex.network.model.NetworkPokemon
+import kr.pe.ssun.cokedex.network.model.NetworkPokemonList
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Query
 import javax.inject.Inject
 import javax.inject.Singleton
 
 interface RetrofitSsunNetworkApi {
 
-    @GET("photos")
-    suspend fun getPhotos(): List<NetworkPhoto>
+    @GET("pokemon")
+    suspend fun getPokemonList(
+        @Query("limit") limit: Int? = 20,
+        @Query("offset") offset: Int? = 0,
+    ): NetworkPokemonList
 }
 
 @Singleton
-class RetrofitSsunNetwork @Inject constructor() : SsunNetworkDataSource {
+class RetrofitSsunNetwork @Inject constructor() : PokemonNetworkDataSource {
 
     private val networkApi = Retrofit.Builder()
-        .baseUrl("https://jsonplaceholder.typicode.com/")
+        .baseUrl("https://pokeapi.co/api/v2/")
         .client(
             OkHttpClient.Builder()
                 .addInterceptor(
@@ -35,5 +40,8 @@ class RetrofitSsunNetwork @Inject constructor() : SsunNetworkDataSource {
         .build()
         .create(RetrofitSsunNetworkApi::class.java)
 
-    override suspend fun getPhotos(): List<NetworkPhoto> = networkApi.getPhotos()
+    override suspend fun getPokemonList(
+        limit: Int?,
+        offset: Int?,
+    ): NetworkPokemonList = networkApi.getPokemonList(limit, offset)
 }
