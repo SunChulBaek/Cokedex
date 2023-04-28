@@ -17,20 +17,17 @@ data class NetworkPokemonDetail(
     @SerializedName("stats") val stats: List<NetworkPokemonStat>,
 )
 
+// https://pokeapi.co/docs/v2#pokemontype
 data class NetworkPokemonType(
     @SerializedName("slot") val id: Int,
-    @SerializedName("type") val type: NetworkPokemonObject,
+    @SerializedName("type") val type: NetworkNamedAPIResource,
 )
 
+// https://pokeapi.co/docs/v2#pokemonstat
 data class NetworkPokemonStat(
     @SerializedName("base_stat") val baseStat: Int,
     @SerializedName("effort") val effort: Int,
-    @SerializedName("stat") val stat: NetworkPokemonObject,
-)
-
-data class NetworkPokemonObject(
-    @SerializedName("name") val name: String,
-    @SerializedName("url") val url: String,
+    @SerializedName("stat") val stat: NetworkNamedAPIResource,
 )
 
 fun NetworkPokemonDetail.asExternalModel() =
