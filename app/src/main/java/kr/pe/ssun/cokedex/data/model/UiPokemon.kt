@@ -1,6 +1,6 @@
 package kr.pe.ssun.cokedex.data.model
 
-data class Pokemon(
+data class UiPokemon(
     val id: Int,
     val name: String,
     val imageUrl: String,

@@ -3,7 +3,7 @@ package kr.pe.ssun.cokedex.network.model
 import com.google.gson.annotations.SerializedName
 import kr.pe.ssun.cokedex.data.model.PokemonDetail
 import kr.pe.ssun.cokedex.data.model.PokemonStat
-import kr.pe.ssun.cokedex.data.model.PokemonType
+import kr.pe.ssun.cokedex.data.model.UiType
 
 data class NetworkPokemonDetail(
     @SerializedName("id") val id: Int,
@@ -36,8 +36,10 @@ fun NetworkPokemonDetail.asExternalModel() =
         name = this.name,
         imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/$id.png",
         types = this.types.map { type ->
-            PokemonType(type.type.name)
+            UiType.fromValue(type.type.name)
         },
+        weight = this.weight,
+        height = this.height,
         stats = this.stats.map { stat ->
             PokemonStat(stat.stat.name, stat.baseStat)
         }

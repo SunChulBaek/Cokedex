@@ -1,6 +1,6 @@
 package kr.pe.ssun.cokedex.network.model
 
-import kr.pe.ssun.cokedex.data.model.Pokemon
+import kr.pe.ssun.cokedex.data.model.UiPokemon
 import com.google.gson.annotations.SerializedName
 
 data class NetworkPokemonList(
@@ -16,7 +16,7 @@ data class NetworkPokemon(
 )
 
 fun NetworkPokemon.asExternalModel() = this.url.split("/")[6].toInt().let { id ->
-    Pokemon(
+    UiPokemon(
         id = id,
         name = this.name,
         imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/$id.png",

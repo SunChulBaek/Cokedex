@@ -18,7 +18,7 @@ import kr.pe.ssun.cokedex.ui.common.MyWebView
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import kr.pe.ssun.cokedex.data.model.Pokemon
+import kr.pe.ssun.cokedex.data.model.UiPokemon
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -116,7 +116,7 @@ fun navigate(
     params: Any? = null,
 ) {
     when (dest) {
-        pokemonDetailNavigationRoute -> navController.navigateToPokemonDetail(params as Pokemon)
+        pokemonDetailNavigationRoute -> navController.navigateToPokemonDetail(params as UiPokemon)
         else -> TODO()
     }
 }

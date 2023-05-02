@@ -4,12 +4,10 @@ data class PokemonDetail(
     val id: Int,
     val name: String,
     val imageUrl: String,
-    val types: List<PokemonType>,
+    val types: List<UiType>,
+    val weight: Int,
+    val height: Int,
     val stats: List<PokemonStat>,
-)
-
-data class PokemonType(
-    val name: String
 )
 
 data class PokemonStat(

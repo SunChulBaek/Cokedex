@@ -5,7 +5,6 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import com.google.accompanist.web.*
 import timber.log.Timber
 
@@ -56,6 +55,6 @@ fun MyWebView(modifier: Modifier = Modifier, url: String) {
         LoadingState.Finished -> if (webViewProgress == WEBVIEW_PROGRESS_ERROR) {
             ErrorScreen()
         }
-        else -> LoadingScreen(background = Color.Transparent, progress = webViewProgress / 100f)
+        else -> LoadingScreen(progress = webViewProgress / 100f)
     }
 }

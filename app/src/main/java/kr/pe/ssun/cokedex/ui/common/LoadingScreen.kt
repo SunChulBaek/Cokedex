@@ -11,12 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 
 @Composable
-fun LoadingScreen(background: Color = MaterialTheme.colorScheme.background, progress: Float? = null) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(background)
-    ) {
+fun LoadingScreen(backgroundColor: Color = MaterialTheme.colorScheme.background, progress: Float? = null) {
+    Box(modifier = Modifier.background(backgroundColor).fillMaxSize()) {
         if (progress != null) {
             CircularProgressIndicator(
                 progress = progress,

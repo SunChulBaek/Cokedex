@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kr.pe.ssun.cokedex.data.model.Pokemon
+import kr.pe.ssun.cokedex.data.model.UiPokemon
 import kr.pe.ssun.cokedex.domain.GetPokemonListParam
 import kr.pe.ssun.cokedex.domain.GetPokemonListUseCase
 import javax.inject.Inject
@@ -20,7 +20,7 @@ class HomeViewModel @Inject constructor(
 
     val param = MutableStateFlow<GetPokemonListParam?>(null)
 
-    private val list = mutableListOf<Pokemon>()
+    private val list = mutableListOf<UiPokemon>()
 
     val uiState = param.flatMapConcat { param ->
         getPokemonListUseCase(param)
