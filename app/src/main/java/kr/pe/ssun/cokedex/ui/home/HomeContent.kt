@@ -35,7 +35,12 @@ fun HomeContent(
             itemContent = { index ->
                 PokemonGridItem(
                     item = pokemonList[index],
-                    onClick = { onClick(pokemonList[index]) }
+                    onClick = { colorStart, colorEnd ->
+                        onClick(pokemonList[index].copy(
+                            colorStart = colorStart,
+                            colorEnd = colorEnd
+                        ))
+                    }
                 )
             }
         )

@@ -1,8 +1,8 @@
 package kr.pe.ssun.cokedex.network.model
 
 import com.google.gson.annotations.SerializedName
-import kr.pe.ssun.cokedex.data.model.PokemonDetail
-import kr.pe.ssun.cokedex.data.model.PokemonStat
+import kr.pe.ssun.cokedex.data.model.UiPokemonDetail
+import kr.pe.ssun.cokedex.data.model.UiPokemonStat
 import kr.pe.ssun.cokedex.data.model.UiType
 
 data class NetworkPokemonDetail(
@@ -31,7 +31,7 @@ data class NetworkPokemonStat(
 )
 
 fun NetworkPokemonDetail.asExternalModel() =
-    PokemonDetail(
+    UiPokemonDetail(
         id = this.id,
         name = this.name,
         imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/$id.png",
@@ -41,6 +41,6 @@ fun NetworkPokemonDetail.asExternalModel() =
         weight = this.weight,
         height = this.height,
         stats = this.stats.map { stat ->
-            PokemonStat(stat.stat.name, stat.baseStat)
+            UiPokemonStat(stat.stat.name, stat.baseStat)
         }
     )

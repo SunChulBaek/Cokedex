@@ -26,7 +26,6 @@ fun MainNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberAnimatedNavController(),
     showToast: (String) -> Toast,
-    onBack: () -> Unit,
     startDestination: String = homeNavigationRoute,
 ) {
     AnimatedNavHost(
@@ -48,7 +47,7 @@ fun MainNavHost(
             popExitTransition = defaultPopExitTransition(),
             navigate = { route, params -> navigate(navController, route, params) },
             showToast = showToast,
-            onBack = onBack
+            onBack = { navController.popBackStack() }
         )
         // 포토
         pokemonDetailScreen(
@@ -58,7 +57,7 @@ fun MainNavHost(
             popExitTransition = defaultPopExitTransition(),
             navigate = { route, params -> navigate(navController, route, params) },
             showToast = showToast,
-            onBack = onBack
+            onBack = { navController.popBackStack() }
         )
         // 웹뷰
         composable(

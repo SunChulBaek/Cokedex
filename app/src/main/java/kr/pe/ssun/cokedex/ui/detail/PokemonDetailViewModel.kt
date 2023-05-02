@@ -4,7 +4,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -23,7 +22,7 @@ class PokemonDetailViewModel @Inject constructor(
     var uiState = getPokemonDetailUseCase(args.id)
         .map { result ->
             result.getOrNull()?.let { pokemon ->
-                PokemonUiState.Success(pokemon)
+                PokemonUiState.Success(pokemon, args.colorStart, args.colorEnd)
             } ?: PokemonUiState.Error
         }
         .stateIn(

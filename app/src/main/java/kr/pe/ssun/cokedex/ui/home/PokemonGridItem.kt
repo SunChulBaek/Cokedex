@@ -23,10 +23,10 @@ import kr.pe.ssun.cokedex.data.model.UiPokemon
 fun PokemonGridItem(
     modifier: Modifier = Modifier,
     item: UiPokemon,
-    onClick: () -> Unit
+    onClick: (Long, Long) -> Unit
 ) = Card(
     modifier = modifier,
-    onClick = onClick
+    onClick = { onClick(0xFFcddc39, 0xFF03a9f4) } // TODO : 팔레트를 쓰고싶은디..
 ) {
     ConstraintLayout(modifier = Modifier
         .padding(8.dp)
