@@ -39,9 +39,13 @@ fun PokemonDetailContent(
     uiState: PokemonUiState,
     onBack: () -> Unit
 ) {
-    val pokemon = (uiState as? PokemonUiState.Success)?.pokemon
-    val colorStart = Color((uiState as? PokemonUiState.Success)?.colorStart ?: (uiState as? PokemonUiState.Loading)?.colorStart ?: 0x00000000)
-    val colorEnd = Color((uiState as? PokemonUiState.Success)?.colorEnd ?: (uiState as? PokemonUiState.Loading)?.colorEnd ?: 0x00000000)
+    val success = uiState as? PokemonUiState.Success
+    val loading = uiState as? PokemonUiState.Loading
+
+    val pokemon = success?.pokemon
+    val id = pokemon?.id ?: loading?.id ?: 0
+    val colorStart = Color(success?.colorStart ?: loading?.colorStart ?: 0x00000000)
+    val colorEnd = Color(success?.colorEnd ?: loading?.colorEnd ?: 0x00000000)
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -59,7 +63,7 @@ fun PokemonDetailContent(
                 Row(modifier = Modifier.fillMaxWidth()) {
                     Text("Cokedex")
                     Spacer(modifier = Modifier.weight(1f))
-                    Text(String.format("#%03d", pokemon?.id ?: 0))
+                    Text(String.format("#%03d", id))
                 }
             }
         )
