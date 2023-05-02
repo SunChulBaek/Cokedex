@@ -12,11 +12,13 @@ fun DefaultScreen(
     isLoading: Boolean = false,
     isError: Boolean = false,
     backgroundColor: Color = MaterialTheme.colorScheme.background,
+    loading: @Composable () -> Unit = { LoadingScreen(backgroundColor) },
+    error: @Composable () -> Unit = { ErrorScreen(backgroundColor) },
     content: @Composable () -> Unit,
 ) = Box(modifier = modifier) {
     when {
-        isLoading -> LoadingScreen(backgroundColor)
-        isError -> ErrorScreen(backgroundColor)
+        isLoading -> { loading() }
+        isError -> { error() }
         else -> content()
     }
 }

@@ -8,6 +8,9 @@ sealed interface PokemonUiState {
         val colorStart: Long,
         val colorEnd: Long,
     ) : PokemonUiState
-    object Loading : PokemonUiState
+    data class Loading(
+        val colorStart: Long,
+        val colorEnd: Long,
+    ) : PokemonUiState
     object Error : PokemonUiState
 }

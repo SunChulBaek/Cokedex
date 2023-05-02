@@ -28,6 +28,9 @@ class PokemonDetailViewModel @Inject constructor(
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = PokemonUiState.Loading
+            initialValue = PokemonUiState.Loading(
+                colorStart = args.colorStart,
+                colorEnd = args.colorEnd,
+            )
         )
 }
