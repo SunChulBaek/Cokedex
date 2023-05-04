@@ -30,7 +30,7 @@ data class NetworkPokemonStat(
     @SerializedName("stat") val stat: NetworkNamedAPIResource,
 )
 
-fun NetworkPokemonDetail.asExternalModel() =
+fun NetworkPokemonDetail.asExternalPokemonModel() =
     UiPokemonDetail(
         id = this.id,
         name = this.name,

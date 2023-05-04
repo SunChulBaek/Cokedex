@@ -2,11 +2,11 @@ package kr.pe.ssun.cokedex.data.repository
 
 import kr.pe.ssun.cokedex.data.model.UiPokemon
 import kr.pe.ssun.cokedex.network.PokemonNetworkDataSource
-import kr.pe.ssun.cokedex.network.model.NetworkPokemon
-import kr.pe.ssun.cokedex.network.model.asExternalModel
+import kr.pe.ssun.cokedex.network.model.asExternalPokemonModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kr.pe.ssun.cokedex.data.model.UiPokemonDetail
+import kr.pe.ssun.cokedex.network.model.NetworkNamedAPIResource
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -22,12 +22,12 @@ class PokemonRepository @Inject constructor(
         emit(network.getPokemonList(
             limit = limit,
             offset = offset
-        ).results.map(NetworkPokemon::asExternalModel))
+        ).results.map(NetworkNamedAPIResource::asExternalPokemonModel))
     }
 
     fun getPokemonDetail(
         id: Int,
     ): Flow<UiPokemonDetail> = flow {
-        emit(network.getPokemonDetail(id).asExternalModel())
+        emit(network.getPokemonDetail(id).asExternalPokemonModel())
     }
 }

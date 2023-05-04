@@ -1,9 +1,8 @@
 package kr.pe.ssun.cokedex.network.retrofit
 
 import kr.pe.ssun.cokedex.network.PokemonNetworkDataSource
-import kr.pe.ssun.cokedex.network.model.NetworkPokemon
+import kr.pe.ssun.cokedex.network.model.NetworkAPIResourceList
 import kr.pe.ssun.cokedex.network.model.NetworkPokemonDetail
-import kr.pe.ssun.cokedex.network.model.NetworkPokemonList
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -20,7 +19,7 @@ interface RetrofitSsunNetworkApi {
     suspend fun getPokemonList(
         @Query("limit") limit: Int? = 20,
         @Query("offset") offset: Int? = 0,
-    ): NetworkPokemonList
+    ): NetworkAPIResourceList
 
     @GET("pokemon/{id}")
     suspend fun getPokemonDetail(
@@ -50,7 +49,7 @@ class RetrofitSsunNetwork @Inject constructor() : PokemonNetworkDataSource {
     override suspend fun getPokemonList(
         limit: Int?,
         offset: Int?,
-    ): NetworkPokemonList = networkApi.getPokemonList(limit, offset)
+    ): NetworkAPIResourceList = networkApi.getPokemonList(limit, offset)
 
     override suspend fun getPokemonDetail(
         id: Int
