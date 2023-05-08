@@ -26,9 +26,9 @@ data class NetworkAbility(
         it.language.name == "en"
     }?.name
 
-    private fun getFlavorText(): String? = flavorTextEntries.firstOrNull {
+    private fun getFlavorText(): String? = (flavorTextEntries.firstOrNull {
         it.language.name == "ko"
     }?.flavorText ?: flavorTextEntries.firstOrNull {
         it.language.name == "en"
-    }?.flavorText
+    }?.flavorText)?.replace("\n", " ")
 }

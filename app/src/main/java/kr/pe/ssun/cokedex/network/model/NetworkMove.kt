@@ -21,10 +21,10 @@ data class NetworkMove(
     }?.name
 
 
-    private fun getFlavor(): String? = flavorTextEntries.firstOrNull {
+    private fun getFlavor(): String? = (flavorTextEntries.firstOrNull {
         it.language.name == "ko"
     }?.flavorText ?: flavorTextEntries.firstOrNull {
         it.language.name == "en"
-    }?.flavorText
+    }?.flavorText)?.replace("\n", " ")
 }
 
