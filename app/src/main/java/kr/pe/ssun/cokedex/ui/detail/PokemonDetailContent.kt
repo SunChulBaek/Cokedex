@@ -1,7 +1,6 @@
 package kr.pe.ssun.cokedex.ui.detail
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,7 +10,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.CircularProgressIndicator
@@ -42,14 +43,22 @@ fun PokemonDetailContent(
     val success = uiState as? PokemonUiState.Success
     val loading = uiState as? PokemonUiState.Loading
 
+    val scrollState = rememberScrollState()
+
     val pokemon = success?.pokemon
     val id = pokemon?.id ?: loading?.id ?: 0
+    val name = pokemon?.name ?: loading?.name ?: ""
+    val imageUrl = pokemon?.imageUrl ?: loading?.imageUrl
     val colorStart = Color(success?.colorStart ?: loading?.colorStart ?: 0x00000000)
     val colorEnd = Color(success?.colorEnd ?: loading?.colorEnd ?: 0x00000000)
+    val totalAbilitiesCount = pokemon?.totalAbilitiesCount ?: 0
+    val totalMovesCount = pokemon?.totalMovesCount ?: 0
+
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF212121)),
+            .background(Color(0xFF212121))
+            .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         TopAppBar(
@@ -77,43 +86,26 @@ fun PokemonDetailContent(
                 )
         ) {
             val imageRef = createRef()
-            if (pokemon != null) {
-                SubcomposeAsyncImage(
-                    modifier = Modifier.constrainAs(imageRef) {
-                        top.linkTo(parent.top)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                        width = Dimension.fillToConstraints
-                        height = Dimension.ratio("1:1")
-                    },
-                    model = pokemon.imageUrl,
-                    loading = {
-                        CircularProgressIndicator(
-                            modifier = Modifier.padding(25.dp),
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                    },
-                    contentDescription = "thumbnail"
-                )
-            } else { // 로딩
-                Box(
-                    modifier = Modifier.constrainAs(imageRef) {
-                        top.linkTo(parent.top)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                        width = Dimension.fillToConstraints
-                        height = Dimension.ratio("1:1")
-                    }
-                ) {
+            SubcomposeAsyncImage(
+                modifier = Modifier.constrainAs(imageRef) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    width = Dimension.fillToConstraints
+                    height = Dimension.ratio("1:1")
+                },
+                model = imageUrl,
+                loading = {
                     CircularProgressIndicator(
-                        modifier = Modifier.align(Alignment.Center).padding(25.dp),
+                        modifier = Modifier.padding(25.dp),
                         color = MaterialTheme.colorScheme.primary
                     )
-                }
-            }
+                },
+                contentDescription = "thumbnail"
+            )
         }
         // 이름
-        Text(text = pokemon?.name ?: "", color = Color.White)
+        Text(text = name, color = Color.White)
         Spacer(modifier = Modifier.height(10.dp))
         // 타입
         Row {
@@ -159,6 +151,34 @@ fun PokemonDetailContent(
                 Spacer(modifier = Modifier.width(10.dp))
                 Text(
                     text = stat.value.toString(),
+                    modifier = Modifier.weight(1f),
+                    color = Color.White
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(10.dp))
+        // abilities
+        Text(text = "Abilities ${pokemon?.abilities?.size ?: 0}/$totalAbilitiesCount", color = Color.White)
+        pokemon?.abilities?.forEach { ability ->
+            Row {
+                Text(text = ability.name ?: "", color = Color.White)
+                Spacer(modifier = Modifier.width(10.dp))
+                Text(
+                    text = ability.flavor ?: "",
+                    modifier = Modifier.weight(1f),
+                    color = Color.White
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(10.dp))
+        // moves
+        Text(text = "Moves ${pokemon?.moves?.size ?: 0}/$totalMovesCount", color = Color.White)
+        pokemon?.moves?.forEach { move ->
+            Row {
+                Text(text = move.name ?: "", color = Color.White)
+                Spacer(modifier = Modifier.width(10.dp))
+                Text(
+                    text = move.flavor ?: "",
                     modifier = Modifier.weight(1f),
                     color = Color.White
                 )

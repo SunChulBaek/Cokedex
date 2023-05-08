@@ -4,9 +4,17 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kr.pe.ssun.cokedex.data.model.UiAbility
+import kr.pe.ssun.cokedex.domain.GetAbilityUseCase
+import kr.pe.ssun.cokedex.domain.GetMoveUseCase
 import kr.pe.ssun.cokedex.domain.GetPokemonDetailUseCase
 import kr.pe.ssun.cokedex.navigation.PokemonDetailArgs
 import javax.inject.Inject
@@ -15,23 +23,81 @@ import javax.inject.Inject
 class PokemonDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     getPokemonDetailUseCase: GetPokemonDetailUseCase,
+    getAbilityUseCase: GetAbilityUseCase,
+    getMoveUseCase: GetMoveUseCase
 ) : ViewModel() {
+
+    companion object {
+        const val DUMMY_ID = 0
+    }
 
     private val args = PokemonDetailArgs(savedStateHandle)
 
-    var uiState = getPokemonDetailUseCase(args.id)
-        .map { result ->
-            result.getOrNull()?.let { pokemon ->
-                PokemonUiState.Success(pokemon, args.colorStart, args.colorEnd)
-            } ?: PokemonUiState.Error
+    private val abilityIds = MutableStateFlow(listOf(DUMMY_ID))
+
+    private val moveIds = MutableStateFlow(listOf(DUMMY_ID))
+
+    private val abilitiesFlow = abilityIds.flatMapConcat { it.asFlow() }
+        .map { abilityId ->
+            getAbilityUseCase(abilityId).first().getOrNull()?.asExternalModel() ?: UiAbility(DUMMY_ID)
         }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = PokemonUiState.Loading(
-                id = args.id,
-                colorStart = args.colorStart,
-                colorEnd = args.colorEnd,
-            )
+
+    private val movesFlow = moveIds.flatMapConcat { it.asFlow() }
+        .map { moveId ->
+            getMoveUseCase(moveId).first().getOrNull()?.asExternalModel() ?: UiAbility(DUMMY_ID)
+        }
+
+    private var abilities: List<UiAbility> = mutableListOf()
+
+    private var moves: List<UiAbility> = mutableListOf()
+
+    var uiState = combine(
+        abilitiesFlow,
+        movesFlow,
+        getPokemonDetailUseCase(args.id)
+    ) { ability, move, result ->
+        val pokemon = result.getOrNull()?.copy()
+
+        // 더미 아이템 하나만 있을 때 Ability api 호출하도록
+        if (abilityIds.value.size == 1) {
+            abilityIds.emit(pokemon?.abilities?.map { it.id } ?: listOf())
+        }
+        // 더미 아이템 하나만 있을 때 Move api 호출하도록
+        if (moveIds.value.size == 1) {
+            moveIds.emit(pokemon?.moves?.map { it.id } ?: listOf())
+        }
+
+        when {
+            pokemon != null -> {
+                // Ability, Move 중복되지 않게 아이템 추가
+                if (abilities.none { it.id == ability.id }) {
+                    abilities = abilities.filterNot { it.id == DUMMY_ID }.plus(ability)
+                }
+                if (moves.none { it.id == move.id }) {
+                    moves = moves.filterNot { it.id == DUMMY_ID }.plus(move)
+                }
+
+                PokemonUiState.Success(
+                    pokemon = pokemon.copy(
+                        abilities = abilities,
+                        moves = moves,
+                    ),
+                    colorStart = args.colorStart,
+                    colorEnd = args.colorEnd
+                )
+            }
+            else -> PokemonUiState.Error
+        }
+    }
+    .stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = PokemonUiState.Loading(
+            id = args.id,
+            name = args.name,
+            imageUrl = args.imageUrl,
+            colorStart = args.colorStart,
+            colorEnd = args.colorEnd,
         )
+    )
 }

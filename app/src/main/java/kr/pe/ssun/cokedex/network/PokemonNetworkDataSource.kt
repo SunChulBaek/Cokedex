@@ -1,9 +1,19 @@
 package kr.pe.ssun.cokedex.network
 
 import kr.pe.ssun.cokedex.network.model.NetworkAPIResourceList
-import kr.pe.ssun.cokedex.network.model.NetworkPokemonDetail
+import kr.pe.ssun.cokedex.network.model.NetworkAbility
+import kr.pe.ssun.cokedex.network.model.NetworkMove
+import kr.pe.ssun.cokedex.network.model.NetworkPokemon
 
 interface PokemonNetworkDataSource {
+
+    suspend fun getMove(
+        id: Int,
+    ): NetworkMove
+    suspend fun getAbility(
+        id: Int,
+    ): NetworkAbility
+
     suspend fun getPokemonList(
         limit: Int? = null,
         offset: Int? = null,
@@ -11,5 +21,5 @@ interface PokemonNetworkDataSource {
 
     suspend fun getPokemonDetail(
         id: Int,
-    ): NetworkPokemonDetail
+    ): NetworkPokemon
 }

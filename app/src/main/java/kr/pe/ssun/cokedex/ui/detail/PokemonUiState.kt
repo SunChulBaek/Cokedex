@@ -10,6 +10,8 @@ sealed interface PokemonUiState {
     ) : PokemonUiState
     data class Loading(
         val id: Int,
+        val name: String,
+        val imageUrl: String,
         val colorStart: Long,
         val colorEnd: Long,
     ) : PokemonUiState

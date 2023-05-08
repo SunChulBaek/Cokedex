@@ -2,7 +2,9 @@ package kr.pe.ssun.cokedex.network.retrofit
 
 import kr.pe.ssun.cokedex.network.PokemonNetworkDataSource
 import kr.pe.ssun.cokedex.network.model.NetworkAPIResourceList
-import kr.pe.ssun.cokedex.network.model.NetworkPokemonDetail
+import kr.pe.ssun.cokedex.network.model.NetworkAbility
+import kr.pe.ssun.cokedex.network.model.NetworkMove
+import kr.pe.ssun.cokedex.network.model.NetworkPokemon
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -15,6 +17,16 @@ import javax.inject.Singleton
 
 interface RetrofitSsunNetworkApi {
 
+    @GET("move/{id}")
+    suspend fun getMove(
+        @Path("id") id: Int,
+    ): NetworkMove
+
+    @GET("ability/{id}")
+    suspend fun getAbility(
+        @Path("id") id: Int,
+    ): NetworkAbility
+
     @GET("pokemon")
     suspend fun getPokemonList(
         @Query("limit") limit: Int? = 20,
@@ -24,7 +36,7 @@ interface RetrofitSsunNetworkApi {
     @GET("pokemon/{id}")
     suspend fun getPokemonDetail(
         @Path("id") id: Int
-    ): NetworkPokemonDetail
+    ): NetworkPokemon
 }
 
 @Singleton
@@ -46,6 +58,13 @@ class RetrofitSsunNetwork @Inject constructor() : PokemonNetworkDataSource {
         .build()
         .create(RetrofitSsunNetworkApi::class.java)
 
+    override suspend fun getMove(
+        id: Int
+    ): NetworkMove = networkApi.getMove(id)
+    override suspend fun getAbility(
+        id: Int,
+    ): NetworkAbility = networkApi.getAbility(id)
+
     override suspend fun getPokemonList(
         limit: Int?,
         offset: Int?,
@@ -53,5 +72,5 @@ class RetrofitSsunNetwork @Inject constructor() : PokemonNetworkDataSource {
 
     override suspend fun getPokemonDetail(
         id: Int
-    ): NetworkPokemonDetail = networkApi.getPokemonDetail(id)
+    ): NetworkPokemon = networkApi.getPokemonDetail(id)
 }

@@ -6,6 +6,8 @@ import kr.pe.ssun.cokedex.network.model.asExternalPokemonModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kr.pe.ssun.cokedex.data.model.UiPokemonDetail
+import kr.pe.ssun.cokedex.network.model.NetworkAbility
+import kr.pe.ssun.cokedex.network.model.NetworkMove
 import kr.pe.ssun.cokedex.network.model.NetworkNamedAPIResource
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -14,6 +16,18 @@ import javax.inject.Singleton
 class PokemonRepository @Inject constructor(
     private val network: PokemonNetworkDataSource
 ) {
+
+    fun getMove(
+        id: Int,
+    ): Flow<NetworkMove> = flow {
+        emit(network.getMove(id))
+    }
+
+    fun getAbilities(
+        id: Int,
+    ): Flow<NetworkAbility> = flow {
+        emit(network.getAbility(id))
+    }
 
     fun getPokemonList(
         limit: Int? = null,
