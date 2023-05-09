@@ -1,4 +1,4 @@
-package kr.pe.ssun.cokedex.data.model
+package kr.pe.ssun.cokedex.model
 
 import androidx.compose.ui.graphics.Color
 import kr.pe.ssun.cokedex.network.model.NetworkType.Companion.TYPE_BUG
@@ -20,7 +20,7 @@ import kr.pe.ssun.cokedex.network.model.NetworkType.Companion.TYPE_STEEL
 import kr.pe.ssun.cokedex.network.model.NetworkType.Companion.TYPE_UNKNOWN
 import kr.pe.ssun.cokedex.network.model.NetworkType.Companion.TYPE_WATER
 
-sealed interface UiType {
+sealed interface Type {
 
     companion object {
         fun fromValue(value: String?) = when (value) {
@@ -47,92 +47,92 @@ sealed interface UiType {
 
     fun getColor(): Color
 
-    object Normal : UiType {
+    object Normal : Type {
         override fun toString(): String = TYPE_NORMAL
         override fun getColor(): Color = Color(0xFF9E9E9E)
     }
 
-    object Fighting : UiType {
+    object Fighting : Type {
         override fun toString(): String = TYPE_FIGHTING
         override fun getColor(): Color = Color(0xFF9E9E9E)
     }
 
-    object Flying : UiType {
+    object Flying : Type {
         override fun toString(): String = TYPE_FLYING
         override fun getColor(): Color = Color(0xFF607D8B)
     }
 
-    object Poison : UiType {
+    object Poison : Type {
         override fun toString(): String = TYPE_POISON
         override fun getColor(): Color = Color(0xFF673AB7)
     }
 
-    object Rock : UiType {
+    object Rock : Type {
         override fun toString(): String = TYPE_ROCK
         override fun getColor(): Color = Color(0xFF9E9E9E)
     }
 
-    object Bug : UiType {
+    object Bug : Type {
         override fun toString(): String = TYPE_BUG
         override fun getColor(): Color = Color(0xFF4CAF50)
     }
 
-    object Steel : UiType {
+    object Steel : Type {
         override fun toString(): String = TYPE_STEEL
         override fun getColor(): Color = Color(0xFF9E9E9E)
     }
 
-    object Fire : UiType {
+    object Fire : Type {
         override fun toString(): String = TYPE_FIRE
         override fun getColor(): Color = Color(0xFFF44336)
     }
 
-    object Water : UiType {
+    object Water : Type {
         override fun toString(): String = TYPE_WATER
         override fun getColor(): Color = Color(0xFF3F51B5)
     }
 
-    object Grass : UiType {
+    object Grass : Type {
         override fun toString(): String = TYPE_GRASS
         override fun getColor(): Color = Color(0xFF4CAF50)
     }
 
-    object Electric : UiType {
+    object Electric : Type {
         override fun toString(): String = TYPE_ELECTRIC
         override fun getColor(): Color = Color(0xFFCDDC39)
     }
 
-    object Psychic : UiType {
+    object Psychic : Type {
         override fun toString(): String = TYPE_PSYCHIC
         override fun getColor(): Color = Color(0xFF9C27B0)
     }
 
-    object Ice : UiType {
+    object Ice : Type {
         override fun toString(): String = TYPE_ICE
         override fun getColor(): Color = Color(0xFF9E9E9E)
     }
 
-    object Dragon : UiType {
+    object Dragon : Type {
         override fun toString(): String = TYPE_DRAGON
         override fun getColor(): Color = Color(0xFF009688)
     }
 
-    object Dark : UiType {
+    object Dark : Type {
         override fun toString(): String = TYPE_DARK
         override fun getColor(): Color = Color(0xFF9E9E9E)
     }
 
-    object Fairy : UiType {
+    object Fairy : Type {
         override fun toString(): String = TYPE_FAIRY
         override fun getColor(): Color = Color(0xFF9E9E9E)
     }
 
-    object Unknown : UiType {
+    object Unknown : Type {
         override fun toString(): String = TYPE_UNKNOWN
         override fun getColor(): Color = Color(0xFF9E9E9E)
     }
 
-    object Shadow : UiType {
+    object Shadow : Type {
         override fun toString(): String = TYPE_SHADOW
         override fun getColor(): Color = Color(0xFF9E9E9E)
     }

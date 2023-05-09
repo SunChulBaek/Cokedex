@@ -1,7 +1,7 @@
 package kr.pe.ssun.cokedex.network.model
 
 import com.google.gson.annotations.SerializedName
-import kr.pe.ssun.cokedex.data.model.UiPokemon
+import kr.pe.ssun.cokedex.model.Pokemon
 
 // https://pokeapi.co/docs/v2#namedapiresource
 data class NetworkNamedAPIResource(
@@ -9,8 +9,8 @@ data class NetworkNamedAPIResource(
     @SerializedName("url") val url: String? = null,
 )
 
-fun NetworkNamedAPIResource.asExternalPokemonModel() = url?.split("/")?.get(6)?.toInt()?.let { id ->
-    UiPokemon(
+fun NetworkNamedAPIResource.asExternalModel() = url?.split("/")?.get(6)?.toInt()?.let { id ->
+    Pokemon(
         id = id,
         name = this.name ?: "",
         imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/$id.png",

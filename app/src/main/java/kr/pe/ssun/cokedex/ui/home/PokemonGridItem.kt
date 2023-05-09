@@ -24,14 +24,14 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.core.graphics.drawable.toBitmap
 import coil.compose.SubcomposeAsyncImage
-import kr.pe.ssun.cokedex.data.model.UiPokemon
+import kr.pe.ssun.cokedex.model.Pokemon
 import kr.pe.ssun.cokedex.util.MyPalette
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PokemonGridItem(
     modifier: Modifier = Modifier,
-    item: UiPokemon,
+    item: Pokemon,
     onClick: (Int, Int) -> Unit
 ) {
     var colorStart by remember { mutableStateOf(Color.Transparent.toArgb()) }

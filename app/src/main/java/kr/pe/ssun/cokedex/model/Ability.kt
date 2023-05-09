@@ -1,6 +1,6 @@
-package kr.pe.ssun.cokedex.data.model
+package kr.pe.ssun.cokedex.model
 
-data class UiAbility(
+data class Ability(
     val id: Int,
     val name: String? = null,
     val flavor: String? = null,

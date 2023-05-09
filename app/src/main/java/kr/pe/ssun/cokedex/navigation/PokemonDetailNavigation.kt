@@ -12,7 +12,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import kr.pe.ssun.cokedex.ui.detail.PokemonDetailRoute
 import com.google.accompanist.navigation.animation.composable
-import kr.pe.ssun.cokedex.data.model.UiPokemon
+import kr.pe.ssun.cokedex.model.Pokemon
 
 const val pokemonDetailNavigationRoute = "pokemon_detail"
 
@@ -32,7 +32,7 @@ internal class PokemonDetailArgs(val id: Int, val name: String, val imageUrl: St
     )
 }
 
-fun NavController.navigateToPokemonDetail(pokemon: UiPokemon, navOptions: NavOptions? = null) {
+fun NavController.navigateToPokemonDetail(pokemon: Pokemon, navOptions: NavOptions? = null) {
     val encoded = Base64.encodeToString(pokemon.imageUrl.toByteArray(), Base64.DEFAULT)
     this.navigate("$pokemonDetailNavigationRoute/${pokemon.id}/${pokemon.name}/$encoded/${pokemon.colorStart}/${pokemon.colorEnd}", navOptions)
 }

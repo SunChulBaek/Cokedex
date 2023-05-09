@@ -10,14 +10,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import kr.pe.ssun.cokedex.data.model.UiPokemon
+import kr.pe.ssun.cokedex.model.Pokemon
 import kr.pe.ssun.cokedex.util.InfiniteGridHandler
 
 @Composable
 fun HomeContent(
     modifier: Modifier = Modifier,
     uiState: HomeUiState,
-    onClick: (UiPokemon) -> Unit,
+    onClick: (Pokemon) -> Unit,
     onLoadMore: (Int) -> Unit,
 ) {
     val pokemonList = (uiState as HomeUiState.Success).pokemonList

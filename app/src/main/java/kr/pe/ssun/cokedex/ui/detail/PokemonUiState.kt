@@ -1,10 +1,10 @@
 package kr.pe.ssun.cokedex.ui.detail
 
-import kr.pe.ssun.cokedex.data.model.UiPokemonDetail
+import kr.pe.ssun.cokedex.model.PokemonDetail
 
 sealed interface PokemonUiState {
     data class Success(
-        val pokemon: UiPokemonDetail,
+        val pokemon: PokemonDetail,
         val colorStart: Long,
         val colorEnd: Long,
     ) : PokemonUiState

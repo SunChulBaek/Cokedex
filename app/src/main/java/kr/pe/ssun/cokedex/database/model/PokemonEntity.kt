@@ -3,12 +3,10 @@ package kr.pe.ssun.cokedex.database.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import kr.pe.ssun.cokedex.network.model.NetworkNamedAPIResource
-import kr.pe.ssun.cokedex.network.model.NetworkPokemon
-import kr.pe.ssun.cokedex.network.model.NetworkPokemonAbility
-import kr.pe.ssun.cokedex.network.model.NetworkPokemonMove
-import kr.pe.ssun.cokedex.network.model.NetworkPokemonStat
-import kr.pe.ssun.cokedex.network.model.NetworkPokemonType
+import kr.pe.ssun.cokedex.model.Ability
+import kr.pe.ssun.cokedex.model.PokemonDetail
+import kr.pe.ssun.cokedex.model.PokemonStat
+import kr.pe.ssun.cokedex.model.Type
 
 @Entity(
     tableName = "pokemon"
@@ -27,47 +25,32 @@ data class PokemonEntity(
     @ColumnInfo(name = "types") val types: List<String>,
 )
 
-// TODO : 수정 필요
-fun PokemonEntity.asExternalModel() = NetworkPokemon(
+fun PokemonEntity.asExternalModel() = PokemonDetail(
     id = id,
     name = name ?: "",
-    baseExp = baseExp,
-    height = height,
-    isDefault = isDefault,
-    order = order,
-    weight = weight,
-    abilities = abilityIds.map { abilityId ->
-        NetworkPokemonAbility(
-            isHidden = false,
-            slot = 0,
-            ability = NetworkNamedAPIResource(
-                name = "",
-                url = "https://pokeapi.co/api/v2/ability/$abilityId/"
-            )
-        )
-    },
-    moves = moveIds.map { moveId ->
-        NetworkPokemonMove(
-            move = NetworkNamedAPIResource(
-                name = "",
-                url = "https://pokeapi.co/api/v2/move/$moveId/"
-            )
-        )
-    },
-    stats = stats.map { (name, value) ->
-        NetworkPokemonStat(
-            baseStat = value,
-            stat = NetworkNamedAPIResource(
-                name = name
-            )
-        )
-    },
+    imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/$id.png",
     types = types.map { type ->
-        NetworkPokemonType(
-            slot = 0,
-            type = NetworkNamedAPIResource(
-                name = type,
-            )
+        Type.fromValue(type)
+    },
+    abilities = abilityIds.map { abilityId ->
+        Ability(
+            id = abilityId,
+            name = "",
+            flavor = "",
         )
+    },
+    totalAbilitiesCount = abilityIds.size,
+    moves = moveIds.map { moveId ->
+        Ability(
+            id = moveId,
+            name = "",
+            flavor = "",
+        )
+    },
+    totalMovesCount = moveIds.size,
+    weight = weight,
+    height = height,
+    stats = stats.map { (name, value) ->
+        PokemonStat(name = name, value = value)
     }
 )

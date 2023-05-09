@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kr.pe.ssun.cokedex.data.model.UiAbility
+import kr.pe.ssun.cokedex.model.Ability
 import kr.pe.ssun.cokedex.domain.GetAbilityUseCase
 import kr.pe.ssun.cokedex.domain.GetMovesUseCase
 import kr.pe.ssun.cokedex.domain.GetPokemonDetailUseCase
@@ -40,18 +40,18 @@ class PokemonDetailViewModel @Inject constructor(
     // TODO
     private val abilitiesFlow = abilityIds.flatMapConcat { it.asFlow() }
         .map { abilityId ->
-            getAbilityUseCase(abilityId).first().getOrNull()?.asExternalModel() ?: UiAbility(DUMMY_ID)
+            getAbilityUseCase(abilityId).first().getOrNull() ?: Ability(DUMMY_ID)
         }
 
     // TODO
     private val movesFlow = moveIds.flatMapConcat { it.asFlow() }
         .map { moveIds ->
-            getMoveUseCase(moveIds).first().getOrNull()?.asExternalModel() ?: UiAbility(DUMMY_ID)
+            getMoveUseCase(moveIds).first().getOrNull() ?: Ability(DUMMY_ID)
         }
 
-    private var abilities: List<UiAbility> = mutableListOf()
+    private var abilities: List<Ability> = mutableListOf()
 
-    private var moves: List<UiAbility> = mutableListOf()
+    private var moves: List<Ability> = mutableListOf()
 
     var uiState = combine(
         abilitiesFlow,

@@ -3,10 +3,7 @@ package kr.pe.ssun.cokedex.database.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import kr.pe.ssun.cokedex.network.model.NetworkAbilityFlavorText
-import kr.pe.ssun.cokedex.network.model.NetworkMove
-import kr.pe.ssun.cokedex.network.model.NetworkName
-import kr.pe.ssun.cokedex.network.model.NetworkNamedAPIResource
+import kr.pe.ssun.cokedex.model.Ability
 
 @Entity(
     tableName = "move"
@@ -19,23 +16,8 @@ data class MoveEntity(
     @ColumnInfo(name = "flavorLang") val flavorLang: String?,
 )
 
-// TODO : 수정 필요
-fun MoveEntity.asExternalModel() = NetworkMove(
+fun MoveEntity.asExternalModel() = Ability(
     id = id,
-    names = listOf(
-        NetworkName(
-            name = name ?: "",
-            language = NetworkNamedAPIResource(
-                name = nameLang ?: "",
-            )
-        )
-    ),
-    flavorTextEntries = listOf(
-        NetworkAbilityFlavorText(
-            flavorText = flavor ?: "",
-            language = NetworkNamedAPIResource(
-                name = flavorLang ?: "",
-            ),
-        )
-    )
+    name = name,
+    flavor = flavor,
 )

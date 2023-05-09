@@ -1,10 +1,6 @@
 package kr.pe.ssun.cokedex.network.model
 
 import com.google.gson.annotations.SerializedName
-import kr.pe.ssun.cokedex.data.model.UiAbility
-import kr.pe.ssun.cokedex.data.model.UiPokemonDetail
-import kr.pe.ssun.cokedex.data.model.UiPokemonStat
-import kr.pe.ssun.cokedex.data.model.UiType
 
 data class NetworkPokemon(
     @SerializedName("id") val id: Int,
@@ -26,34 +22,3 @@ data class NetworkPokemon(
     @SerializedName("stats") val stats: List<NetworkPokemonStat> = listOf(),
     @SerializedName("types") val types: List<NetworkPokemonType>,
 )
-
-fun NetworkPokemon.asExternalPokemonModel() =
-    UiPokemonDetail(
-        id = this.id,
-        name = this.name,
-        imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/$id.png",
-        types = this.types.map { type ->
-            UiType.fromValue(type.type.name)
-        },
-        abilities = this.abilities.map { ability ->
-            UiAbility(
-                id = ability.ability.url!!.split("/")[6].toInt(),
-                name = ability.ability.name,
-                flavor = ""
-            )
-        },
-        totalAbilitiesCount = this.abilities.size,
-        moves = this.moves.map { move ->
-            UiAbility(
-                id = move.move.url!!.split("/")[6].toInt(),
-                name = move.move.name,
-                flavor = ""
-            )
-        },
-        totalMovesCount = this.moves.size,
-        weight = this.weight,
-        height = this.height,
-        stats = this.stats.map { stat ->
-            UiPokemonStat(stat.stat.name ?: "", stat.baseStat)
-        }
-    )
