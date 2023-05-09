@@ -3,16 +3,16 @@ package kr.pe.ssun.cokedex.database.dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import kr.pe.ssun.cokedex.database.model.Move
+import kr.pe.ssun.cokedex.database.model.MoveEntity
 
 @Dao
 interface MoveDao {
     @Query("SELECT * FROM move WHERE id = :moveId")
-    fun findById(moveId: Int): Move?
+    fun findById(moveId: Int): MoveEntity?
 
     @Query("SELECT * FROM move WHERE id IN (:moveIds)")
-    fun findById(moveIds: IntArray): List<Move>
+    fun findById(moveIds: IntArray): List<MoveEntity>
 
     @Insert
-    fun insert(move: Move)
+    fun insert(move: MoveEntity)
 }

@@ -6,18 +6,18 @@ import androidx.room.TypeConverters
 import kr.pe.ssun.cokedex.database.dao.AbilityDao
 import kr.pe.ssun.cokedex.database.dao.MoveDao
 import kr.pe.ssun.cokedex.database.dao.PokemonDao
-import kr.pe.ssun.cokedex.database.model.Ability
-import kr.pe.ssun.cokedex.database.model.Move
-import kr.pe.ssun.cokedex.database.model.Pokemon
+import kr.pe.ssun.cokedex.database.model.AbilityEntity
+import kr.pe.ssun.cokedex.database.model.MoveEntity
+import kr.pe.ssun.cokedex.database.model.PokemonEntity
 import kr.pe.ssun.cokedex.database.util.IdsConverter
 import kr.pe.ssun.cokedex.database.util.StatsConverter
 import kr.pe.ssun.cokedex.database.util.TypesConverter
 
 @Database(
     entities = [
-        Pokemon::class,
-        Ability::class,
-        Move::class
+        PokemonEntity::class,
+        AbilityEntity::class,
+        MoveEntity::class
     ],
     version = 1,
 )
