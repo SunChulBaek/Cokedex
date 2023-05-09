@@ -30,7 +30,7 @@ class PokemonRepository @Inject constructor(
     fun getMove(id: Int): Flow<Ability> = flow {
         moveDao.findById(id)?.let { move ->
             Timber.i("[sunchulbaek] Move(id = $id) DB에 저장되어 있음")
-            emit(move.asExternalModel())
+            emit(move.asExternalModel(fromDB = true))
         } ?: run {
             when (id) {
                 DUMMY_ID -> {
@@ -51,7 +51,7 @@ class PokemonRepository @Inject constructor(
     fun getAbility(id: Int): Flow<Ability> = flow {
         abilityDao.findById(id)?.let { ability ->
             Timber.i("[sunchulbaek] Ability(id = $id) DB에 저장되어 있음")
-            emit(ability.asExternalModel())
+            emit(ability.asExternalModel(fromDB = true))
         } ?: run {
             when (id) {
                 DUMMY_ID -> {

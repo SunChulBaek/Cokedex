@@ -16,8 +16,9 @@ data class MoveEntity(
     @ColumnInfo(name = "flavorLang") val flavorLang: String?,
 )
 
-fun MoveEntity.asExternalModel() = Ability(
+fun MoveEntity.asExternalModel(fromDB: Boolean = false) = Ability(
     id = id,
     name = name,
     flavor = flavor,
+    fromDB = fromDB,
 )
