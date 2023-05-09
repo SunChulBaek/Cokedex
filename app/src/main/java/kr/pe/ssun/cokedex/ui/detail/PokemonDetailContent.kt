@@ -200,8 +200,8 @@ fun PokemonDetailContent(
             for (i in 0 until totalAbilitiesCount) {
                 Box(modifier = Modifier.weight(1f).fillMaxHeight().background(
                     when (pokemon?.abilities?.getOrNull(i)?.fromDB) {
-                        true -> Color(0xFF2196f3)
-                        false -> Color(0xFFe91e63)
+                        true -> Color(0xFF4caf50)
+                        false -> Color(0xFFff9800)
                         else -> Color.Transparent
                     }
                 )) {
