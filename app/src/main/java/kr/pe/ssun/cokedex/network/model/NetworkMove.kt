@@ -10,21 +10,33 @@ data class NetworkMove(
 ) {
     fun asExternalModel() = UiAbility(
         id = id,
-        name = getNameX(),
+        name = getName(),
         flavor = getFlavor()
     )
 
-    private fun getNameX(): String? = names.firstOrNull {
+    fun getName(): String? = names.firstOrNull {
         it.language.name == "ko"
     }?.name ?: names.firstOrNull {
         it.language.name == "en"
     }?.name
 
+    fun getNameLang(): String? = names.firstOrNull {
+        it.language.name == "ko"
+    }?.language?.name ?: names.firstOrNull {
+        it.language.name == "en"
+    }?.language?.name
 
-    private fun getFlavor(): String? = (flavorTextEntries.firstOrNull {
+
+    fun getFlavor(): String? = (flavorTextEntries.firstOrNull {
         it.language.name == "ko"
     }?.flavorText ?: flavorTextEntries.firstOrNull {
         it.language.name == "en"
     }?.flavorText)?.replace("\n", " ")
+
+    fun getFlavorLang(): String? = flavorTextEntries.firstOrNull {
+        it.language.name == "ko"
+    }?.language?.name ?: flavorTextEntries.firstOrNull {
+        it.language.name == "en"
+    }?.language?.name
 }
 

@@ -8,7 +8,7 @@ import kr.pe.ssun.cokedex.network.model.NetworkMove
 import kr.pe.ssun.cokedex.util.IoDispatcher
 import javax.inject.Inject
 
-class GetMoveUseCase @Inject constructor(
+class GetMovesUseCase @Inject constructor(
     @IoDispatcher dispatcher: CoroutineDispatcher,
     private val repository: PokemonRepository
 ) : FlowUseCase<Int, NetworkMove>(dispatcher) {

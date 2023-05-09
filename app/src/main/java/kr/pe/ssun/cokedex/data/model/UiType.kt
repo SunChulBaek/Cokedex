@@ -23,7 +23,7 @@ import kr.pe.ssun.cokedex.network.model.NetworkType.Companion.TYPE_WATER
 sealed interface UiType {
 
     companion object {
-        fun fromValue(value: String) = when (value) {
+        fun fromValue(value: String?) = when (value) {
             TYPE_NORMAL -> Normal
             TYPE_FIGHTING -> Fighting
             TYPE_FLYING -> Flying

@@ -1,6 +1,7 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 
 plugins {
+    id("com.google.devtools.ksp") version libs.versions.ksp.get()
     id("com.github.ben-manes.versions") version libs.versions.versions.get()
 }
 

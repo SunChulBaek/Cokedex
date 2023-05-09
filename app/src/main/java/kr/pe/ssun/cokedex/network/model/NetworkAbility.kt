@@ -5,30 +5,42 @@ import kr.pe.ssun.cokedex.data.model.UiAbility
 
 data class NetworkAbility(
     @SerializedName("id") val id: Int,
-    @SerializedName("name") val name: String,
-    @SerializedName("is_main_series") val isMainSeries: Boolean,
-    @SerializedName("generation") val generation: NetworkNamedAPIResource,
+    @SerializedName("name") val name: String? = null,
+    @SerializedName("is_main_series") val isMainSeries: Boolean = false,
+    @SerializedName("generation") val generation: NetworkNamedAPIResource? = null,
     @SerializedName("names") val names: List<NetworkName>,
-    @SerializedName("effect_entries") val effectEntries: List<NetworkVerboseEffect>,
-    @SerializedName("effect_changes") val effectChanges: List<NetworkAbilityEffectChange>,
-    @SerializedName("flavor_text_entries") val flavorTextEntries: List<NetworkAbilityFlavorText>,
-    @SerializedName("pokemon") val pokemon: List<NetworkAbilityPokemon>,
+    @SerializedName("effect_entries") val effectEntries: List<NetworkVerboseEffect> = listOf(),
+    @SerializedName("effect_changes") val effectChanges: List<NetworkAbilityEffectChange> = listOf(),
+    @SerializedName("flavor_text_entries") val flavorTextEntries: List<NetworkAbilityFlavorText> = listOf(),
+    @SerializedName("pokemon") val pokemon: List<NetworkAbilityPokemon> = listOf(),
 ) {
     fun asExternalModel() = UiAbility(
         id = id,
         name = this.getNameX(),
-        flavor = this.getFlavorText()
+        flavor = this.getFlavor()
     )
 
-    private fun getNameX(): String? = names.firstOrNull {
+    fun getNameX(): String? = names.firstOrNull {
         it.language.name == "ko"
     }?.name ?: names.firstOrNull {
         it.language.name == "en"
     }?.name
 
-    private fun getFlavorText(): String? = (flavorTextEntries.firstOrNull {
+    fun getNameLang(): String? = names.firstOrNull {
+        it.language.name == "ko"
+    }?.language?.name ?: names.firstOrNull {
+        it.language.name == "en"
+    }?.language?.name
+
+    fun getFlavor(): String? = (flavorTextEntries.firstOrNull {
         it.language.name == "ko"
     }?.flavorText ?: flavorTextEntries.firstOrNull {
         it.language.name == "en"
     }?.flavorText)?.replace("\n", " ")
+
+    fun getFlavorLang(): String? = flavorTextEntries.firstOrNull {
+        it.language.name == "ko"
+    }?.language?.name ?: flavorTextEntries.firstOrNull {
+        it.language.name == "en"
+    }?.language?.name
 }

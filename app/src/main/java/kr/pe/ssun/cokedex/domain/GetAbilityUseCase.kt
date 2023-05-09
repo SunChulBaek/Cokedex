@@ -14,7 +14,7 @@ class GetAbilityUseCase @Inject constructor(
 ) : FlowUseCase<Int, NetworkAbility>(dispatcher) {
 
     override fun execute(parameters: Int): Flow<Result<NetworkAbility>> =
-        repository.getAbilities(parameters)
+        repository.getAbility(parameters)
             .map {
                 Result.success(it)
             }

@@ -2,6 +2,7 @@ plugins {
     id("kr.pe.ssun.application")
     id("kr.pe.ssun.application.compose")
     id("kr.pe.ssun.hilt")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -108,4 +109,9 @@ dependencies {
 
     // Timber
     implementation(libs.timber)
+
+    // Room
+    implementation(libs.room.runtime)
+    annotationProcessor(libs.room.compiler)
+    ksp(libs.room.compiler)
 }

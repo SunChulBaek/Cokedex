@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kr.pe.ssun.cokedex.data.model.UiAbility
 import kr.pe.ssun.cokedex.domain.GetAbilityUseCase
-import kr.pe.ssun.cokedex.domain.GetMoveUseCase
+import kr.pe.ssun.cokedex.domain.GetMovesUseCase
 import kr.pe.ssun.cokedex.domain.GetPokemonDetailUseCase
 import kr.pe.ssun.cokedex.navigation.PokemonDetailArgs
 import javax.inject.Inject
@@ -24,7 +24,7 @@ class PokemonDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     getPokemonDetailUseCase: GetPokemonDetailUseCase,
     getAbilityUseCase: GetAbilityUseCase,
-    getMoveUseCase: GetMoveUseCase
+    getMoveUseCase: GetMovesUseCase
 ) : ViewModel() {
 
     companion object {
@@ -37,14 +37,16 @@ class PokemonDetailViewModel @Inject constructor(
 
     private val moveIds = MutableStateFlow(listOf(DUMMY_ID))
 
+    // TODO
     private val abilitiesFlow = abilityIds.flatMapConcat { it.asFlow() }
         .map { abilityId ->
             getAbilityUseCase(abilityId).first().getOrNull()?.asExternalModel() ?: UiAbility(DUMMY_ID)
         }
 
+    // TODO
     private val movesFlow = moveIds.flatMapConcat { it.asFlow() }
-        .map { moveId ->
-            getMoveUseCase(moveId).first().getOrNull()?.asExternalModel() ?: UiAbility(DUMMY_ID)
+        .map { moveIds ->
+            getMoveUseCase(moveIds).first().getOrNull()?.asExternalModel() ?: UiAbility(DUMMY_ID)
         }
 
     private var abilities: List<UiAbility> = mutableListOf()
