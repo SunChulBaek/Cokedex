@@ -22,7 +22,8 @@ class MainActivity : ComponentActivity() {
                         Toast.makeText(this, text, Toast.LENGTH_SHORT).apply {
                             this.show()
                         }
-                    }
+                    },
+                    onBack = { finishAffinity() }
                 )
             }
         }
