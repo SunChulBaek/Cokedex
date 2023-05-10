@@ -192,6 +192,7 @@ fun PokemonDetailContent(
                 }
             }
         }
+        // 프로그레스
         Row(
             modifier = Modifier
                 .fillMaxWidth().height(5.dp)

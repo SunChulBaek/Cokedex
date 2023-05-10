@@ -12,7 +12,7 @@ const val WEBVIEW_PROGRESS_ERROR = -1
 
 // 웹뷰 (+ 프로그레스, 에러 화면)
 @Composable
-fun MyWebView(modifier: Modifier = Modifier, url: String) {
+fun MyWebView(modifier: Modifier = Modifier, url: String, onBack: () -> Unit) {
     var webViewProgress by remember { mutableStateOf(0) }
     val webViewState = rememberWebViewState(url = url)
     val webViewNavigator = rememberWebViewNavigator()

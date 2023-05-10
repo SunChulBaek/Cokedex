@@ -1,6 +1,5 @@
 package kr.pe.ssun.cokedex.navigation
 
-import android.util.Base64
 import android.widget.Toast
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
@@ -12,11 +11,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
-import kr.pe.ssun.cokedex.ui.common.MyWebView
 import com.google.accompanist.navigation.animation.AnimatedNavHost
-import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import kr.pe.ssun.cokedex.model.Pokemon
 
@@ -55,20 +50,15 @@ fun MainNavHost(
             onBack = { navController.popBackStack() }
         )
         // 웹뷰
-        composable(
-            route = "webview/{url}",
-            arguments = listOf(
-                navArgument("url" ) { type = NavType.StringType }
-            ),
-            enterTransition = { defaultEnterTransition() },
-            exitTransition = { defaultExitTransition() },
-            popEnterTransition = { defaultPopEnterTransition() },
-            popExitTransition = { defaultPopExitTransition() },
-        ) { backStackEntry ->
-            val encodedUrl = backStackEntry.arguments?.getString("url")
-            val decodedUrl = String(Base64.decode(encodedUrl, 0))
-            MyWebView(url = decodedUrl)
-        }
+        webViewScreen(
+            enterTransition = defaultEnterTransition(),
+            exitTransition = defaultExitTransition(),
+            popEnterTransition = defaultPopEnterTransition(),
+            popExitTransition = defaultPopExitTransition(),
+            navigate = { route, params -> navigate(navController, route, params) },
+            showToast = showToast,
+            onBack = { navController.popBackStack() }
+        )
     }
 }
 
@@ -111,6 +101,7 @@ fun navigate(
 ) {
     when (dest) {
         pokemonDetailNavigationRoute -> navController.navigateToPokemonDetail(params as Pokemon)
+        webViewNavigationRoute -> navController.navigateToWebView(params as String)
         else -> TODO()
     }
 }
