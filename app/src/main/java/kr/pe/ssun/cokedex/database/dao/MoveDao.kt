@@ -7,10 +7,10 @@ import kr.pe.ssun.cokedex.database.model.MoveEntity
 
 @Dao
 interface MoveDao {
-    @Query("SELECT * FROM move WHERE id = :moveId")
+    @Query("SELECT * FROM move WHERE m_id = :moveId")
     fun findById(moveId: Int): MoveEntity?
 
-    @Query("SELECT * FROM move WHERE id IN (:moveIds)")
+    @Query("SELECT * FROM move WHERE m_id IN (:moveIds)")
     fun findById(moveIds: IntArray): List<MoveEntity>
 
     @Insert

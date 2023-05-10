@@ -17,6 +17,7 @@ import kr.pe.ssun.cokedex.domain.GetAbilityUseCase
 import kr.pe.ssun.cokedex.domain.GetMovesUseCase
 import kr.pe.ssun.cokedex.domain.GetPokemonDetailUseCase
 import kr.pe.ssun.cokedex.navigation.PokemonDetailArgs
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -60,23 +61,32 @@ class PokemonDetailViewModel @Inject constructor(
     ) { ability, move, result ->
         val pokemon = result.getOrNull()?.copy()
 
-        // 더미 아이템 하나만 있을 때 Ability api 호출하도록
+        // 더미 아이템 하나만 있을 때 캐시 안된 Ability api 호출하도록
         if (abilityIds.value.size == 1) {
-            abilityIds.emit(pokemon?.abilities?.map { it.id } ?: listOf())
+            abilities = pokemon?.abilities?.map { it.copy(fromDB = true) } ?: listOf()
+            val notCachedAIds = pokemon?.totalAbilityIds?.filterNot { aId ->
+                pokemon.abilities.map { it.id }.contains(aId)
+            } ?: listOf()
+            abilityIds.emit(notCachedAIds)
         }
-        // 더미 아이템 하나만 있을 때 Move api 호출하도록
+
+        // 더미 아이템 하나만 있을 때 캐시 안된 Move api 호출하도록
         if (moveIds.value.size == 1) {
-            moveIds.emit(pokemon?.moves?.map { it.id } ?: listOf())
+            moves = pokemon?.moves?.map { it.copy(fromDB = true) } ?: listOf()
+            val notCachedMIds = pokemon?.totalMoveIds?.filterNot { mId ->
+                pokemon.moves.map { it.id }.contains(mId)
+            } ?: listOf()
+            moveIds.emit(notCachedMIds)
         }
 
         when {
             pokemon != null -> {
                 // Ability, Move 중복되지 않게 아이템 추가
-                if (abilities.none { it.id == ability.id }) {
-                    abilities = abilities.filterNot { it.id == DUMMY_ID }.plus(ability)
+                if (ability.id != DUMMY_ID && abilities.none { it.id == ability.id }) {
+                    abilities = abilities.filterNot { it.id == DUMMY_ID }.plus(ability).sortedBy { it.id }
                 }
-                if (moves.none { it.id == move.id }) {
-                    moves = moves.filterNot { it.id == DUMMY_ID }.plus(move)
+                if (move.id != DUMMY_ID && moves.none { it.id == move.id }) {
+                    moves = moves.filterNot { it.id == DUMMY_ID }.plus(move).sortedBy { it.id }
                 }
 
                 PokemonUiState.Success(

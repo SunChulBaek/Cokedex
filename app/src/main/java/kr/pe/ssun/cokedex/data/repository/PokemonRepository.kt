@@ -10,6 +10,9 @@ import kr.pe.ssun.cokedex.data.model.asEntity
 import kr.pe.ssun.cokedex.database.dao.AbilityDao
 import kr.pe.ssun.cokedex.database.dao.MoveDao
 import kr.pe.ssun.cokedex.database.dao.PokemonDao
+import kr.pe.ssun.cokedex.database.model.FullPokemon
+import kr.pe.ssun.cokedex.database.model.PokemonAbilityCrossRef
+import kr.pe.ssun.cokedex.database.model.PokemonMoveCrossRef
 import kr.pe.ssun.cokedex.database.model.asExternalModel
 import kr.pe.ssun.cokedex.model.Ability
 import timber.log.Timber
@@ -80,14 +83,38 @@ class PokemonRepository @Inject constructor(
     }
 
     fun getPokemonDetail(id: Int): Flow<PokemonDetail> = flow {
-        pokemonDao.findById(id)?.let { pokemon ->
-            Timber.i("[sunchulbaek] Pokemon(id = $id) DB에 저장되어 있음")
-            emit(pokemon.asExternalModel())
+        pokemonDao.findById(id)?.let { fullPokemon ->
+            Timber.i("[sunchulbaek] full pokemon db에 저장되어 있음")
+            fullPokemon.abilities.forEach { ability ->
+                Timber.i("[sunchulbaek] Ability(id = ${ability.id}) DB에 저장되어 있음")
+            }
+            fullPokemon.moves.forEach { move ->
+                Timber.i("[sunchulbaek] Move(id = ${move.id}) DB에 저장되어 있음")
+            }
+            emit(fullPokemon.asExternalModel())
         } ?: run {
-            Timber.e("[sunchulbaek] Pokemon(id = $id) DB에 저장되어 있지 않음. API 콜")
-            network.getPokemonDetail(id).asEntity().let { pokemon ->
-                pokemonDao.insert(pokemon)
-                emit(pokemon.asExternalModel())
+            Timber.e("[sunchulbaek] full pokemon db에 저장되어 있지 않음")
+            network.getPokemonDetail(id).let { pokemon ->
+                val entity = pokemon.asEntity()
+                val entity2 = FullPokemon(
+                    pokemon = pokemon.asEntity(),
+                    abilities = abilityDao.findById(abilityIds = pokemon.abilities.map { it.ability.url!!.split("/")[6].toInt() }.toIntArray()),
+                    moves = moveDao.findById(moveIds = pokemon.moves.map { it.move.url!!.split("/")[6].toInt() }.toIntArray()),
+                )
+                pokemonDao.insert(entity)
+                pokemon.abilities.forEach { ability ->
+                    pokemonDao.insert(PokemonAbilityCrossRef(
+                        pId = pokemon.id,
+                        aId = ability.ability.url!!.split("/")[6].toInt()
+                    ))
+                }
+                pokemon.moves.forEach { move ->
+                    pokemonDao.insert(PokemonMoveCrossRef(
+                        pId = pokemon.id,
+                        mId = move.move.url!!.split("/")[6].toInt()
+                    ))
+                }
+                emit(entity2.asExternalModel())
             }
         }
     }

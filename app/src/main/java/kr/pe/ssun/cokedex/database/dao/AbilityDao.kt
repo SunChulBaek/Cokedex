@@ -7,10 +7,10 @@ import kr.pe.ssun.cokedex.database.model.AbilityEntity
 
 @Dao
 interface AbilityDao {
-    @Query("SELECT * FROM ability WHERE id = :abilityId")
+    @Query("SELECT * FROM ability WHERE a_id = :abilityId")
     fun findById(abilityId: Int): AbilityEntity?
 
-    @Query("SELECT * FROM ability WHERE id IN (:abilityIds)")
+    @Query("SELECT * FROM ability WHERE a_id IN (:abilityIds)")
     fun findById(abilityIds: IntArray): List<AbilityEntity>
 
     @Insert

@@ -8,6 +8,8 @@ import kr.pe.ssun.cokedex.database.dao.MoveDao
 import kr.pe.ssun.cokedex.database.dao.PokemonDao
 import kr.pe.ssun.cokedex.database.model.AbilityEntity
 import kr.pe.ssun.cokedex.database.model.MoveEntity
+import kr.pe.ssun.cokedex.database.model.PokemonAbilityCrossRef
+import kr.pe.ssun.cokedex.database.model.PokemonMoveCrossRef
 import kr.pe.ssun.cokedex.database.model.PokemonEntity
 import kr.pe.ssun.cokedex.database.util.IdsConverter
 import kr.pe.ssun.cokedex.database.util.StatsConverter
@@ -17,9 +19,12 @@ import kr.pe.ssun.cokedex.database.util.TypesConverter
     entities = [
         PokemonEntity::class,
         AbilityEntity::class,
-        MoveEntity::class
+        MoveEntity::class,
+        PokemonAbilityCrossRef::class,
+        PokemonMoveCrossRef::class,
     ],
     version = 1,
+    exportSchema = false
 )
 @TypeConverters(
     IdsConverter::class,

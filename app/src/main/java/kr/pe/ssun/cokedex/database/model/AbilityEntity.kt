@@ -9,7 +9,7 @@ import kr.pe.ssun.cokedex.model.Ability
     tableName = "ability"
 )
 data class AbilityEntity(
-    @PrimaryKey val id: Int,
+    @PrimaryKey @ColumnInfo(name = "a_id") val id: Int,
     @ColumnInfo(name = "name") val name: String?,
     @ColumnInfo(name = "nameLang") val nameLang: String?,
     @ColumnInfo(name = "flavor") val flavor: String?,

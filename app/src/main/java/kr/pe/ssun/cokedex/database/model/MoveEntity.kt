@@ -9,7 +9,7 @@ import kr.pe.ssun.cokedex.model.Ability
     tableName = "move"
 )
 data class MoveEntity(
-    @PrimaryKey val id: Int,
+    @PrimaryKey  @ColumnInfo(name = "m_id")val id: Int,
     @ColumnInfo(name = "name") val name: String?,
     @ColumnInfo(name = "nameLang") val nameLang: String?,
     @ColumnInfo(name = "flavor") val flavor: String?,

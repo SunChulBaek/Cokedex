@@ -53,8 +53,8 @@ fun PokemonDetailContent(
     val imageUrl = pokemon?.imageUrl ?: loading?.imageUrl
     val colorStart = Color(success?.colorStart ?: loading?.colorStart ?: 0x00000000)
     val colorEnd = Color(success?.colorEnd ?: loading?.colorEnd ?: 0x00000000)
-    val totalAbilitiesCount = pokemon?.totalAbilitiesCount ?: 0
-    val totalMovesCount = pokemon?.totalMovesCount ?: 0
+    val totalAbilitiesCount = pokemon?.totalAbilityIds?.size ?: 0
+    val totalMovesCount = pokemon?.totalMoveIds?.size ?: 0
 
     Column(
         modifier = Modifier
