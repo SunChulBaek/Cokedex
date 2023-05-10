@@ -14,11 +14,11 @@ import javax.inject.Singleton
 object DatabaseModule {
     @Provides
     @Singleton
-    fun providesCokedexDatabse(
+    fun providesCokedexDatabase(
         @ApplicationContext context: Context,
     ): CokedexDatabase = Room.databaseBuilder(
         context,
         CokedexDatabase::class.java,
         "cokedex-database"
-    ).build()
+    ).createFromAsset("database/preset_1_50.db").build()
 }
