@@ -25,4 +25,6 @@ data class NetworkPokemon(
     fun getAbilityIds(): List<Int> = abilities.map { ability -> ability.getId() }
 
     fun getMoveIds(): List<Int> = moves.map { move -> move.getId() }
+
+    fun getTypeIds(): List<Int> = types.map { type -> type.getId() }
 }

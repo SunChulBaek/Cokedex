@@ -5,6 +5,7 @@ import kr.pe.ssun.cokedex.network.model.NetworkAPIResourceList
 import kr.pe.ssun.cokedex.network.model.NetworkAbility
 import kr.pe.ssun.cokedex.network.model.NetworkMove
 import kr.pe.ssun.cokedex.network.model.NetworkPokemon
+import kr.pe.ssun.cokedex.network.model.NetworkType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -16,6 +17,11 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 interface RetrofitSsunNetworkApi {
+
+    @GET("type/{id}")
+    suspend fun getType(
+        @Path("id") id: Int,
+    ): NetworkType
 
     @GET("move/{id}")
     suspend fun getMove(
@@ -57,6 +63,10 @@ class RetrofitSsunNetwork @Inject constructor() : PokemonNetworkDataSource {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
         .create(RetrofitSsunNetworkApi::class.java)
+
+    override suspend fun getType(
+        id: Int
+    ): NetworkType = networkApi.getType(id)
 
     override suspend fun getMove(
         id: Int

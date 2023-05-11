@@ -25,15 +25,20 @@ data class FullPokemon(
         entityColumn = "p_id"
     )
     val stat: StatEntity,
+    @Relation(
+        parentColumn = "p_id",
+        entityColumn = "t_id",
+        associateBy = Junction(PokemonTypeCrossRef::class)
+    )
+    val types: List<TypeEntity>
 )
 
 fun FullPokemon.asExternalModel() = PokemonDetail(
     id = pokemon.id,
     name = pokemon.name ?: "",
     imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png",
-    types = pokemon.types.map { type ->
-        Type.fromValue(type)
-    },
+    totalTypeIds = pokemon.typeIds,
+    types = types.map { type -> Type(type.id, type.name) },
     abilities = abilities.map { ability -> ability.asExternalModel() },
     totalAbilityIds = pokemon.abilityIds,
     moves = moves.map { move -> move.asExternalModel() },

@@ -2,6 +2,7 @@ package kr.pe.ssun.cokedex.network.model
 
 import com.google.gson.annotations.SerializedName
 import kr.pe.ssun.cokedex.model.Ability
+import java.util.Locale
 
 data class NetworkAbility(
     @SerializedName("id") val id: Int,
@@ -21,25 +22,25 @@ data class NetworkAbility(
     )
 
     fun getNameX(): String? = names.firstOrNull {
-        it.language.name == "ko"
+        it.language.name == Locale.getDefault().language
     }?.name ?: names.firstOrNull {
         it.language.name == "en"
     }?.name
 
     fun getNameLang(): String? = names.firstOrNull {
-        it.language.name == "ko"
+        it.language.name == Locale.getDefault().language
     }?.language?.name ?: names.firstOrNull {
         it.language.name == "en"
     }?.language?.name
 
     fun getFlavor(): String? = (flavorTextEntries.firstOrNull {
-        it.language.name == "ko"
+        it.language.name == Locale.getDefault().language
     }?.flavorText ?: flavorTextEntries.firstOrNull {
         it.language.name == "en"
     }?.flavorText)?.replace("\n", " ")
 
     fun getFlavorLang(): String? = flavorTextEntries.firstOrNull {
-        it.language.name == "ko"
+        it.language.name == Locale.getDefault().language
     }?.language?.name ?: flavorTextEntries.firstOrNull {
         it.language.name == "en"
     }?.language?.name

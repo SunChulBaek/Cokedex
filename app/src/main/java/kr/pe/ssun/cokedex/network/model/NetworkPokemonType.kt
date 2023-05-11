@@ -6,4 +6,6 @@ import com.google.gson.annotations.SerializedName
 data class NetworkPokemonType(
     @SerializedName("slot") val slot: Int,
     @SerializedName("type") val type: NetworkNamedAPIResource,
-)
+) {
+    fun getId() = type.getId()
+}

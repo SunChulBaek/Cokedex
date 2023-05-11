@@ -10,6 +10,7 @@ import dagger.hilt.components.SingletonComponent
 import kr.pe.ssun.cokedex.database.dao.AbilityDao
 import kr.pe.ssun.cokedex.database.dao.MoveDao
 import kr.pe.ssun.cokedex.database.dao.PokemonDao
+import kr.pe.ssun.cokedex.database.dao.TypeDao
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import javax.inject.Singleton
@@ -43,9 +44,10 @@ object ApiModule {
     fun providesFakeRepository(
         apiService: RetrofitSsunNetwork,
         pokemonDao: PokemonDao,
+        typeDao: TypeDao,
         abilityDao: AbilityDao,
         moveDao: MoveDao,
     ): PokemonRepository {
-        return PokemonRepository(apiService, pokemonDao, abilityDao, moveDao)
+        return PokemonRepository(apiService, pokemonDao, typeDao, abilityDao, moveDao)
     }
 }

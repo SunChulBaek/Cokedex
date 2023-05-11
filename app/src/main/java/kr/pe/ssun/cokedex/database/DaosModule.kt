@@ -7,6 +7,7 @@ import dagger.hilt.components.SingletonComponent
 import kr.pe.ssun.cokedex.database.dao.AbilityDao
 import kr.pe.ssun.cokedex.database.dao.MoveDao
 import kr.pe.ssun.cokedex.database.dao.PokemonDao
+import kr.pe.ssun.cokedex.database.dao.TypeDao
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -15,6 +16,11 @@ object DaosModule {
     fun providesPokemonDao(
         database: CokedexDatabase,
     ): PokemonDao = database.pokemonDao()
+
+    @Provides
+    fun providesTypeDao(
+        database: CokedexDatabase,
+    ): TypeDao = database.typeDao()
 
     @Provides
     fun providesAbilityDao(

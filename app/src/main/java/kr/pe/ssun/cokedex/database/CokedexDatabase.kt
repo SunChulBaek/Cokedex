@@ -6,12 +6,15 @@ import androidx.room.TypeConverters
 import kr.pe.ssun.cokedex.database.dao.AbilityDao
 import kr.pe.ssun.cokedex.database.dao.MoveDao
 import kr.pe.ssun.cokedex.database.dao.PokemonDao
+import kr.pe.ssun.cokedex.database.dao.TypeDao
 import kr.pe.ssun.cokedex.database.model.AbilityEntity
 import kr.pe.ssun.cokedex.database.model.MoveEntity
 import kr.pe.ssun.cokedex.database.model.PokemonAbilityCrossRef
 import kr.pe.ssun.cokedex.database.model.PokemonMoveCrossRef
 import kr.pe.ssun.cokedex.database.model.PokemonEntity
+import kr.pe.ssun.cokedex.database.model.PokemonTypeCrossRef
 import kr.pe.ssun.cokedex.database.model.StatEntity
+import kr.pe.ssun.cokedex.database.model.TypeEntity
 import kr.pe.ssun.cokedex.database.util.IdsConverter
 import kr.pe.ssun.cokedex.database.util.StatsConverter
 import kr.pe.ssun.cokedex.database.util.TypesConverter
@@ -21,9 +24,11 @@ import kr.pe.ssun.cokedex.database.util.TypesConverter
         PokemonEntity::class,
         AbilityEntity::class,
         MoveEntity::class,
+        StatEntity::class,
+        TypeEntity::class,
         PokemonAbilityCrossRef::class,
         PokemonMoveCrossRef::class,
-        StatEntity::class,
+        PokemonTypeCrossRef::class,
     ],
     version = 1,
     exportSchema = false
@@ -35,6 +40,7 @@ import kr.pe.ssun.cokedex.database.util.TypesConverter
 )
 abstract class CokedexDatabase : RoomDatabase() {
     abstract fun pokemonDao(): PokemonDao
+    abstract fun typeDao(): TypeDao
     abstract fun abilityDao(): AbilityDao
     abstract fun moveDao(): MoveDao
 }

@@ -53,6 +53,7 @@ fun PokemonDetailContent(
     val imageUrl = pokemon?.imageUrl ?: loading?.imageUrl
     val colorStart = Color(success?.colorStart ?: loading?.colorStart ?: 0x00000000)
     val colorEnd = Color(success?.colorEnd ?: loading?.colorEnd ?: 0x00000000)
+    val totalTypesCount = pokemon?.totalTypeIds?.size ?: 0
     val totalAbilitiesCount = pokemon?.totalAbilityIds?.size ?: 0
     val totalMovesCount = pokemon?.totalMoveIds?.size ?: 0
 
@@ -116,7 +117,7 @@ fun PokemonDetailContent(
                 Spacer(modifier = Modifier.weight(1f))
                 pokemon?.types?.forEach { type ->
                     Text(
-                        text = type.toString(),
+                        text = type.name ?: "",
                         modifier = Modifier
                             .background(type.getColor(), RoundedCornerShape(16.dp))
                             .padding(vertical = 4.dp, horizontal = 12.dp),
@@ -198,6 +199,19 @@ fun PokemonDetailContent(
                 .fillMaxWidth().height(5.dp)
                 .background(Color(0xFFe0e0e0))
         ) {
+            // 타입
+            for (j in 0 until totalTypesCount) {
+                Box(modifier = Modifier.weight(1f).fillMaxHeight().background(
+                    when (pokemon?.types?.getOrNull(j)?.fromDB) {
+                        true -> Color(0xFF2196f3)
+                        false -> Color(0xFFe91e63)
+                        else -> Color.Transparent
+                    }
+                )) {
+
+                }
+            }
+            // 어빌리티
             for (i in 0 until totalAbilitiesCount) {
                 Box(modifier = Modifier.weight(1f).fillMaxHeight().background(
                     when (pokemon?.abilities?.getOrNull(i)?.fromDB) {
@@ -209,6 +223,7 @@ fun PokemonDetailContent(
 
                 }
             }
+            // 뭅뭅
             for (j in 0 until totalMovesCount) {
                 Box(modifier = Modifier.weight(1f).fillMaxHeight().background(
                     when (pokemon?.moves?.getOrNull(j)?.fromDB) {

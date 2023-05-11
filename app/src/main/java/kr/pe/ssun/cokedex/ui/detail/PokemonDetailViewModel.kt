@@ -16,14 +16,16 @@ import kr.pe.ssun.cokedex.model.Ability
 import kr.pe.ssun.cokedex.domain.GetAbilityUseCase
 import kr.pe.ssun.cokedex.domain.GetMovesUseCase
 import kr.pe.ssun.cokedex.domain.GetPokemonDetailUseCase
+import kr.pe.ssun.cokedex.domain.GetTypeUseCase
+import kr.pe.ssun.cokedex.model.Type
 import kr.pe.ssun.cokedex.navigation.PokemonDetailArgs
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class PokemonDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     getPokemonDetailUseCase: GetPokemonDetailUseCase,
+    getTypeUseCase: GetTypeUseCase,
     getAbilityUseCase: GetAbilityUseCase,
     getMoveUseCase: GetMovesUseCase
 ) : ViewModel() {
@@ -34,9 +36,16 @@ class PokemonDetailViewModel @Inject constructor(
 
     private val args = PokemonDetailArgs(savedStateHandle)
 
+    private val typeIds = MutableStateFlow(listOf(DUMMY_ID))
+
     private val abilityIds = MutableStateFlow(listOf(DUMMY_ID))
 
     private val moveIds = MutableStateFlow(listOf(DUMMY_ID))
+
+    private val typeFlow = typeIds.flatMapConcat { it.asFlow() }
+        .map { typeId ->
+            getTypeUseCase(typeId).first().getOrNull() ?: Type(DUMMY_ID)
+        }
 
     // TODO
     private val abilitiesFlow = abilityIds.flatMapConcat { it.asFlow() }
@@ -50,16 +59,28 @@ class PokemonDetailViewModel @Inject constructor(
             getMoveUseCase(moveIds).first().getOrNull() ?: Ability(DUMMY_ID)
         }
 
+    private var types: List<Type> = mutableListOf()
+
     private var abilities: List<Ability> = mutableListOf()
 
     private var moves: List<Ability> = mutableListOf()
 
     var uiState = combine(
+        typeFlow,
         abilitiesFlow,
         movesFlow,
         getPokemonDetailUseCase(args.id)
-    ) { ability, move, result ->
+    ) { type, ability, move, result ->
         val pokemon = result.getOrNull()?.copy()
+
+        // 더미 아이템 하나만 있을 때 캐시 안된 Type api 호출하도록
+        if (typeIds.value.size == 1) {
+            types = pokemon?.types?.map { it.copy(fromDB = true) } ?: listOf()
+            val notCachedTIds = pokemon?.totalTypeIds?.filterNot { tId ->
+                pokemon.types.map { it.id }.contains(tId)
+            } ?: listOf()
+            typeIds.emit(notCachedTIds)
+        }
 
         // 더미 아이템 하나만 있을 때 캐시 안된 Ability api 호출하도록
         if (abilityIds.value.size == 1) {
@@ -81,7 +102,10 @@ class PokemonDetailViewModel @Inject constructor(
 
         when {
             pokemon != null -> {
-                // Ability, Move 중복되지 않게 아이템 추가
+                // Type, Ability, Move 중복되지 않게 아이템 추가
+                if (type.id != DUMMY_ID && types.none { it.id == type.id }) {
+                    types = types.filterNot { it.id == DUMMY_ID }.plus(type).sortedBy { it.id }
+                }
                 if (ability.id != DUMMY_ID && abilities.none { it.id == ability.id }) {
                     abilities = abilities.filterNot { it.id == DUMMY_ID }.plus(ability).sortedBy { it.id }
                 }
@@ -91,6 +115,7 @@ class PokemonDetailViewModel @Inject constructor(
 
                 PokemonUiState.Success(
                     pokemon = pokemon.copy(
+                        types = types,
                         abilities = abilities,
                         moves = moves,
                     ),
