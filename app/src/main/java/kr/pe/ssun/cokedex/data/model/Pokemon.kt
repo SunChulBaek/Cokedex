@@ -11,12 +11,8 @@ fun NetworkPokemon.asEntity() = PokemonEntity(
     isDefault = isDefault,
     order = order,
     weight = weight,
-    abilityIds = abilities.map {
-        it.ability.url!!.split("/")[6].toInt()
-    },
-    moveIds = moves.map {
-        it.move.url!!.split("/")[6].toInt()
-    },
+    abilityIds = abilities.map { ability -> ability.ability.getId() },
+    moveIds = moves.map { move -> move.move.getId() },
     stats = stats.map {
         Pair(it.stat.name!!, it.baseStat)
     },

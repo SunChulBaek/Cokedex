@@ -98,20 +98,20 @@ class PokemonRepository @Inject constructor(
                 val entity = pokemon.asEntity()
                 val entity2 = FullPokemon(
                     pokemon = pokemon.asEntity(),
-                    abilities = abilityDao.findById(abilityIds = pokemon.abilities.map { it.ability.url!!.split("/")[6].toInt() }.toIntArray()),
-                    moves = moveDao.findById(moveIds = pokemon.moves.map { it.move.url!!.split("/")[6].toInt() }.toIntArray()),
+                    abilities = abilityDao.findById(pokemon.getAbilityIds().toIntArray()),
+                    moves = moveDao.findById(pokemon.getMoveIds().toIntArray()),
                 )
                 pokemonDao.insert(entity)
                 pokemon.abilities.forEach { ability ->
                     pokemonDao.insert(PokemonAbilityCrossRef(
                         pId = pokemon.id,
-                        aId = ability.ability.url!!.split("/")[6].toInt()
+                        aId = ability.getId()
                     ))
                 }
                 pokemon.moves.forEach { move ->
                     pokemonDao.insert(PokemonMoveCrossRef(
                         pId = pokemon.id,
-                        mId = move.move.url!!.split("/")[6].toInt()
+                        mId = move.getId()
                     ))
                 }
                 emit(entity2.asExternalModel())
