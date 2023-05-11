@@ -9,6 +9,7 @@ import kr.pe.ssun.cokedex.database.model.FullPokemon
 import kr.pe.ssun.cokedex.database.model.PokemonAbilityCrossRef
 import kr.pe.ssun.cokedex.database.model.PokemonMoveCrossRef
 import kr.pe.ssun.cokedex.database.model.PokemonEntity
+import kr.pe.ssun.cokedex.database.model.StatEntity
 
 @Dao
 interface PokemonDao {
@@ -19,6 +20,9 @@ interface PokemonDao {
 
     @Insert
     fun insert(pokemon: PokemonEntity)
+
+    @Insert
+    fun insert(stat: StatEntity)
 
     @Insert
     fun insert(p2a: PokemonAbilityCrossRef)

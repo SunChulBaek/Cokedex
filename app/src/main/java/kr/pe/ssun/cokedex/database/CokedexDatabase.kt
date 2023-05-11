@@ -11,6 +11,7 @@ import kr.pe.ssun.cokedex.database.model.MoveEntity
 import kr.pe.ssun.cokedex.database.model.PokemonAbilityCrossRef
 import kr.pe.ssun.cokedex.database.model.PokemonMoveCrossRef
 import kr.pe.ssun.cokedex.database.model.PokemonEntity
+import kr.pe.ssun.cokedex.database.model.StatEntity
 import kr.pe.ssun.cokedex.database.util.IdsConverter
 import kr.pe.ssun.cokedex.database.util.StatsConverter
 import kr.pe.ssun.cokedex.database.util.TypesConverter
@@ -22,6 +23,7 @@ import kr.pe.ssun.cokedex.database.util.TypesConverter
         MoveEntity::class,
         PokemonAbilityCrossRef::class,
         PokemonMoveCrossRef::class,
+        StatEntity::class,
     ],
     version = 1,
     exportSchema = false

@@ -13,9 +13,6 @@ fun NetworkPokemon.asEntity() = PokemonEntity(
     weight = weight,
     abilityIds = abilities.map { ability -> ability.ability.getId() },
     moveIds = moves.map { move -> move.move.getId() },
-    stats = stats.map {
-        Pair(it.stat.name!!, it.baseStat)
-    },
     types = types.map {
         it.type.name!!
     }

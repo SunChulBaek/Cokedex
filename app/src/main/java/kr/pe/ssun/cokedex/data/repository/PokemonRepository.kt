@@ -15,6 +15,7 @@ import kr.pe.ssun.cokedex.database.model.PokemonAbilityCrossRef
 import kr.pe.ssun.cokedex.database.model.PokemonMoveCrossRef
 import kr.pe.ssun.cokedex.database.model.asExternalModel
 import kr.pe.ssun.cokedex.model.Ability
+import kr.pe.ssun.cokedex.network.model.asEntity
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -79,7 +80,7 @@ class PokemonRepository @Inject constructor(
         emit(network.getPokemonList(
             limit = limit,
             offset = offset
-        ).results.map { it.asExternalModel()!! })
+        ).results.map { it.asExternalModel() })
     }
 
     fun getPokemonDetail(id: Int): Flow<PokemonDetail> = flow {
@@ -96,12 +97,15 @@ class PokemonRepository @Inject constructor(
             Timber.e("[sunchulbaek] full pokemon db에 저장되어 있지 않음")
             network.getPokemonDetail(id).let { pokemon ->
                 val entity = pokemon.asEntity()
+                val stat = pokemon.stats.asEntity(pokemon.id)
                 val entity2 = FullPokemon(
                     pokemon = pokemon.asEntity(),
                     abilities = abilityDao.findById(pokemon.getAbilityIds().toIntArray()),
                     moves = moveDao.findById(pokemon.getMoveIds().toIntArray()),
+                    stat = stat
                 )
                 pokemonDao.insert(entity)
+                pokemonDao.insert(stat)
                 pokemon.abilities.forEach { ability ->
                     pokemonDao.insert(PokemonAbilityCrossRef(
                         pId = pokemon.id,

@@ -4,7 +4,6 @@ import androidx.room.Embedded
 import androidx.room.Junction
 import androidx.room.Relation
 import kr.pe.ssun.cokedex.model.PokemonDetail
-import kr.pe.ssun.cokedex.model.PokemonStat
 import kr.pe.ssun.cokedex.model.Type
 
 data class FullPokemon(
@@ -21,6 +20,11 @@ data class FullPokemon(
         associateBy = Junction(PokemonMoveCrossRef::class)
     )
     val moves: List<MoveEntity>,
+    @Relation(
+        parentColumn = "p_id",
+        entityColumn = "p_id"
+    )
+    val stat: StatEntity,
 )
 
 fun FullPokemon.asExternalModel() = PokemonDetail(
@@ -36,7 +40,5 @@ fun FullPokemon.asExternalModel() = PokemonDetail(
     totalMoveIds = pokemon.moveIds,
     weight = pokemon.weight,
     height = pokemon.height,
-    stats = pokemon.stats.map { (name, value) ->
-        PokemonStat(name = name, value = value)
-    }
+    stats = stat.asExternalModel()
 )
