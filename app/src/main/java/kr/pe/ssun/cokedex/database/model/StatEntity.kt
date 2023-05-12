@@ -3,7 +3,7 @@ package kr.pe.ssun.cokedex.database.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import kr.pe.ssun.cokedex.model.PokemonStat
+import kr.pe.ssun.cokedex.model.Stat
 
 @Entity(
     tableName = "stat"
@@ -13,7 +13,7 @@ data class StatEntity(
     @ColumnInfo(name = "name") val name: String?,
 )
 
-fun StatEntity.asExternalModel(value: Int = 0, fromDB: Boolean = false) = PokemonStat(
+fun StatEntity.asExternalModel(value: Int = 0, fromDB: Boolean = false) = Stat(
     id = id,
     name = name,
     value = value,

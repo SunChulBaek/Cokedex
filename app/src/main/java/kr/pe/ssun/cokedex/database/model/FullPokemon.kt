@@ -4,7 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Junction
 import androidx.room.Relation
 import kr.pe.ssun.cokedex.model.PokemonDetail
-import kr.pe.ssun.cokedex.model.PokemonStat
+import kr.pe.ssun.cokedex.model.Stat
 import kr.pe.ssun.cokedex.model.Type
 
 data class FullPokemon(
@@ -48,6 +48,6 @@ fun FullPokemon.asExternalModel() = PokemonDetail(
     weight = pokemon.weight,
     height = pokemon.height,
     stats = stats.map { stat ->
-        PokemonStat(stat.value.sId, stat.stat?.name, stat.value.value)
+        Stat(stat.value.sId, stat.stat?.name, stat.value.value)
     },
 )

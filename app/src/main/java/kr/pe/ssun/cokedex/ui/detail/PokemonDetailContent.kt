@@ -1,11 +1,9 @@
 package kr.pe.ssun.cokedex.ui.detail
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -53,7 +51,6 @@ fun PokemonDetailContent(
     val imageUrl = pokemon?.imageUrl ?: loading?.imageUrl
     val colorStart = Color(success?.colorStart ?: loading?.colorStart ?: 0x00000000)
     val colorEnd = Color(success?.colorEnd ?: loading?.colorEnd ?: 0x00000000)
-    val totalTypesCount = pokemon?.totalTypeIds?.size ?: 0
     val totalAbilitiesCount = pokemon?.totalAbilityIds?.size ?: 0
     val totalMovesCount = pokemon?.totalMoveIds?.size ?: 0
 
@@ -63,7 +60,10 @@ fun PokemonDetailContent(
             .background(Color(0xFF212121)),
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth().weight(1f).verticalScroll(scrollState),
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+                .verticalScroll(scrollState),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             TopAppBar(
@@ -193,48 +193,8 @@ fun PokemonDetailContent(
                 }
             }
         }
+
         // 프로그레스
-        Row(
-            modifier = Modifier
-                .fillMaxWidth().height(5.dp)
-                .background(Color(0xFFe0e0e0))
-        ) {
-            // 타입
-            for (j in 0 until totalTypesCount) {
-                Box(modifier = Modifier.weight(1f).fillMaxHeight().background(
-                    when (pokemon?.types?.getOrNull(j)?.fromDB) {
-                        true -> Color(0xFF2196f3)
-                        false -> Color(0xFFe91e63)
-                        else -> Color.Transparent
-                    }
-                )) {
-
-                }
-            }
-            // 어빌리티
-            for (i in 0 until totalAbilitiesCount) {
-                Box(modifier = Modifier.weight(1f).fillMaxHeight().background(
-                    when (pokemon?.abilities?.getOrNull(i)?.fromDB) {
-                        true -> Color(0xFF4caf50)
-                        false -> Color(0xFFff9800)
-                        else -> Color.Transparent
-                    }
-                )) {
-
-                }
-            }
-            // 뭅뭅
-            for (j in 0 until totalMovesCount) {
-                Box(modifier = Modifier.weight(1f).fillMaxHeight().background(
-                    when (pokemon?.moves?.getOrNull(j)?.fromDB) {
-                        true -> Color(0xFF2196f3)
-                        false -> Color(0xFFe91e63)
-                        else -> Color.Transparent
-                    }
-                )) {
-
-                }
-            }
-        }
+        PokemonDetailLoadingProgress(modifier = Modifier.fillMaxWidth().height(16.dp), pokemon = pokemon)
     }
 }

@@ -1,8 +1,8 @@
 package kr.pe.ssun.cokedex.model
 
-data class Ability(
+data class Stat(
     override val id: Int,
     val name: String? = null,
-    val flavor: String? = null,
+    val value: Int? = null,
     override val fromDB: Boolean = false,
 ) : Loadable(id, fromDB)

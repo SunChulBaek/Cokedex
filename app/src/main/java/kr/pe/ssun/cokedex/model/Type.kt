@@ -20,10 +20,10 @@ import kr.pe.ssun.cokedex.network.model.NetworkType.Companion.TYPE_STEEL
 import kr.pe.ssun.cokedex.network.model.NetworkType.Companion.TYPE_WATER
 
 data class Type(
-    val id: Int,
+    override val id: Int,
     val name: String? = null,
-    val fromDB: Boolean = false,
-) {
+    override val fromDB: Boolean = false,
+) : Loadable(id, fromDB) {
     fun getColor(): Color = when (id) {
         TYPE_NORMAL -> Color(0xFF9E9E9E)
         TYPE_FIGHTING -> Color(0xFF9E9E9E)

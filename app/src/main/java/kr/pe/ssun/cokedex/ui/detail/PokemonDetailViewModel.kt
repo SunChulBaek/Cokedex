@@ -18,7 +18,7 @@ import kr.pe.ssun.cokedex.domain.GetMovesUseCase
 import kr.pe.ssun.cokedex.domain.GetPokemonDetailUseCase
 import kr.pe.ssun.cokedex.domain.GetStatUseCase
 import kr.pe.ssun.cokedex.domain.GetTypeUseCase
-import kr.pe.ssun.cokedex.model.PokemonStat
+import kr.pe.ssun.cokedex.model.Stat
 import kr.pe.ssun.cokedex.model.Type
 import kr.pe.ssun.cokedex.navigation.PokemonDetailArgs
 import javax.inject.Inject
@@ -54,7 +54,7 @@ class PokemonDetailViewModel @Inject constructor(
 
     private val statFlow = statIds.flatMapConcat { it.asFlow() }
         .map { statId ->
-            getStatUseCase(statId).first().getOrNull() ?: PokemonStat(DUMMY_ID)
+            getStatUseCase(statId).first().getOrNull() ?: Stat(DUMMY_ID)
         }
 
     private val abilitiesFlow = abilityIds.flatMapConcat { it.asFlow() }
@@ -69,7 +69,7 @@ class PokemonDetailViewModel @Inject constructor(
 
     private var types: List<Type> = mutableListOf()
 
-    private var stats: List<PokemonStat> = mutableListOf()
+    private var stats: List<Stat> = mutableListOf()
 
     private var abilities: List<Ability> = mutableListOf()
 

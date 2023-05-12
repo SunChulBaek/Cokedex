@@ -22,7 +22,7 @@ import kr.pe.ssun.cokedex.database.model.ValueEntity
 import kr.pe.ssun.cokedex.database.model.ValueWithStat
 import kr.pe.ssun.cokedex.database.model.asExternalModel
 import kr.pe.ssun.cokedex.model.Ability
-import kr.pe.ssun.cokedex.model.PokemonStat
+import kr.pe.ssun.cokedex.model.Stat
 import kr.pe.ssun.cokedex.model.Type
 import kr.pe.ssun.cokedex.network.model.asEntity
 import timber.log.Timber
@@ -64,7 +64,7 @@ class PokemonRepository @Inject constructor(
         }
     }
 
-    fun getStat(id: Int, value: Int): Flow<PokemonStat> = flow {
+    fun getStat(id: Int, value: Int): Flow<Stat> = flow {
         statDao.findById(id)?.let { stat ->
             Timber.i("[sunchulbaek] Stat(id = $id) DB에 저장되어 있음")
             emit(stat.asExternalModel(fromDB = true))
@@ -72,7 +72,7 @@ class PokemonRepository @Inject constructor(
             when (id) {
                 DUMMY_ID -> {
                     Timber.d("[sunchulbaek] Stat(id = 0) 은 무시")
-                    emit(PokemonStat(DUMMY_ID))
+                    emit(Stat(DUMMY_ID))
                 }
                 else -> {
                     Timber.e("[sunchulbaek] Stat(id = $id) DB에 저장되어 있지 않음. API 콜")

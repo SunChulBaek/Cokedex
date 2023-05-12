@@ -12,5 +12,5 @@ data class PokemonDetail(
     val totalMoveIds: List<Int> = listOf(),
     val weight: Int,
     val height: Int,
-    val stats: List<PokemonStat>,
+    val stats: List<Stat>,
 )
