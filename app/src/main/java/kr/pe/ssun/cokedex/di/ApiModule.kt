@@ -10,7 +10,9 @@ import dagger.hilt.components.SingletonComponent
 import kr.pe.ssun.cokedex.database.dao.AbilityDao
 import kr.pe.ssun.cokedex.database.dao.MoveDao
 import kr.pe.ssun.cokedex.database.dao.PokemonDao
+import kr.pe.ssun.cokedex.database.dao.StatDao
 import kr.pe.ssun.cokedex.database.dao.TypeDao
+import kr.pe.ssun.cokedex.database.dao.ValueDao
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import javax.inject.Singleton
@@ -45,9 +47,19 @@ object ApiModule {
         apiService: RetrofitSsunNetwork,
         pokemonDao: PokemonDao,
         typeDao: TypeDao,
+        statDao: StatDao,
+        valueDao: ValueDao,
         abilityDao: AbilityDao,
         moveDao: MoveDao,
     ): PokemonRepository {
-        return PokemonRepository(apiService, pokemonDao, typeDao, abilityDao, moveDao)
+        return PokemonRepository(
+            network = apiService,
+            pokemonDao = pokemonDao,
+            typeDao = typeDao,
+            statDao = statDao,
+            valueDao = valueDao,
+            abilityDao = abilityDao,
+            moveDao = moveDao
+        )
     }
 }

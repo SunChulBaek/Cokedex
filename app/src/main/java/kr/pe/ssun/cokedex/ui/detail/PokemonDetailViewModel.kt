@@ -16,7 +16,9 @@ import kr.pe.ssun.cokedex.model.Ability
 import kr.pe.ssun.cokedex.domain.GetAbilityUseCase
 import kr.pe.ssun.cokedex.domain.GetMovesUseCase
 import kr.pe.ssun.cokedex.domain.GetPokemonDetailUseCase
+import kr.pe.ssun.cokedex.domain.GetStatUseCase
 import kr.pe.ssun.cokedex.domain.GetTypeUseCase
+import kr.pe.ssun.cokedex.model.PokemonStat
 import kr.pe.ssun.cokedex.model.Type
 import kr.pe.ssun.cokedex.navigation.PokemonDetailArgs
 import javax.inject.Inject
@@ -26,6 +28,7 @@ class PokemonDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     getPokemonDetailUseCase: GetPokemonDetailUseCase,
     getTypeUseCase: GetTypeUseCase,
+    getStatUseCase: GetStatUseCase,
     getAbilityUseCase: GetAbilityUseCase,
     getMoveUseCase: GetMovesUseCase
 ) : ViewModel() {
@@ -38,6 +41,8 @@ class PokemonDetailViewModel @Inject constructor(
 
     private val typeIds = MutableStateFlow(listOf(DUMMY_ID))
 
+    private val statIds = MutableStateFlow(listOf(Pair(DUMMY_ID, DUMMY_ID)))
+
     private val abilityIds = MutableStateFlow(listOf(DUMMY_ID))
 
     private val moveIds = MutableStateFlow(listOf(DUMMY_ID))
@@ -47,13 +52,16 @@ class PokemonDetailViewModel @Inject constructor(
             getTypeUseCase(typeId).first().getOrNull() ?: Type(DUMMY_ID)
         }
 
-    // TODO
+    private val statFlow = statIds.flatMapConcat { it.asFlow() }
+        .map { statId ->
+            getStatUseCase(statId).first().getOrNull() ?: PokemonStat(DUMMY_ID)
+        }
+
     private val abilitiesFlow = abilityIds.flatMapConcat { it.asFlow() }
         .map { abilityId ->
             getAbilityUseCase(abilityId).first().getOrNull() ?: Ability(DUMMY_ID)
         }
 
-    // TODO
     private val movesFlow = moveIds.flatMapConcat { it.asFlow() }
         .map { moveIds ->
             getMoveUseCase(moveIds).first().getOrNull() ?: Ability(DUMMY_ID)
@@ -61,16 +69,19 @@ class PokemonDetailViewModel @Inject constructor(
 
     private var types: List<Type> = mutableListOf()
 
+    private var stats: List<PokemonStat> = mutableListOf()
+
     private var abilities: List<Ability> = mutableListOf()
 
     private var moves: List<Ability> = mutableListOf()
 
     var uiState = combine(
         typeFlow,
+        statFlow,
         abilitiesFlow,
         movesFlow,
         getPokemonDetailUseCase(args.id)
-    ) { type, ability, move, result ->
+    ) { type, stat, ability, move, result ->
         val pokemon = result.getOrNull()?.copy()
 
         // 더미 아이템 하나만 있을 때 캐시 안된 Type api 호출하도록
@@ -80,6 +91,15 @@ class PokemonDetailViewModel @Inject constructor(
                 pokemon.types.map { it.id }.contains(tId)
             } ?: listOf()
             typeIds.emit(notCachedTIds)
+        }
+
+        // 더미 아이템 하나만 있을 때 캐시 안된 Stat api 호출하도록
+        if (statIds.value.size == 1) {
+            stats = pokemon?.stats?.filterNot { it.name == null }?.map { it.copy(fromDB = true) } ?: listOf()
+            val notCachedSIds = pokemon?.stats?.filter {
+                it.name == null
+            }?.map { Pair(it.id, it.value ?: 0) } ?: listOf()
+            statIds.emit(notCachedSIds)
         }
 
         // 더미 아이템 하나만 있을 때 캐시 안된 Ability api 호출하도록
@@ -102,9 +122,12 @@ class PokemonDetailViewModel @Inject constructor(
 
         when {
             pokemon != null -> {
-                // Type, Ability, Move 중복되지 않게 아이템 추가
+                // Type, Stat, Ability, Move 중복되지 않게 아이템 추가
                 if (type.id != DUMMY_ID && types.none { it.id == type.id }) {
                     types = types.filterNot { it.id == DUMMY_ID }.plus(type).sortedBy { it.id }
+                }
+                if (stat.id != DUMMY_ID && stats.none { it.id == stat.id }) {
+                    stats = stats.filterNot { it.id == DUMMY_ID }.plus(stat).sortedBy { it.id }
                 }
                 if (ability.id != DUMMY_ID && abilities.none { it.id == ability.id }) {
                     abilities = abilities.filterNot { it.id == DUMMY_ID }.plus(ability).sortedBy { it.id }
@@ -116,6 +139,7 @@ class PokemonDetailViewModel @Inject constructor(
                 PokemonUiState.Success(
                     pokemon = pokemon.copy(
                         types = types,
+                        stats = stats,
                         abilities = abilities,
                         moves = moves,
                     ),

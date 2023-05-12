@@ -5,6 +5,7 @@ import kr.pe.ssun.cokedex.network.model.NetworkAPIResourceList
 import kr.pe.ssun.cokedex.network.model.NetworkAbility
 import kr.pe.ssun.cokedex.network.model.NetworkMove
 import kr.pe.ssun.cokedex.network.model.NetworkPokemon
+import kr.pe.ssun.cokedex.network.model.NetworkStat
 import kr.pe.ssun.cokedex.network.model.NetworkType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -22,6 +23,11 @@ interface RetrofitSsunNetworkApi {
     suspend fun getType(
         @Path("id") id: Int,
     ): NetworkType
+
+    @GET("stat/{id}")
+    suspend fun getStat(
+        @Path("id") id: Int,
+    ): NetworkStat
 
     @GET("move/{id}")
     suspend fun getMove(
@@ -67,6 +73,10 @@ class RetrofitSsunNetwork @Inject constructor() : PokemonNetworkDataSource {
     override suspend fun getType(
         id: Int
     ): NetworkType = networkApi.getType(id)
+
+    override suspend fun getStat(
+        id: Int
+    ): NetworkStat = networkApi.getStat(id)
 
     override suspend fun getMove(
         id: Int

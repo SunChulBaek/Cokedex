@@ -1,6 +1,8 @@
 package kr.pe.ssun.cokedex.model
 
 data class PokemonStat(
-    val name: String,
-    val value: Int,
+    val id: Int,
+    val name: String? = null,
+    val value: Int? = null,
+    val fromDB: Boolean = false,
 )

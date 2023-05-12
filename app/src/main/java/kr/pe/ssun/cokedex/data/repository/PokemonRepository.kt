@@ -10,13 +10,19 @@ import kr.pe.ssun.cokedex.data.model.asEntity
 import kr.pe.ssun.cokedex.database.dao.AbilityDao
 import kr.pe.ssun.cokedex.database.dao.MoveDao
 import kr.pe.ssun.cokedex.database.dao.PokemonDao
+import kr.pe.ssun.cokedex.database.dao.StatDao
 import kr.pe.ssun.cokedex.database.dao.TypeDao
+import kr.pe.ssun.cokedex.database.dao.ValueDao
 import kr.pe.ssun.cokedex.database.model.FullPokemon
 import kr.pe.ssun.cokedex.database.model.PokemonAbilityCrossRef
 import kr.pe.ssun.cokedex.database.model.PokemonMoveCrossRef
+import kr.pe.ssun.cokedex.database.model.PokemonStatCrossRef
 import kr.pe.ssun.cokedex.database.model.PokemonTypeCrossRef
+import kr.pe.ssun.cokedex.database.model.ValueEntity
+import kr.pe.ssun.cokedex.database.model.ValueWithStat
 import kr.pe.ssun.cokedex.database.model.asExternalModel
 import kr.pe.ssun.cokedex.model.Ability
+import kr.pe.ssun.cokedex.model.PokemonStat
 import kr.pe.ssun.cokedex.model.Type
 import kr.pe.ssun.cokedex.network.model.asEntity
 import timber.log.Timber
@@ -28,6 +34,8 @@ class PokemonRepository @Inject constructor(
     private val network: PokemonNetworkDataSource,
     private val pokemonDao: PokemonDao,
     private val typeDao: TypeDao,
+    private val statDao: StatDao,
+    private val valueDao: ValueDao,
     private val abilityDao: AbilityDao,
     private val moveDao: MoveDao,
 ) {
@@ -50,6 +58,27 @@ class PokemonRepository @Inject constructor(
                     network.getType(id).asEntity().let { type ->
                         typeDao.insert(type)
                         emit(type.asExternalModel())
+                    }
+                }
+            }
+        }
+    }
+
+    fun getStat(id: Int, value: Int): Flow<PokemonStat> = flow {
+        statDao.findById(id)?.let { stat ->
+            Timber.i("[sunchulbaek] Stat(id = $id) DB에 저장되어 있음")
+            emit(stat.asExternalModel(fromDB = true))
+        } ?: run {
+            when (id) {
+                DUMMY_ID -> {
+                    Timber.d("[sunchulbaek] Stat(id = 0) 은 무시")
+                    emit(PokemonStat(DUMMY_ID))
+                }
+                else -> {
+                    Timber.e("[sunchulbaek] Stat(id = $id) DB에 저장되어 있지 않음. API 콜")
+                    network.getStat(id).asEntity().let { stat ->
+                        statDao.insert(stat)
+                        emit(stat.asExternalModel(value))
                     }
                 }
             }
@@ -114,6 +143,9 @@ class PokemonRepository @Inject constructor(
             fullPokemon.types.forEach { type ->
                 Timber.i("[sunchulbaek] Type(id = ${type.id}) DB에 저장되어 있음")
             }
+            fullPokemon.stats.forEach { stat ->
+                Timber.i("[sunchulbaek] Stat(sId = ${stat.value.sId}) DB에 저장되어 ${if (stat.stat != null) "있음" else "있지않음"}")
+            }
             fullPokemon.abilities.forEach { ability ->
                 Timber.i("[sunchulbaek] Ability(id = ${ability.id}) DB에 저장되어 있음")
             }
@@ -122,19 +154,33 @@ class PokemonRepository @Inject constructor(
             }
             emit(fullPokemon.asExternalModel())
         } ?: run {
-            Timber.e("[sunchulbaek] Pokemon(id =${id}) DB에 저장되어 있지 않음")
+            Timber.e("[sunchulbaek] Pokemon(id = ${id}) DB에 저장되어 있지 않음")
             network.getPokemonDetail(id).let { pokemon ->
                 val entity = pokemon.asEntity()
-                val stat = pokemon.stats.asEntity(pokemon.id)
                 val entity2 = FullPokemon(
                     pokemon = pokemon.asEntity(),
                     abilities = abilityDao.findById(pokemon.getAbilityIds().toIntArray()),
                     moves = moveDao.findById(pokemon.getMoveIds().toIntArray()),
-                    stat = stat,
+                    stats = pokemon.stats.map { stat ->
+                        ValueWithStat(
+                            value = ValueEntity(pokemon.id, stat.stat.getId(), stat.baseStat),
+                            stat = statDao.findById(stat.stat.getId())
+                        )
+                    },
                     types = typeDao.findById(pokemon.getTypeIds().toIntArray())
                 )
                 pokemonDao.insert(entity)
-                pokemonDao.insert(stat)
+                pokemon.stats.forEach { stat ->
+                    pokemonDao.insert(PokemonStatCrossRef(
+                        pId = pokemon.id,
+                        sId = stat.stat.getId()
+                    ))
+                    valueDao.insert(ValueEntity(
+                        pId = pokemon.id,
+                        sId = stat.stat.getId(),
+                        value = stat.baseStat
+                    ))
+                }
                 pokemon.types.forEach { type ->
                     pokemonDao.insert(PokemonTypeCrossRef(
                         pId = pokemon.id,

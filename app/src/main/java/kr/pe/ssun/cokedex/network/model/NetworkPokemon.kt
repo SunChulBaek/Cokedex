@@ -22,6 +22,7 @@ data class NetworkPokemon(
     @SerializedName("stats") val stats: List<NetworkPokemonStat> = listOf(),
     @SerializedName("types") val types: List<NetworkPokemonType>,
 ) {
+    fun getStatIds(): List<Int> = stats.map { stat -> stat.stat.getId() }
     fun getAbilityIds(): List<Int> = abilities.map { ability -> ability.getId() }
 
     fun getMoveIds(): List<Int> = moves.map { move -> move.getId() }

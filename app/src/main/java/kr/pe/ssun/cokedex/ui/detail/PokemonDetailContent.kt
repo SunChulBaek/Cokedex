@@ -152,7 +152,7 @@ fun PokemonDetailContent(
             Text(text = "Base Stats", color = Color.White)
             pokemon?.stats?.forEach { stat ->
                 Row {
-                    Text(text = stat.name, color = Color.White)
+                    Text(text = stat.name ?: "", color = Color.White)
                     Spacer(modifier = Modifier.width(10.dp))
                     Text(
                         text = stat.value.toString(),

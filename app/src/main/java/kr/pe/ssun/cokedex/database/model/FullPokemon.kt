@@ -4,6 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Junction
 import androidx.room.Relation
 import kr.pe.ssun.cokedex.model.PokemonDetail
+import kr.pe.ssun.cokedex.model.PokemonStat
 import kr.pe.ssun.cokedex.model.Type
 
 data class FullPokemon(
@@ -22,9 +23,10 @@ data class FullPokemon(
     val moves: List<MoveEntity>,
     @Relation(
         parentColumn = "p_id",
-        entityColumn = "p_id"
+        entityColumn = "p_id",
+        entity = ValueEntity::class
     )
-    val stat: StatEntity,
+    val stats: List<ValueWithStat>,
     @Relation(
         parentColumn = "p_id",
         entityColumn = "t_id",
@@ -45,5 +47,7 @@ fun FullPokemon.asExternalModel() = PokemonDetail(
     totalMoveIds = pokemon.moveIds,
     weight = pokemon.weight,
     height = pokemon.height,
-    stats = stat.asExternalModel()
+    stats = stats.map { stat ->
+        PokemonStat(stat.value.sId, stat.stat?.name, stat.value.value)
+    },
 )

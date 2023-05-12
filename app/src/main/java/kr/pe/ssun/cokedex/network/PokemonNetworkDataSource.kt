@@ -4,6 +4,7 @@ import kr.pe.ssun.cokedex.network.model.NetworkAPIResourceList
 import kr.pe.ssun.cokedex.network.model.NetworkAbility
 import kr.pe.ssun.cokedex.network.model.NetworkMove
 import kr.pe.ssun.cokedex.network.model.NetworkPokemon
+import kr.pe.ssun.cokedex.network.model.NetworkStat
 import kr.pe.ssun.cokedex.network.model.NetworkType
 
 interface PokemonNetworkDataSource {
@@ -11,6 +12,10 @@ interface PokemonNetworkDataSource {
     suspend fun getType(
         id: Int,
     ): NetworkType
+
+    suspend fun getStat(
+        id: Int,
+    ): NetworkStat
 
     suspend fun getMove(
         id: Int,
