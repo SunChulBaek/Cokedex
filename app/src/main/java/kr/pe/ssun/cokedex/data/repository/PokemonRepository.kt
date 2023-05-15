@@ -184,6 +184,7 @@ class PokemonRepository @Inject constructor(
                 val entity = pokemon.asEntity()
                 val entity2 = FullPokemon(
                     pokemon = pokemon.asEntity(),
+                    name = nameDao.findById(pokemon.id),
                     abilities = abilityDao.findById(pokemon.getAbilityIds().toIntArray()),
                     moves = moveDao.findById(pokemon.getMoveIds().toIntArray()),
                     stats = pokemon.stats.map { stat ->

@@ -11,6 +11,11 @@ data class FullPokemon(
     @Embedded val pokemon: PokemonEntity,
     @Relation(
         parentColumn = "p_id",
+        entityColumn = "p_id"
+    )
+    val name: NameEntity?,
+    @Relation(
+        parentColumn = "p_id",
         entityColumn = "a_id",
         associateBy = Junction(PokemonAbilityCrossRef::class)
     )
@@ -37,7 +42,7 @@ data class FullPokemon(
 
 fun FullPokemon.asExternalModel() = PokemonDetail(
     id = pokemon.id,
-    name = pokemon.name ?: "",
+    name = name?.name ?: (pokemon.name ?: ""),
     imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png",
     totalTypeIds = pokemon.typeIds,
     types = types.map { type -> Type(type.id, type.name) },
