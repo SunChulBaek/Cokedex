@@ -49,16 +49,6 @@ class HomeViewModel @Inject constructor(
         pokemonListFlow,
         namesFlow
     ) { pokemonListResult, newName ->
-        // 이름 정보 요청
-        pokemonListResult.getOrNull()?.filterNot { pokemon ->
-            list.map { it.id }.contains(pokemon.id)
-        }?.map { it.id }?.let { newNameIds ->
-            if (newNameIds.isNotEmpty()) {
-                Timber.d("[sunchulbaek] name 캐시안됨 = $newNameIds")
-                namesIds.emit(newNameIds)
-            }
-        }
-
         // 이름 정보 업뎃
         if (!names.contains(newName.id) && newName.name != null) {
             Timber.d("[sunchulbaek] name(id = ${newName.id}) 업뎃 = ${newName.name}")
@@ -69,6 +59,9 @@ class HomeViewModel @Inject constructor(
         pokemonListResult.getOrNull()?.let { pokemonList ->
             list.addAll(pokemonList.filterNot { list.contains(it) })
         }
+
+        // 이름 정보 요청
+        namesIds.emit(list.filter { pokemon -> !names.contains(pokemon.id) }.map { it.id })
 
         HomeUiState.Success(
             pokemonList = list.map { pokemon ->
