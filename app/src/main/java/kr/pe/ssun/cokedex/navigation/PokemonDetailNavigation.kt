@@ -34,7 +34,7 @@ internal class PokemonDetailArgs(val id: Int, val name: String, val imageUrl: St
 
 fun NavController.navigateToPokemonDetail(pokemon: Pokemon, navOptions: NavOptions? = null) {
     val encoded = Base64.encodeToString(pokemon.imageUrl.toByteArray(), Base64.DEFAULT)
-    this.navigate("$pokemonDetailNavigationRoute/${pokemon.id}/${pokemon.name}/$encoded/${pokemon.colorStart}/${pokemon.colorEnd}", navOptions)
+    this.navigate("$pokemonDetailNavigationRoute/${pokemon.id}/${pokemon.fallbackName}/$encoded/${pokemon.colorStart}/${pokemon.colorEnd}", navOptions)
 }
 
 @OptIn(ExperimentalAnimationApi::class)

@@ -17,21 +17,9 @@ data class NetworkAbility(
 ) {
     fun asExternalModel() = Ability(
         id = id,
-        name = this.getNameX(),
+        name = names.getNameX(),
         flavor = this.getFlavor()
     )
-
-    fun getNameX(): String? = names.firstOrNull {
-        it.language.name == Locale.getDefault().language
-    }?.name ?: names.firstOrNull {
-        it.language.name == "en"
-    }?.name
-
-    fun getNameLang(): String? = names.firstOrNull {
-        it.language.name == Locale.getDefault().language
-    }?.language?.name ?: names.firstOrNull {
-        it.language.name == "en"
-    }?.language?.name
 
     fun getFlavor(): String? = (flavorTextEntries.firstOrNull {
         it.language.name == Locale.getDefault().language

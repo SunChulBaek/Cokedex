@@ -9,6 +9,7 @@ import kr.pe.ssun.cokedex.model.PokemonDetail
 import kr.pe.ssun.cokedex.data.model.asEntity
 import kr.pe.ssun.cokedex.database.dao.AbilityDao
 import kr.pe.ssun.cokedex.database.dao.MoveDao
+import kr.pe.ssun.cokedex.database.dao.NameDao
 import kr.pe.ssun.cokedex.database.dao.PokemonDao
 import kr.pe.ssun.cokedex.database.dao.StatDao
 import kr.pe.ssun.cokedex.database.dao.TypeDao
@@ -22,9 +23,11 @@ import kr.pe.ssun.cokedex.database.model.ValueEntity
 import kr.pe.ssun.cokedex.database.model.ValueWithStat
 import kr.pe.ssun.cokedex.database.model.asExternalModel
 import kr.pe.ssun.cokedex.model.Ability
+import kr.pe.ssun.cokedex.model.Name
 import kr.pe.ssun.cokedex.model.Stat
 import kr.pe.ssun.cokedex.model.Type
 import kr.pe.ssun.cokedex.network.model.asEntity
+import kr.pe.ssun.cokedex.network.model.asNameEntity
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -33,6 +36,7 @@ import javax.inject.Singleton
 class PokemonRepository @Inject constructor(
     private val network: PokemonNetworkDataSource,
     private val pokemonDao: PokemonDao,
+    private val nameDao: NameDao,
     private val typeDao: TypeDao,
     private val statDao: StatDao,
     private val valueDao: ValueDao,
@@ -41,6 +45,27 @@ class PokemonRepository @Inject constructor(
 ) {
     companion object {
         const val DUMMY_ID = 0
+    }
+
+    fun getName(id: Int): Flow<Name> = flow {
+        nameDao.findById(id)?.let { name ->
+            Timber.i("[sunchulbaek] Name(id = $id) DB에 저장되어 있음")
+            emit(name.asExternalModel(fromDB = true))
+        } ?: run {
+            when (id) {
+                DUMMY_ID -> {
+                    Timber.d("[sunchulbaek] Name(id = 0) 은 무시")
+                    emit(Name(DUMMY_ID))
+                }
+                else -> {
+                    Timber.e("[sunchulbaek] Name(id = $id) DB에 저장되어 있지 않음. API 콜")
+                    network.getSpecies(id).asNameEntity().let { name ->
+                        nameDao.insert(name)
+                        emit(name.asExternalModel())
+                    }
+                }
+            }
+        }
     }
 
     fun getType(id: Int): Flow<Type> = flow {

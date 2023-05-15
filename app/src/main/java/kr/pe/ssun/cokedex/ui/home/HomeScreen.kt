@@ -55,8 +55,8 @@ fun HomeScreen(
                 onClick = { pokemon ->
                     navigate(pokemonDetailNavigationRoute, pokemon)
                 },
-                onLoadMore = { offset ->
-                    viewModel.param.value = GetPokemonListParam(offset = offset)
+                onLoadMore = {
+                    viewModel.param.value = GetPokemonListParam(offset = (uiState as HomeUiState.Success).offset)
                 }
             )
         }

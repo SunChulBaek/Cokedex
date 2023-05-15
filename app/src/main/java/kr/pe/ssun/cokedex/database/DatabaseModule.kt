@@ -20,5 +20,5 @@ object DatabaseModule {
         context,
         CokedexDatabase::class.java,
         "cokedex-database"
-    ).createFromAsset("database/preset.db").build()
+    ).build()
 }

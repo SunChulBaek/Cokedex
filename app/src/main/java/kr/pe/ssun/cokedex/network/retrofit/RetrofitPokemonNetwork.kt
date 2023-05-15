@@ -5,6 +5,7 @@ import kr.pe.ssun.cokedex.network.model.NetworkAPIResourceList
 import kr.pe.ssun.cokedex.network.model.NetworkAbility
 import kr.pe.ssun.cokedex.network.model.NetworkMove
 import kr.pe.ssun.cokedex.network.model.NetworkPokemon
+import kr.pe.ssun.cokedex.network.model.NetworkPokemonSpecies
 import kr.pe.ssun.cokedex.network.model.NetworkStat
 import kr.pe.ssun.cokedex.network.model.NetworkType
 import okhttp3.OkHttpClient
@@ -17,7 +18,12 @@ import retrofit2.http.Query
 import javax.inject.Inject
 import javax.inject.Singleton
 
-interface RetrofitSsunNetworkApi {
+interface RetrofitPokemonNetworkApi {
+
+    @GET("pokemon-species/{id}")
+    suspend fun getSpecies(
+        @Path("id") id: Int,
+    ): NetworkPokemonSpecies
 
     @GET("type/{id}")
     suspend fun getType(
@@ -68,7 +74,11 @@ class RetrofitSsunNetwork @Inject constructor() : PokemonNetworkDataSource {
         )
         .addConverterFactory(GsonConverterFactory.create())
         .build()
-        .create(RetrofitSsunNetworkApi::class.java)
+        .create(RetrofitPokemonNetworkApi::class.java)
+
+    override suspend fun getSpecies(
+        id: Int
+    ): NetworkPokemonSpecies = networkApi.getSpecies(id)
 
     override suspend fun getType(
         id: Int

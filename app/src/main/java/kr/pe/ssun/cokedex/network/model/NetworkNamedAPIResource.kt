@@ -20,5 +20,6 @@ data class NetworkNamedAPIResource(
 fun NetworkNamedAPIResource.asExternalModel() = Pokemon(
     id = getId(),
     name = this.name ?: "",
+    fallbackName = this.name ?: "",
     imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${getId()}.png",
 )

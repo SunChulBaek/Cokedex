@@ -12,16 +12,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import kr.pe.ssun.cokedex.model.Pokemon
 import kr.pe.ssun.cokedex.util.InfiniteGridHandler
+import timber.log.Timber
 
 @Composable
 fun HomeContent(
     modifier: Modifier = Modifier,
     uiState: HomeUiState,
     onClick: (Pokemon) -> Unit,
-    onLoadMore: (Int) -> Unit,
+    onLoadMore: () -> Unit,
 ) {
     val pokemonList = (uiState as HomeUiState.Success).pokemonList
     val gridState = rememberLazyGridState()
+    Timber.d("[sunchulbaek] HomeContent pokemonList.size = ${pokemonList.size}")
     LazyVerticalGrid(
         modifier = modifier.background(Color(0xFF212121)),
         state = gridState,
@@ -46,6 +48,6 @@ fun HomeContent(
         )
     }
     InfiniteGridHandler(gridState = gridState) {
-        onLoadMore(pokemonList.size)
+        onLoadMore()
     }
 }
