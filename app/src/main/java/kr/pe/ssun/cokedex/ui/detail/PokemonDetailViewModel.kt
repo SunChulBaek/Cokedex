@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kr.pe.ssun.cokedex.model.Ability
 import kr.pe.ssun.cokedex.domain.GetAbilityUseCase
+import kr.pe.ssun.cokedex.domain.GetEvolutionChainUseCase
 import kr.pe.ssun.cokedex.domain.GetMovesUseCase
 import kr.pe.ssun.cokedex.domain.GetPokemonDetailUseCase
 import kr.pe.ssun.cokedex.domain.GetStatUseCase
@@ -21,6 +22,7 @@ import kr.pe.ssun.cokedex.domain.GetTypeUseCase
 import kr.pe.ssun.cokedex.model.Stat
 import kr.pe.ssun.cokedex.model.Type
 import kr.pe.ssun.cokedex.navigation.PokemonDetailArgs
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,7 +32,8 @@ class PokemonDetailViewModel @Inject constructor(
     getTypeUseCase: GetTypeUseCase,
     getStatUseCase: GetStatUseCase,
     getAbilityUseCase: GetAbilityUseCase,
-    getMoveUseCase: GetMovesUseCase
+    // getMoveUseCase: GetMovesUseCase,
+    getEvolutionChainUseCase: GetEvolutionChainUseCase,
 ) : ViewModel() {
 
     companion object {
@@ -62,10 +65,10 @@ class PokemonDetailViewModel @Inject constructor(
             getAbilityUseCase(abilityId).first().getOrNull() ?: Ability(DUMMY_ID)
         }
 
-    private val movesFlow = moveIds.flatMapConcat { it.asFlow() }
-        .map { moveIds ->
-            getMoveUseCase(moveIds).first().getOrNull() ?: Ability(DUMMY_ID)
-        }
+//    private val movesFlow = moveIds.flatMapConcat { it.asFlow() }
+//        .map { moveIds ->
+//            getMoveUseCase(moveIds).first().getOrNull() ?: Ability(DUMMY_ID)
+//        }
 
     private var types: List<Type> = mutableListOf()
 
@@ -73,15 +76,17 @@ class PokemonDetailViewModel @Inject constructor(
 
     private var abilities: List<Ability> = mutableListOf()
 
-    private var moves: List<Ability> = mutableListOf()
+//    private var moves: List<Ability> = mutableListOf()
+
+    private var evolutionChains: List<List<Pair<Int, String>>> = mutableListOf()
 
     var uiState = combine(
         typeFlow,
         statFlow,
         abilitiesFlow,
-        movesFlow,
+        // movesFlow,
         getPokemonDetailUseCase(args.id)
-    ) { type, stat, ability, move, result ->
+    ) { type, stat, ability, result ->
         val pokemon = result.getOrNull()?.copy()
 
         // 더미 아이템 하나만 있을 때 캐시 안된 Type api 호출하도록
@@ -112,13 +117,13 @@ class PokemonDetailViewModel @Inject constructor(
         }
 
         // 더미 아이템 하나만 있을 때 캐시 안된 Move api 호출하도록
-        if (moveIds.value.size == 1) {
-            moves = pokemon?.moves?.map { it.copy(fromDB = true) } ?: listOf()
-            val notCachedMIds = pokemon?.totalMoveIds?.filterNot { mId ->
-                pokemon.moves.map { it.id }.contains(mId)
-            } ?: listOf()
-            moveIds.emit(notCachedMIds)
-        }
+//        if (moveIds.value.size == 1) {
+//            moves = pokemon?.moves?.map { it.copy(fromDB = true) } ?: listOf()
+//            val notCachedMIds = pokemon?.totalMoveIds?.filterNot { mId ->
+//                pokemon.moves.map { it.id }.contains(mId)
+//            } ?: listOf()
+//            moveIds.emit(notCachedMIds)
+//        }
 
         when {
             pokemon != null -> {
@@ -132,8 +137,13 @@ class PokemonDetailViewModel @Inject constructor(
                 if (ability.id != DUMMY_ID && abilities.none { it.id == ability.id }) {
                     abilities = abilities.filterNot { it.id == DUMMY_ID }.plus(ability).sortedBy { it.id }
                 }
-                if (move.id != DUMMY_ID && moves.none { it.id == move.id }) {
-                    moves = moves.filterNot { it.id == DUMMY_ID }.plus(move).sortedBy { it.id }
+//                if (move.id != DUMMY_ID && moves.none { it.id == move.id }) {
+//                    moves = moves.filterNot { it.id == DUMMY_ID }.plus(move).sortedBy { it.id }
+//                }
+                pokemon.evolutionChainId?.let { ecId ->
+                    getEvolutionChainUseCase(ecId).first().getOrNull()?.let { chains ->
+                        evolutionChains = chains.chains
+                    }
                 }
 
                 PokemonUiState.Success(
@@ -141,7 +151,8 @@ class PokemonDetailViewModel @Inject constructor(
                         types = types,
                         stats = stats,
                         abilities = abilities,
-                        moves = moves,
+//                        moves = moves,
+                        evolutionChains = evolutionChains,
                     ),
                     colorStart = args.colorStart,
                     colorEnd = args.colorEnd

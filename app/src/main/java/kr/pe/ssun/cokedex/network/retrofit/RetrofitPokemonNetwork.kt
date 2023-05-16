@@ -3,6 +3,7 @@ package kr.pe.ssun.cokedex.network.retrofit
 import kr.pe.ssun.cokedex.network.PokemonNetworkDataSource
 import kr.pe.ssun.cokedex.network.model.NetworkAPIResourceList
 import kr.pe.ssun.cokedex.network.model.NetworkAbility
+import kr.pe.ssun.cokedex.network.model.NetworkEvolutionChain
 import kr.pe.ssun.cokedex.network.model.NetworkMove
 import kr.pe.ssun.cokedex.network.model.NetworkPokemon
 import kr.pe.ssun.cokedex.network.model.NetworkPokemonSpecies
@@ -19,6 +20,11 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 interface RetrofitPokemonNetworkApi {
+
+    @GET("evolution-chain/{id}")
+    suspend fun getEvolutionChain(
+        @Path("id") id: Int,
+    ): NetworkEvolutionChain
 
     @GET("pokemon-species/{id}")
     suspend fun getSpecies(
@@ -75,6 +81,10 @@ class RetrofitSsunNetwork @Inject constructor() : PokemonNetworkDataSource {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
         .create(RetrofitPokemonNetworkApi::class.java)
+
+    override suspend fun getEvolutionChain(
+        id: Int
+    ): NetworkEvolutionChain = networkApi.getEvolutionChain(id)
 
     override suspend fun getSpecies(
         id: Int

@@ -32,7 +32,7 @@ fun PokemonDetailLoadingProgress(
         Pair(pokemon?.types, totalTypeIds),
         Pair(pokemon?.stats, totalStatIds),
         Pair(pokemon?.abilities, totalAbilityIds),
-        Pair(pokemon?.moves, totalMoveIds)
+        //Pair(pokemon?.moves, totalMoveIds)
     ).forEach { (items, ids) ->
         LoadingProgress(
             modifier = Modifier

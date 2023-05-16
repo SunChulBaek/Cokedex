@@ -13,7 +13,7 @@ data class FullPokemon(
         parentColumn = "p_id",
         entityColumn = "p_id"
     )
-    val name: NameEntity?,
+    val species: SpeciesEntity?,
     @Relation(
         parentColumn = "p_id",
         entityColumn = "a_id",
@@ -42,7 +42,7 @@ data class FullPokemon(
 
 fun FullPokemon.asExternalModel() = PokemonDetail(
     id = pokemon.id,
-    name = name?.name ?: (pokemon.name ?: ""),
+    name = species?.name ?: (pokemon.name ?: ""),
     imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png",
     totalTypeIds = pokemon.typeIds,
     types = types.map { type -> Type(type.id, type.name) },
@@ -55,4 +55,5 @@ fun FullPokemon.asExternalModel() = PokemonDetail(
     stats = stats.map { stat ->
         Stat(stat.value.sId, stat.stat?.name, stat.value.value)
     },
+    evolutionChainId = species?.ecId
 )

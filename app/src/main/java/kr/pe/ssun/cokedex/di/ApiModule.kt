@@ -8,8 +8,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kr.pe.ssun.cokedex.database.dao.AbilityDao
+import kr.pe.ssun.cokedex.database.dao.EvolutionChainDao
 import kr.pe.ssun.cokedex.database.dao.MoveDao
-import kr.pe.ssun.cokedex.database.dao.NameDao
+import kr.pe.ssun.cokedex.database.dao.SpeciesDao
 import kr.pe.ssun.cokedex.database.dao.PokemonDao
 import kr.pe.ssun.cokedex.database.dao.StatDao
 import kr.pe.ssun.cokedex.database.dao.TypeDao
@@ -47,22 +48,24 @@ object ApiModule {
     fun providesFakeRepository(
         apiService: RetrofitSsunNetwork,
         pokemonDao: PokemonDao,
-        nameDao: NameDao,
+        nameDao: SpeciesDao,
         typeDao: TypeDao,
         statDao: StatDao,
         valueDao: ValueDao,
         abilityDao: AbilityDao,
-        moveDao: MoveDao,
+        //moveDao: MoveDao,
+        evolutionChainDao: EvolutionChainDao,
     ): PokemonRepository {
         return PokemonRepository(
             network = apiService,
             pokemonDao = pokemonDao,
-            nameDao = nameDao,
+            speciesDao = nameDao,
             typeDao = typeDao,
             statDao = statDao,
             valueDao = valueDao,
             abilityDao = abilityDao,
-            moveDao = moveDao
+            //moveDao = moveDao,
+            evolutionChainDao = evolutionChainDao,
         )
     }
 }

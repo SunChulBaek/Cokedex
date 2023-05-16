@@ -5,11 +5,13 @@ import kr.pe.ssun.cokedex.network.PokemonNetworkDataSource
 import kr.pe.ssun.cokedex.network.model.asExternalModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kr.pe.ssun.cokedex.data.model.EvolutionChains
 import kr.pe.ssun.cokedex.model.PokemonDetail
 import kr.pe.ssun.cokedex.data.model.asEntity
 import kr.pe.ssun.cokedex.database.dao.AbilityDao
+import kr.pe.ssun.cokedex.database.dao.EvolutionChainDao
 import kr.pe.ssun.cokedex.database.dao.MoveDao
-import kr.pe.ssun.cokedex.database.dao.NameDao
+import kr.pe.ssun.cokedex.database.dao.SpeciesDao
 import kr.pe.ssun.cokedex.database.dao.PokemonDao
 import kr.pe.ssun.cokedex.database.dao.StatDao
 import kr.pe.ssun.cokedex.database.dao.TypeDao
@@ -23,7 +25,7 @@ import kr.pe.ssun.cokedex.database.model.ValueEntity
 import kr.pe.ssun.cokedex.database.model.ValueWithStat
 import kr.pe.ssun.cokedex.database.model.asExternalModel
 import kr.pe.ssun.cokedex.model.Ability
-import kr.pe.ssun.cokedex.model.Name
+import kr.pe.ssun.cokedex.model.Species
 import kr.pe.ssun.cokedex.model.Stat
 import kr.pe.ssun.cokedex.model.Type
 import kr.pe.ssun.cokedex.network.model.asEntity
@@ -36,31 +38,32 @@ import javax.inject.Singleton
 class PokemonRepository @Inject constructor(
     private val network: PokemonNetworkDataSource,
     private val pokemonDao: PokemonDao,
-    private val nameDao: NameDao,
+    private val speciesDao: SpeciesDao,
     private val typeDao: TypeDao,
     private val statDao: StatDao,
     private val valueDao: ValueDao,
     private val abilityDao: AbilityDao,
-    private val moveDao: MoveDao,
+    //private val moveDao: MoveDao,
+    private val evolutionChainDao: EvolutionChainDao,
 ) {
     companion object {
         const val DUMMY_ID = 0
     }
 
-    fun getName(id: Int): Flow<Name> = flow {
-        nameDao.findById(id)?.let { name ->
-            Timber.i("[sunchulbaek] Name(id = $id) DB에 저장되어 있음")
-            emit(name.asExternalModel(fromDB = true))
+    fun getSpecies(id: Int): Flow<Species> = flow {
+        speciesDao.findById(id)?.let { species ->
+            Timber.i("[sunchulbaek] Species(id = $id) DB에 저장되어 있음")
+            emit(species.asExternalModel(fromDB = true))
         } ?: run {
             when (id) {
                 DUMMY_ID -> {
-                    Timber.d("[sunchulbaek] Name(id = 0) 은 무시")
-                    emit(Name(DUMMY_ID))
+                    Timber.d("[sunchulbaek] Species(id = 0) 은 무시")
+                    emit(Species(DUMMY_ID))
                 }
                 else -> {
-                    Timber.e("[sunchulbaek] Name(id = $id) DB에 저장되어 있지 않음. API 콜")
+                    Timber.e("[sunchulbaek] Species(id = $id) DB에 저장되어 있지 않음. API 콜")
                     network.getSpecies(id).asNameEntity().let { name ->
-                        nameDao.insert(name)
+                        speciesDao.insert(name)
                         emit(name.asExternalModel())
                     }
                 }
@@ -111,24 +114,24 @@ class PokemonRepository @Inject constructor(
     }
 
     fun getMove(id: Int): Flow<Ability> = flow {
-        moveDao.findById(id)?.let { move ->
-            Timber.i("[sunchulbaek] Move(id = $id) DB에 저장되어 있음")
-            emit(move.asExternalModel(fromDB = true))
-        } ?: run {
-            when (id) {
-                DUMMY_ID -> {
-                    Timber.d("[sunchulbaek] Move(id = 0) 은 무시")
-                    emit(Ability(DUMMY_ID))
-                }
-                else -> {
-                    Timber.e("[sunchulbaek] Move(id = $id) DB에 저장되어 있지 않음. API 콜")
-                    network.getMove(id).asEntity().let { move ->
-                        moveDao.insert(move)
-                        emit(move.asExternalModel())
-                    }
-                }
-            }
-        }
+//        moveDao.findById(id)?.let { move ->
+//            Timber.i("[sunchulbaek] Move(id = $id) DB에 저장되어 있음")
+//            emit(move.asExternalModel(fromDB = true))
+//        } ?: run {
+//            when (id) {
+//                DUMMY_ID -> {
+//                    Timber.d("[sunchulbaek] Move(id = 0) 은 무시")
+//                    emit(Ability(DUMMY_ID))
+//                }
+//                else -> {
+//                    Timber.e("[sunchulbaek] Move(id = $id) DB에 저장되어 있지 않음. API 콜")
+//                    network.getMove(id).asEntity().let { move ->
+//                        moveDao.insert(move)
+//                        emit(move.asExternalModel())
+//                    }
+//                }
+//            }
+//        }
     }
 
     fun getAbility(id: Int): Flow<Ability> = flow {
@@ -147,6 +150,30 @@ class PokemonRepository @Inject constructor(
                         abilityDao.insert(ability)
                         emit(ability.asExternalModel())
                     }
+                }
+            }
+        }
+    }
+
+    fun getEvolutionChain(id: Int): Flow<EvolutionChains> = flow {
+        val entities = evolutionChainDao.findById(id)
+        if (entities.isNotEmpty()) {
+            Timber.i("[sunchulbaek] EvolutionChain(id = $id) DB에 저장되어 있음")
+            emit(entities.asExternalModel())
+        } else {
+            when (id) {
+                DUMMY_ID -> {
+                    Timber.d("[sunchulbaek] EvolutionChain(id = 0) 은 무시")
+                    emit(EvolutionChains())
+                }
+
+                else -> {
+                    Timber.e("[sunchulbaek] EvolutionChain(id = $id) DB에 저장되어 있지 않음. API 콜")
+                    val result = network.getEvolutionChain(id).asEntity()
+                    result.forEach { chain ->
+                        evolutionChainDao.insert(chain)
+                    }
+                    emit(result.asExternalModel())
                 }
             }
         }
@@ -184,9 +211,9 @@ class PokemonRepository @Inject constructor(
                 val entity = pokemon.asEntity()
                 val entity2 = FullPokemon(
                     pokemon = pokemon.asEntity(),
-                    name = nameDao.findById(pokemon.id),
+                    species = speciesDao.findById(pokemon.id),
                     abilities = abilityDao.findById(pokemon.getAbilityIds().toIntArray()),
-                    moves = moveDao.findById(pokemon.getMoveIds().toIntArray()),
+                    moves = listOf(),//moveDao.findById(pokemon.getMoveIds().toIntArray()),
                     stats = pokemon.stats.map { stat ->
                         ValueWithStat(
                             value = ValueEntity(pokemon.id, stat.stat.getId(), stat.baseStat),

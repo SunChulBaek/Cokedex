@@ -13,4 +13,6 @@ data class PokemonDetail(
     val weight: Int,
     val height: Int,
     val stats: List<Stat>,
+    val evolutionChainId: Int?,
+    val evolutionChains: List<List<Pair<Int, String>>> = listOf()
 )

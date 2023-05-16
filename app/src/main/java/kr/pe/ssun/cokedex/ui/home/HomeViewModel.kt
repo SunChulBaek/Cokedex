@@ -15,7 +15,7 @@ import kr.pe.ssun.cokedex.domain.GetNameUseCase
 import kr.pe.ssun.cokedex.model.Pokemon
 import kr.pe.ssun.cokedex.domain.GetPokemonListParam
 import kr.pe.ssun.cokedex.domain.GetPokemonListUseCase
-import kr.pe.ssun.cokedex.model.Name
+import kr.pe.ssun.cokedex.model.Species
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -39,7 +39,7 @@ class HomeViewModel @Inject constructor(
 
     private val namesFlow = namesIds.flatMapConcat { it.asFlow() }
         .map { nameId ->
-            getNameUseCase(nameId).first().getOrNull() ?: Name(DUMMY_ID)
+            getNameUseCase(nameId).first().getOrNull() ?: Species(DUMMY_ID)
         }
 
     private val list = mutableListOf<Pokemon>()
