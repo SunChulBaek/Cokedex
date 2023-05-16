@@ -88,14 +88,16 @@ fun PokemonGridItem(
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                 },
-                text = if (item.name.isNotBlank()) item.name else item.fallbackName
+                text = item.name.ifBlank { item.fallbackName },
+                color = Color.Black
             )
             Text(
                 modifier = Modifier.constrainAs(idRef) {
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
                 },
-                text = item.id.toString()
+                text = item.id.toString(),
+                color = Color.Black
             )
         }
     }
