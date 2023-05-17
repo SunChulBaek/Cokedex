@@ -1,7 +1,6 @@
 package kr.pe.ssun.cokedex.ui.detail
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
@@ -55,7 +53,6 @@ fun PokemonDetailContent(
     val colorEnd = Color(success?.colorEnd ?: loading?.colorEnd ?: 0x00000000)
     val totalAbilitiesCount = pokemon?.totalAbilityIds?.size ?: 0
     val totalMovesCount = pokemon?.totalMoveIds?.size ?: 0
-    val evolutionChains = pokemon?.evolutionChains ?: listOf()
 
     Column(
         modifier = Modifier
@@ -153,19 +150,10 @@ fun PokemonDetailContent(
             Spacer(modifier = Modifier.height(10.dp))
             // 진화
             Text(text = "Evolutions", color = Color.White)
-            evolutionChains.forEach { chain ->
-                Row {
-                    chain.forEach {
-                        Box(Modifier.weight(1f).height(50.dp)) {
-                            SubcomposeAsyncImage(
-                                modifier = Modifier.align(Alignment.Center).size(50.dp),
-                                model = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${it.first}.png",
-                                contentDescription = null
-                            )
-                        }
-                    }
-                }
-            }
+            PokemonEvolutionChains(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                pokemon = pokemon,
+            )
             Spacer(modifier = Modifier.height(10.dp))
             // 스탯
             Text(text = "Base Stats", color = Color.White)
