@@ -27,6 +27,8 @@ class HomeViewModel @Inject constructor(
     companion object {
         const val DUMMY_ID = 0
         private val SHORTCUTS = listOf(
+            10034, // 메가리자몽X
+            10196, // 리자몽 거다이맥스
             1008, // 미라이돈 (진화 없음)
             936, // 카디나르마 (1단계, 2분기)
             135, // 쥬피썬더 (1단계, 8분기)
