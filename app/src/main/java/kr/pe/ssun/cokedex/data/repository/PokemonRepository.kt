@@ -2,7 +2,6 @@ package kr.pe.ssun.cokedex.data.repository
 
 import kr.pe.ssun.cokedex.model.Pokemon
 import kr.pe.ssun.cokedex.network.PokemonNetworkDataSource
-import kr.pe.ssun.cokedex.network.model.asExternalModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kr.pe.ssun.cokedex.data.model.EvolutionChains
@@ -10,9 +9,9 @@ import kr.pe.ssun.cokedex.model.PokemonDetail
 import kr.pe.ssun.cokedex.data.model.asEntity
 import kr.pe.ssun.cokedex.database.dao.AbilityDao
 import kr.pe.ssun.cokedex.database.dao.EvolutionChainDao
-import kr.pe.ssun.cokedex.database.dao.MoveDao
 import kr.pe.ssun.cokedex.database.dao.SpeciesDao
 import kr.pe.ssun.cokedex.database.dao.PokemonDao
+import kr.pe.ssun.cokedex.database.dao.PokemonItemDao
 import kr.pe.ssun.cokedex.database.dao.StatDao
 import kr.pe.ssun.cokedex.database.dao.TypeDao
 import kr.pe.ssun.cokedex.database.dao.ValueDao
@@ -37,6 +36,7 @@ import javax.inject.Singleton
 @Singleton
 class PokemonRepository @Inject constructor(
     private val network: PokemonNetworkDataSource,
+    private val pokemonItemDao: PokemonItemDao,
     private val pokemonDao: PokemonDao,
     private val speciesDao: SpeciesDao,
     private val typeDao: TypeDao,
@@ -179,14 +179,21 @@ class PokemonRepository @Inject constructor(
         }
     }
 
-    fun getPokemonList(
-        limit: Int? = null,
-        offset: Int? = null,
-    ): Flow<List<Pokemon>> = flow {
-        emit(network.getPokemonList(
-            limit = limit,
-            offset = offset
-        ).results.map { it.asExternalModel() })
+    fun getPokemonList(limit: Int, offset: Int): Flow<List<Pokemon>> = flow {
+        val indexes = (offset until offset + limit).toList().toIntArray()
+        Timber.d("[sunchulbaek] Pokemon List limit = $limit, offset = $offset, ids = ${indexes.toList()}")
+        val pokemonList = pokemonItemDao.findByIndex(indexes)
+        if (pokemonList.isNotEmpty()) {
+            Timber.i("[sunchulbaek] Pokemon List(offset = $offset, limit = $limit) DB에 저장되어 있음(size = ${pokemonList.size})")
+            Timber.i("[sunchulbaek] Pokemon List = ${pokemonList.map { it.id }}")
+            emit(pokemonList.asExternalModel())
+        } else {
+            Timber.e("[sunchulbaek] Pokemon List(offset = $offset, limit = $limit) DB에 저장되어 있지 않음")
+            network.getPokemonList(limit = limit, offset = offset).asEntity(offset = offset).let { entities ->
+                pokemonItemDao.insert(entities)
+                emit(entities.asExternalModel())
+            }
+        }
     }
 
     fun getPokemonDetail(id: Int): Flow<PokemonDetail> = flow {

@@ -18,6 +18,7 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import kr.pe.ssun.cokedex.domain.GetPokemonListParam
 import kr.pe.ssun.cokedex.navigation.pokemonDetailNavigationRoute
 import kr.pe.ssun.cokedex.ui.common.DefaultScreen
+import timber.log.Timber
 
 // 백 키 관련
 const val BACK_PRESS_DELAY_TIME: Long = 2000
@@ -56,7 +57,10 @@ fun HomeScreen(
                     navigate(pokemonDetailNavigationRoute, pokemon)
                 },
                 onLoadMore = {
-                    viewModel.param.value = GetPokemonListParam(offset = (uiState as HomeUiState.Success).offset)
+                    Timber.d("[sunchulbaek] HomeScreen.onLoadMore(offset = ${(uiState as HomeUiState.Success).offset})")
+                    viewModel.param.value = GetPokemonListParam(
+                        offset = (uiState as HomeUiState.Success).offset,
+                    )
                 }
             )
         }

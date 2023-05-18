@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import kr.pe.ssun.cokedex.model.Pokemon
 import kr.pe.ssun.cokedex.util.InfiniteGridHandler
+import timber.log.Timber
 
 @Composable
 fun HomeContent(
@@ -96,6 +97,7 @@ fun HomeContent(
         )
     }
     InfiniteGridHandler(gridState = gridState) {
+        Timber.d("[sunchulbaek] HomeContent.onLoadMore()")
         onLoadMore()
     }
 }

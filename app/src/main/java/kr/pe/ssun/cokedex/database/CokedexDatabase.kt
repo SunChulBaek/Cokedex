@@ -8,6 +8,7 @@ import kr.pe.ssun.cokedex.database.dao.EvolutionChainDao
 import kr.pe.ssun.cokedex.database.dao.MoveDao
 import kr.pe.ssun.cokedex.database.dao.SpeciesDao
 import kr.pe.ssun.cokedex.database.dao.PokemonDao
+import kr.pe.ssun.cokedex.database.dao.PokemonItemDao
 import kr.pe.ssun.cokedex.database.dao.StatDao
 import kr.pe.ssun.cokedex.database.dao.TypeDao
 import kr.pe.ssun.cokedex.database.dao.ValueDao
@@ -18,6 +19,7 @@ import kr.pe.ssun.cokedex.database.model.SpeciesEntity
 import kr.pe.ssun.cokedex.database.model.PokemonAbilityCrossRef
 import kr.pe.ssun.cokedex.database.model.PokemonMoveCrossRef
 import kr.pe.ssun.cokedex.database.model.PokemonEntity
+import kr.pe.ssun.cokedex.database.model.PokemonItemEntity
 import kr.pe.ssun.cokedex.database.model.PokemonStatCrossRef
 import kr.pe.ssun.cokedex.database.model.PokemonTypeCrossRef
 import kr.pe.ssun.cokedex.database.model.StatEntity
@@ -29,6 +31,7 @@ import kr.pe.ssun.cokedex.database.util.TypesConverter
 
 @Database(
     entities = [
+        PokemonItemEntity::class,
         PokemonEntity::class,
         SpeciesEntity::class,
         TypeEntity::class,
@@ -51,6 +54,7 @@ import kr.pe.ssun.cokedex.database.util.TypesConverter
     StatsConverter::class,
 )
 abstract class CokedexDatabase : RoomDatabase() {
+    abstract fun pokemonItemDao(): PokemonItemDao
     abstract fun pokemonDao(): PokemonDao
     abstract fun speciesDao(): SpeciesDao
     abstract fun typeDao(): TypeDao

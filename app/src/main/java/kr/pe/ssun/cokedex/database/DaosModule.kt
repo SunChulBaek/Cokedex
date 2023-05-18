@@ -9,6 +9,7 @@ import kr.pe.ssun.cokedex.database.dao.EvolutionChainDao
 import kr.pe.ssun.cokedex.database.dao.MoveDao
 import kr.pe.ssun.cokedex.database.dao.SpeciesDao
 import kr.pe.ssun.cokedex.database.dao.PokemonDao
+import kr.pe.ssun.cokedex.database.dao.PokemonItemDao
 import kr.pe.ssun.cokedex.database.dao.StatDao
 import kr.pe.ssun.cokedex.database.dao.TypeDao
 import kr.pe.ssun.cokedex.database.dao.ValueDao
@@ -16,6 +17,11 @@ import kr.pe.ssun.cokedex.database.dao.ValueDao
 @Module
 @InstallIn(SingletonComponent::class)
 object DaosModule {
+    @Provides
+    fun providesPokemonItemDao(
+        database: CokedexDatabase,
+    ): PokemonItemDao = database.pokemonItemDao()
+
     @Provides
     fun providesPokemonDao(
         database: CokedexDatabase,
