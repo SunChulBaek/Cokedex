@@ -4,7 +4,11 @@ import androidx.room.TypeConverter
 
 class IdsConverter {
     @TypeConverter
-    fun stringToListInt(value: String): List<Int> = value.split(":").map { it.toInt() }
+    fun stringToListInt(value: String): List<Int> = if (value.isBlank()) {
+        listOf()
+    } else {
+        value.split(":").map { it.toInt() }
+    }
 
     @TypeConverter
     fun listIntToString(value: List<Int>): String = value.fold("") { acc, id ->
