@@ -54,7 +54,6 @@ object ApiModule {
         statDao: StatDao,
         valueDao: ValueDao,
         abilityDao: AbilityDao,
-        //moveDao: MoveDao,
         evolutionChainDao: EvolutionChainDao,
     ): PokemonRepository {
         return PokemonRepository(
@@ -66,7 +65,6 @@ object ApiModule {
             statDao = statDao,
             valueDao = valueDao,
             abilityDao = abilityDao,
-            //moveDao = moveDao,
             evolutionChainDao = evolutionChainDao,
         )
     }

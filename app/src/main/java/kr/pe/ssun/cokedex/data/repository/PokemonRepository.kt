@@ -17,7 +17,6 @@ import kr.pe.ssun.cokedex.database.dao.TypeDao
 import kr.pe.ssun.cokedex.database.dao.ValueDao
 import kr.pe.ssun.cokedex.database.model.FullPokemon
 import kr.pe.ssun.cokedex.database.model.PokemonAbilityCrossRef
-import kr.pe.ssun.cokedex.database.model.PokemonMoveCrossRef
 import kr.pe.ssun.cokedex.database.model.PokemonStatCrossRef
 import kr.pe.ssun.cokedex.database.model.PokemonTypeCrossRef
 import kr.pe.ssun.cokedex.database.model.ValueEntity
@@ -208,9 +207,6 @@ class PokemonRepository @Inject constructor(
             fullPokemon.abilities.forEach { ability ->
                 Timber.i("[sunchulbaek] Ability(id = ${ability.id}) DB에 저장되어 있음")
             }
-            fullPokemon.moves.forEach { move ->
-                Timber.i("[sunchulbaek] Move(id = ${move.id}) DB에 저장되어 있음")
-            }
             emit(fullPokemon.asExternalModel())
         } ?: run {
             Timber.e("[sunchulbaek] Pokemon(id = ${id}) DB에 저장되어 있지 않음")
@@ -220,7 +216,6 @@ class PokemonRepository @Inject constructor(
                     pokemon = pokemon.asEntity(),
                     species = speciesDao.findById(pokemon.id),
                     abilities = abilityDao.findById(pokemon.getAbilityIds().toIntArray()),
-                    moves = listOf(),//moveDao.findById(pokemon.getMoveIds().toIntArray()),
                     stats = pokemon.stats.map { stat ->
                         ValueWithStat(
                             value = ValueEntity(pokemon.id, stat.stat.getId(), stat.baseStat),
@@ -251,12 +246,6 @@ class PokemonRepository @Inject constructor(
                     pokemonDao.insert(PokemonAbilityCrossRef(
                         pId = pokemon.id,
                         aId = ability.getId()
-                    ))
-                }
-                pokemon.moves.forEach { move ->
-                    pokemonDao.insert(PokemonMoveCrossRef(
-                        pId = pokemon.id,
-                        mId = move.getId()
                     ))
                 }
                 emit(entity2.asExternalModel())

@@ -8,7 +8,6 @@ import androidx.room.RewriteQueriesToDropUnusedColumns
 import androidx.room.Transaction
 import kr.pe.ssun.cokedex.database.model.FullPokemon
 import kr.pe.ssun.cokedex.database.model.PokemonAbilityCrossRef
-import kr.pe.ssun.cokedex.database.model.PokemonMoveCrossRef
 import kr.pe.ssun.cokedex.database.model.PokemonEntity
 import kr.pe.ssun.cokedex.database.model.PokemonStatCrossRef
 import kr.pe.ssun.cokedex.database.model.PokemonTypeCrossRef
@@ -31,7 +30,4 @@ interface PokemonDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(p2a: PokemonAbilityCrossRef)
-
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(p2m: PokemonMoveCrossRef)
 }

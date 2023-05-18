@@ -22,12 +22,6 @@ data class FullPokemon(
     val abilities: List<AbilityEntity>,
     @Relation(
         parentColumn = "p_id",
-        entityColumn = "m_id",
-        associateBy = Junction(PokemonMoveCrossRef::class)
-    )
-    val moves: List<MoveEntity>,
-    @Relation(
-        parentColumn = "p_id",
         entityColumn = "p_id",
         entity = ValueEntity::class
     )
@@ -48,7 +42,6 @@ fun FullPokemon.asExternalModel() = PokemonDetail(
     types = types.map { type -> Type(type.id, type.name) },
     abilities = abilities.map { ability -> ability.asExternalModel() },
     totalAbilityIds = pokemon.abilityIds,
-    moves = moves.map { move -> move.asExternalModel() },
     totalMoveIds = pokemon.moveIds,
     weight = pokemon.weight,
     height = pokemon.height,
