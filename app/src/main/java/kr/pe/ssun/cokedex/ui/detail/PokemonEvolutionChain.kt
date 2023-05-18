@@ -11,17 +11,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import kr.pe.ssun.cokedex.model.PokemonDetail
-import timber.log.Timber
+import kr.pe.ssun.cokedex.util.dpToPx
+import kr.pe.ssun.cokedex.util.dpToSp
 
 @Composable
 fun PokemonEvolutionChains(
@@ -58,21 +61,26 @@ private fun RowScope.DrawEvolutionLines(
     normalColor: Color,
     accentColor: Color,
 ) = if (columnIndex > 0) {
+    val sizePx = dpToPx(size)
     Box(Modifier.weight(1f)) {
         columnPokemonIds(pokemon, columnIndex) { index, id ->
             val prevNodeIndex = prevNodeIndex(id, pokemon, itemsByColumn, columnIndex)
             Box(modifier = Modifier
-                .padding(top = (size * prevNodeIndex) + size / 2)
-                .fillMaxWidth().height((60 * (index - prevNodeIndex)).dp)
+                .padding(top = size * prevNodeIndex)
+                .fillMaxWidth()
+                .height(size * (index - prevNodeIndex + 1))
                 .drawWithContent {
                     drawLine(
                         color = if (isActivePokemon(id, pokemon)) accentColor else normalColor,
                         strokeWidth = 10f,
-                        start = Offset.Zero,
-                        end = Offset(this.size.width, this.size.height)
+                        start = Offset(0f, 0.5f * sizePx),
+                        end = Offset(this.size.width, (index - prevNodeIndex + 0.5f) * sizePx)
                     )
+                    drawContent()
                 }
-            )
+            ) {
+                // TODO : 진화 트리거 표시
+            }
         }
     }
 } else Unit
@@ -89,13 +97,22 @@ private fun DrawPokemons(
     val items = columnPokemonIds(pokemon, columnIndex) { _, id ->
         Box(modifier = Modifier
             .size(size)
-            .background(if (isActivePokemon(id, pokemon)) accentColor else normalColor, CircleShape)) {
+            .background(if (isActivePokemon(id, pokemon)) accentColor else normalColor, CircleShape)
+        ) {
             SubcomposeAsyncImage(
                 modifier = Modifier
-                    .align(Alignment.Center)
-                    .size(size - 15.dp),
+                    .align(Alignment.TopCenter)
+                    .padding(top = 5.dp)
+                    .size(size - 20.dp),
                 model = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/$id.png",
                 contentDescription = null
+            )
+            Text(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 2.dp),
+                text = String.format("#%03d", id),
+                style = TextStyle(fontSize = dpToSp(10.dp))
             )
         }
     }
