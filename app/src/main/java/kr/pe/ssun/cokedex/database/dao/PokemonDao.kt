@@ -2,6 +2,7 @@ package kr.pe.ssun.cokedex.database.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.RewriteQueriesToDropUnusedColumns
 import androidx.room.Transaction
@@ -22,15 +23,15 @@ interface PokemonDao {
     @Insert
     fun insert(pokemon: PokemonEntity)
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(p2t: PokemonTypeCrossRef)
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(p2s: PokemonStatCrossRef)
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(p2a: PokemonAbilityCrossRef)
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(p2m: PokemonMoveCrossRef)
 }

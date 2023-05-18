@@ -55,9 +55,9 @@ class PokemonRepository @Inject constructor(
             Timber.i("[sunchulbaek] Species(id = $id) DB에 저장되어 있음")
             emit(species.asExternalModel(fromDB = true))
         } ?: run {
-            when (id) {
-                DUMMY_ID -> {
-                    Timber.d("[sunchulbaek] Species(id = 0) 은 무시")
+            when {
+                id == DUMMY_ID || id >= 10001 -> {
+                    Timber.d("[sunchulbaek] Species(id = $id) 은 무시")
                     emit(Species(DUMMY_ID))
                 }
                 else -> {
