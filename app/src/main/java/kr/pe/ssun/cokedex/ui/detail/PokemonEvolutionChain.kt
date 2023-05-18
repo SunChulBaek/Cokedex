@@ -23,8 +23,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import kr.pe.ssun.cokedex.model.PokemonDetail
-import kr.pe.ssun.cokedex.util.dpToPx
-import kr.pe.ssun.cokedex.util.dpToSp
+import kr.pe.ssun.cokedex.util.asPx
+import kr.pe.ssun.cokedex.util.asSp
 
 @Composable
 fun PokemonEvolutionChains(
@@ -61,7 +61,7 @@ private fun RowScope.DrawEvolutionLines(
     normalColor: Color,
     accentColor: Color,
 ) = if (columnIndex > 0) {
-    val sizePx = dpToPx(size)
+    val sizePx = size.asPx()
     Box(Modifier.weight(1f)) {
         columnPokemonIds(pokemon, columnIndex) { index, id ->
             val prevNodeIndex = prevNodeIndex(id, pokemon, itemsByColumn, columnIndex)
@@ -112,7 +112,7 @@ private fun DrawPokemons(
                     .align(Alignment.BottomCenter)
                     .padding(bottom = 2.dp),
                 text = String.format("#%03d", id),
-                style = TextStyle(fontSize = dpToSp(10.dp))
+                style = TextStyle(fontSize = 10.dp.asSp())
             )
         }
     }

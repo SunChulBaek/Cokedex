@@ -5,7 +5,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 
 @Composable
-fun dpToSp(dp: Dp) = with(LocalDensity.current) { dp.toSp() }
+fun Dp.asSp() = with(LocalDensity.current) { this@asSp.toSp() }
 
 @Composable
-fun dpToPx(dp: Dp) = with(LocalDensity.current) { dp.toPx() }
+fun Dp.asPx() = with(LocalDensity.current) { this@asPx.toPx() }
