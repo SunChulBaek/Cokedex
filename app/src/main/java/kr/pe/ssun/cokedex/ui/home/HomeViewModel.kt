@@ -16,7 +16,6 @@ import kr.pe.ssun.cokedex.model.Pokemon
 import kr.pe.ssun.cokedex.domain.GetPokemonListParam
 import kr.pe.ssun.cokedex.domain.GetPokemonListUseCase
 import kr.pe.ssun.cokedex.model.Species
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,6 +26,11 @@ class HomeViewModel @Inject constructor(
 
     companion object {
         const val DUMMY_ID = 0
+        private val SHORTCUTS = listOf(
+            135, // 쥬피썬더 (1단계)
+            269, // 독케일 (2단계, 1단계 분기)
+            182, // 아르코 (2단계, 2단계 분기)
+        ) // 다양한 진화 형태..
     }
 
     val param = MutableStateFlow<GetPokemonListParam?>(null)
@@ -35,7 +39,7 @@ class HomeViewModel @Inject constructor(
         getPokemonListUseCase(param)
     }
 
-    private val namesIds = MutableStateFlow(listOf(DUMMY_ID))
+    private val namesIds = MutableStateFlow(listOf(DUMMY_ID).plus(SHORTCUTS))
 
     private val namesFlow = namesIds.flatMapConcat { it.asFlow() }
         .map { nameId ->
@@ -51,7 +55,6 @@ class HomeViewModel @Inject constructor(
     ) { pokemonListResult, newName ->
         // 이름 정보 업뎃
         if (!names.contains(newName.id) && newName.name != null) {
-            Timber.d("[sunchulbaek] name(id = ${newName.id}) 업뎃 = ${newName.name}")
             names[newName.id] = newName.name
         }
 
@@ -67,7 +70,8 @@ class HomeViewModel @Inject constructor(
             pokemonList = list.map { pokemon ->
                 pokemon.copy(name = names[pokemon.id] ?: "")
             },
-            offset = list.size
+            offset = list.size,
+            shortcuts = SHORTCUTS
         )
     }.stateIn(
         scope = viewModelScope,
