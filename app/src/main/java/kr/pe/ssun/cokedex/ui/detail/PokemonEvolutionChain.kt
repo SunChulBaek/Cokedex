@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import kr.pe.ssun.cokedex.model.PokemonDetail
+import timber.log.Timber
 
 @Composable
 fun PokemonEvolutionChains(
@@ -40,7 +41,12 @@ fun PokemonEvolutionChains(
 }
 
 private fun maxEvolutionChainLength(pokemon: PokemonDetail?) =
-    pokemon?.evolutionChains?.maxOf { it.size } ?: 0
+    pokemon?.evolutionChains?.size?.let { size ->
+        when {
+            size > 0 -> pokemon.evolutionChains.maxOf { it.size }
+            else -> 0
+        }
+    } ?: 0
 
 // 진화 가지치기
 @Composable
