@@ -27,9 +27,11 @@ class HomeViewModel @Inject constructor(
     companion object {
         const val DUMMY_ID = 0
         private val SHORTCUTS = listOf(
-            135, // 쥬피썬더 (1단계)
+            1008, // 미라이돈 (진화 없음)
+            936, // 카디나르마 (1단계, 2분기)
+            135, // 쥬피썬더 (1단계, 8분기)
             269, // 독케일 (2단계, 1단계 분기)
-            182, // 아르코 (2단계, 2단계 분기)
+            792, // 루나아라 (2단계, 2단계 분기)
         ) // 다양한 진화 형태..
     }
 
