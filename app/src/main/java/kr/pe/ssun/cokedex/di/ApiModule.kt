@@ -14,6 +14,7 @@ import kr.pe.ssun.cokedex.database.dao.PokemonItemDao
 import kr.pe.ssun.cokedex.database.dao.StatDao
 import kr.pe.ssun.cokedex.database.dao.TypeDao
 import kr.pe.ssun.cokedex.database.dao.ValueDao
+import kr.pe.ssun.cokedex.database.dao.VarietyDao
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import javax.inject.Singleton
@@ -53,6 +54,7 @@ object ApiModule {
         statDao: StatDao,
         valueDao: ValueDao,
         evolutionChainDao: EvolutionChainDao,
+        varietyDao: VarietyDao,
     ): PokemonRepository {
         return PokemonRepository(
             network = apiService,
@@ -63,6 +65,7 @@ object ApiModule {
             statDao = statDao,
             valueDao = valueDao,
             evolutionChainDao = evolutionChainDao,
+            varietyDao = varietyDao,
         )
     }
 }

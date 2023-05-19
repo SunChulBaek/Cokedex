@@ -68,7 +68,14 @@ class HomeViewModel @Inject constructor(
         }
 
         // 이름 정보 요청
-        namesIds.emit(list.filter { pokemon -> !names.contains(pokemon.id) }.map { it.id })
+        // TODO : species id로 호출해야함
+        namesIds.emit(list
+            .filter { pokemon ->
+                pokemon.id < 10001 && !names.contains(pokemon.id)
+            }.map { pokemon ->
+                pokemon.id
+            }
+        )
 
         HomeUiState.Success(
             pokemonList = list.map { pokemon ->

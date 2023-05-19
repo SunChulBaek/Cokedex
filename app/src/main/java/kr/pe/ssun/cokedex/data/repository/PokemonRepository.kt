@@ -24,6 +24,7 @@ class PokemonRepository @Inject constructor(
     private val statDao: StatDao,
     private val valueDao: ValueDao,
     private val evolutionChainDao: EvolutionChainDao,
+    private val varietyDao: VarietyDao,
 ) {
     companion object {
         const val DUMMY_ID = 0
@@ -34,16 +35,24 @@ class PokemonRepository @Inject constructor(
             Timber.i("[sunchulbaek] Species(id = $id) DB에 저장되어 있음")
             emit(species.asExternalModel(fromDB = true))
         } ?: run {
-            when {
-                id == DUMMY_ID || id >= 10001 -> {
+            when (id) {
+                DUMMY_ID -> {
                     Timber.d("[sunchulbaek] Species(id = $id) 은 무시")
                     emit(Species(DUMMY_ID))
                 }
                 else -> {
                     Timber.e("[sunchulbaek] Species(id = $id) DB에 저장되어 있지 않음. API 콜")
-                    network.getSpecies(id).asNameEntity().let { name ->
-                        speciesDao.insert(name)
-                        emit(name.asExternalModel())
+                    network.getSpecies(id).let { species ->
+                        val entity = species.asNameEntity()
+
+                        Timber.d("[sunchulbaek] Species(id = $id) varieties = ${species.getVarietyIds()}")
+                        species.getVarietyIds().forEach { varietyId ->
+                            pokemonDao.insert(SpeciesVarietyCrossRef(id, varietyId))
+                            varietyDao.insert(VarietyEntity(varietyId, id))
+                        }
+
+                        speciesDao.insert(entity)
+                        emit(entity.asExternalModel())
                     }
                 }
             }
@@ -142,21 +151,26 @@ class PokemonRepository @Inject constructor(
             fullPokemon.stats.forEach { stat ->
                 Timber.i("[sunchulbaek] Stat(sId = ${stat.value.sId}) DB에 저장되어 ${if (stat.stat != null) "있음" else "있지않음"}")
             }
+            fullPokemon.varieties.forEach { variety ->
+                Timber.i("[sunchulbaek] Variety(sId = ${variety.id}) DB에 저장되어 있음")
+            }
             emit(fullPokemon.asExternalModel())
         } ?: run {
             Timber.e("[sunchulbaek] Pokemon(id = ${id}) DB에 저장되어 있지 않음")
             network.getPokemonDetail(id).let { pokemon ->
                 val entity = pokemon.asEntity()
+                val species = speciesDao.findById(pokemon.id)
                 val entity2 = FullPokemon(
                     pokemon = pokemon.asEntity(),
-                    species = speciesDao.findById(pokemon.id),
+                    species = species,
                     stats = pokemon.stats.map { stat ->
                         ValueWithStat(
                             value = ValueEntity(pokemon.id, stat.stat.getId(), stat.baseStat),
                             stat = statDao.findById(stat.stat.getId())
                         )
                     },
-                    types = typeDao.findById(pokemon.getTypeIds().toIntArray())
+                    types = typeDao.findById(pokemon.getTypeIds().toIntArray()),
+                    varieties = varietyDao.findBySpeciesId(species?.id ?: DUMMY_ID),
                 )
                 pokemonDao.insert(entity)
                 pokemon.stats.forEach { stat ->

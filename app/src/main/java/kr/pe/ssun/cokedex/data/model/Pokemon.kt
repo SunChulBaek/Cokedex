@@ -5,11 +5,12 @@ import kr.pe.ssun.cokedex.network.model.NetworkPokemon
 
 fun NetworkPokemon.asEntity() = PokemonEntity(
     id = id,
+    sId = species.getId(),
     name = name,
     baseExp = baseExp,
     height = height,
     isDefault = isDefault,
     order = order,
     weight = weight,
-    typeIds = types.map { type -> type.type.getId() },
+    typeIds = getTypeIds(),
 )

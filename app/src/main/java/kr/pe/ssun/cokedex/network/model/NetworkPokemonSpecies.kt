@@ -7,11 +7,14 @@ data class NetworkPokemonSpecies(
     @SerializedName("id") val id: Int,
     @SerializedName("name") val name: String,
     @SerializedName("names") val names: List<NetworkName>,
-    @SerializedName("evolution_chain") val evolutionChain: NetworkAPIResource
-)
+    @SerializedName("evolution_chain") val evolutionChain: NetworkAPIResource,
+    @SerializedName("varieties") val varieties: List<NetworkPokemonSpeciesVariety>,
+) {
+    fun getVarietyIds() = varieties.map { variety -> variety.getId() }
+}
 
 fun NetworkPokemonSpecies.asNameEntity() = SpeciesEntity(
     id = id,
     name = names.getNameX() ?: name,
-    ecId = evolutionChain.getId()
+    ecId = evolutionChain.getId(),
 )

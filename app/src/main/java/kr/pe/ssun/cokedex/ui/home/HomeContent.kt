@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
@@ -51,7 +52,8 @@ fun HomeContent(
                 Box(
                     modifier = Modifier
                         .size(40.dp)
-                        .background(Color.White, CircleShape)
+                        .clip(CircleShape)
+                        .background(Color.White)
                         .clickable { onClick(
                             Pokemon(
                                 id = shortcuts[index],

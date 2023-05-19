@@ -54,6 +54,6 @@ fun NavGraphBuilder.pokemonDetailScreen(
         popEnterTransition = { popEnterTransition },
         popExitTransition = { popExitTransition },
     ) {
-        PokemonDetailRoute(onBack = onBack)
+        PokemonDetailRoute(navigate = navigate, onBack = onBack)
     }
 }

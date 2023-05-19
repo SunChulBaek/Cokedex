@@ -18,14 +18,9 @@ data class NetworkPokemon(
     @SerializedName("moves") val moves: List<NetworkPokemonMove>,
     @SerializedName("past_types") val pastTypes: List<NetworkPokemonTypePast> = listOf(),
     @SerializedName("sprites") val sprites: NetworkPokemonSprites? = null,
-    @SerializedName("species") val species: NetworkNamedAPIResource? = null,
+    @SerializedName("species") val species: NetworkNamedAPIResource,
     @SerializedName("stats") val stats: List<NetworkPokemonStat> = listOf(),
     @SerializedName("types") val types: List<NetworkPokemonType>,
 ) {
-    fun getStatIds(): List<Int> = stats.map { stat -> stat.stat.getId() }
-    fun getAbilityIds(): List<Int> = abilities.map { ability -> ability.getId() }
-
-    fun getMoveIds(): List<Int> = moves.map { move -> move.getId() }
-
     fun getTypeIds(): List<Int> = types.map { type -> type.getId() }
 }

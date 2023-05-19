@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -32,12 +31,15 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import coil.compose.SubcomposeAsyncImage
+import kr.pe.ssun.cokedex.model.Pokemon
+import timber.log.Timber
 import java.text.DecimalFormat
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PokemonDetailContent(
     uiState: PokemonUiState,
+    onClick: (Pokemon) -> Unit,
     onBack: () -> Unit
 ) {
     val success = uiState as? PokemonUiState.Success
@@ -49,8 +51,10 @@ fun PokemonDetailContent(
     val id = pokemon?.id ?: loading?.id ?: 0
     val name = pokemon?.name ?: loading?.name ?: ""
     val imageUrl = pokemon?.imageUrl ?: loading?.imageUrl
+    val varietyIds = pokemon?.varietyIds ?: listOf()
     val colorStart = Color(success?.colorStart ?: loading?.colorStart ?: 0x00000000)
     val colorEnd = Color(success?.colorEnd ?: loading?.colorEnd ?: 0x00000000)
+    Timber.d("[sunchulbaek] id = $id, varieties = $varietyIds")
 
     Column(
         modifier = Modifier
@@ -65,7 +69,7 @@ fun PokemonDetailContent(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             TopAppBar(
-                colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = colorStart),
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = colorStart),
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = null)
@@ -146,16 +150,33 @@ fun PokemonDetailContent(
                 Spacer(modifier = Modifier.weight(1f))
             }
             Spacer(modifier = Modifier.height(10.dp))
+
             // 진화
-            Text(text = "Evolutions", color = Color.White)
-            PokemonEvolutionChains(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                pokemon = pokemon,
-            )
-            Spacer(modifier = Modifier.height(10.dp))
+            if (maxEvolutionChainLength(pokemon) > 1) {
+                Text(text = "Evolutions", color = Color.White)
+                PokemonEvolutionChains(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    pokemon = pokemon,
+                    onClick = onClick,
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+            }
+
+            // 베리에이션
+            if ((pokemon?.varietyIds?.size ?: 0) > 1) {
+                Text(text = "Varieties", color = Color.White)
+                PokemonVarieties(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    pokemon = pokemon,
+                    onClick = onClick,
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+            }
         }
 
         // 프로그레스
-        PokemonDetailLoadingProgress(modifier = Modifier.fillMaxWidth().height(16.dp), pokemon = pokemon)
+        PokemonDetailLoadingProgress(modifier = Modifier
+            .fillMaxWidth()
+            .height(16.dp), pokemon = pokemon)
     }
 }

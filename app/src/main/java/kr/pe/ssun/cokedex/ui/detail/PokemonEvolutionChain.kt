@@ -1,6 +1,5 @@
 package kr.pe.ssun.cokedex.ui.detail
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,23 +7,17 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import coil.compose.SubcomposeAsyncImage
+import kr.pe.ssun.cokedex.model.Pokemon
 import kr.pe.ssun.cokedex.model.PokemonDetail
 import kr.pe.ssun.cokedex.util.asPx
-import kr.pe.ssun.cokedex.util.asSp
 
 @Composable
 fun PokemonEvolutionChains(
@@ -33,17 +26,18 @@ fun PokemonEvolutionChains(
     size: Dp = 60.dp,
     normalColor: Color = Color(0xFFbdbdbd),
     accentColor: Color = Color(0xFFc6ff00),
+    onClick: (Pokemon) -> Unit,
 ) = Row(modifier = modifier) {
     val itemsByColumn = mutableListOf<List<Int>>()
     for (columnIndex in 0 until maxEvolutionChainLength(pokemon)) {
         // 진화 가지치기
         DrawEvolutionLines(columnIndex, pokemon, itemsByColumn, size, normalColor, accentColor)
         // 이미지
-        DrawPokemons(columnIndex, pokemon, itemsByColumn, size, normalColor, accentColor)
+        DrawPokemons(columnIndex, pokemon, itemsByColumn, size, normalColor, accentColor, onClick)
     }
 }
 
-private fun maxEvolutionChainLength(pokemon: PokemonDetail?) =
+fun maxEvolutionChainLength(pokemon: PokemonDetail?) =
     pokemon?.evolutionChains?.size?.let { size ->
         when {
             size > 0 -> pokemon.evolutionChains.maxOf { it.size }
@@ -93,39 +87,29 @@ private fun DrawPokemons(
     size: Dp,
     normalColor: Color,
     accentColor: Color,
+    onClick: (Pokemon) -> Unit,
 ) = Column(modifier = Modifier.width(size)) {
     val items = columnPokemonIds(pokemon, columnIndex) { _, id ->
-        Box(modifier = Modifier
-            .size(size)
-            .background(if (isActivePokemon(id, pokemon)) accentColor else normalColor, CircleShape)
-        ) {
-            SubcomposeAsyncImage(
-                modifier = Modifier
-                    .align(Alignment.TopCenter)
-                    .padding(top = 5.dp)
-                    .size(size - 20.dp),
-                model = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/$id.png",
-                contentDescription = null
-            )
-            Text(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = 2.dp),
-                text = String.format("#%03d", id),
-                style = TextStyle(fontSize = 10.dp.asSp())
-            )
-        }
+        PokemonThumb(
+            id = id,
+            pokemon = pokemon,
+            size = size,
+            normalColor = normalColor,
+            accentColor = accentColor,
+            isActive = { isActivePokemon(id, pokemon) },
+            onClick = onClick,
+        )
     }
     itemsByColumn.add(items)
 }
 
-private fun isActivePokemon(id: Int, pokemon: PokemonDetail?) =
+fun isActivePokemon(id: Int, pokemon: PokemonDetail?) =
     activePokemonIds(pokemon).contains(id)
 
 // Evolution Chain에서 현재 상세 페이지로 들어온 포켓몬 포함한 이전 포켓몬 id
 // ex) 이상해풀(id=2)로 들어왔으면 [1, 2] (이상해꽃은 제외)
 private fun activePokemonIds(pokemon: PokemonDetail?): List<Int> {
-    val chain = pokemon?.evolutionChains?.first { chain ->
+    val chain = pokemon?.evolutionChains?.firstOrNull { chain ->
         chain.map { it.first }.contains(pokemon.id)
     }?.map { (id, _) -> id }
 
