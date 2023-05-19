@@ -11,7 +11,6 @@ import kr.pe.ssun.cokedex.database.dao.PokemonItemDao
 import kr.pe.ssun.cokedex.database.dao.StatDao
 import kr.pe.ssun.cokedex.database.dao.TypeDao
 import kr.pe.ssun.cokedex.database.dao.ValueDao
-import kr.pe.ssun.cokedex.database.dao.VarietyDao
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -50,9 +49,4 @@ object DaosModule {
     fun providesEvolutionChainDao(
         database: CokedexDatabase,
     ): EvolutionChainDao = database.evolutionChainDao()
-
-    @Provides
-    fun providesVarietyDao(
-        database: CokedexDatabase,
-    ): VarietyDao = database.varietyDao()
 }

@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kr.pe.ssun.cokedex.domain.GetNameUseCase
+import kr.pe.ssun.cokedex.domain.GetSpeciesUseCase
 import kr.pe.ssun.cokedex.model.Pokemon
 import kr.pe.ssun.cokedex.domain.GetPokemonListParam
 import kr.pe.ssun.cokedex.domain.GetPokemonListUseCase
@@ -21,7 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     getPokemonListUseCase: GetPokemonListUseCase,
-    getNameUseCase: GetNameUseCase,
+    getSpeciesUseCase: GetSpeciesUseCase,
 ) : ViewModel() {
 
     companion object {
@@ -43,11 +43,11 @@ class HomeViewModel @Inject constructor(
         getPokemonListUseCase(param)
     }
 
-    private val namesIds = MutableStateFlow(listOf(DUMMY_ID).plus(SHORTCUTS))
+    private val namesIds = MutableStateFlow(listOf(DUMMY_ID))
 
     private val namesFlow = namesIds.flatMapConcat { it.asFlow() }
         .map { nameId ->
-            getNameUseCase(nameId).first().getOrNull() ?: Species(DUMMY_ID)
+            getSpeciesUseCase(nameId).first().getOrNull() ?: Species(DUMMY_ID)
         }
 
     private val list = mutableListOf<Pokemon>()

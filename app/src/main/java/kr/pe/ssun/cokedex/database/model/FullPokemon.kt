@@ -30,19 +30,14 @@ data class FullPokemon(
         associateBy = Junction(PokemonTypeCrossRef::class)
     )
     val types: List<TypeEntity>,
-
-    @Relation(
-        parentColumn = "s_id",
-        entityColumn = "v_id",
-        associateBy = Junction(SpeciesVarietyCrossRef::class)
-    )
-    val varieties: List<VarietyEntity>,
 )
 
 fun FullPokemon.asExternalModel() = PokemonDetail(
     id = pokemon.id,
     name = species?.name ?: (pokemon.name ?: ""),
     imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png",
+    speciesId = species?.id,
+    isDefault = pokemon.isDefault,
     totalTypeIds = pokemon.typeIds,
     types = types.map { type -> Type(type.id, type.name) },
     weight = pokemon.weight,
@@ -51,7 +46,5 @@ fun FullPokemon.asExternalModel() = PokemonDetail(
         Stat(stat.value.sId, stat.stat?.name, stat.value.value)
     },
     evolutionChainId = species?.ecId,
-    varietyIds = varieties.map { variety ->
-        variety.id
-    }
+    varietyIds = species?.vIds ?: listOf()
 )

@@ -10,7 +10,6 @@ import kr.pe.ssun.cokedex.database.model.FullPokemon
 import kr.pe.ssun.cokedex.database.model.PokemonEntity
 import kr.pe.ssun.cokedex.database.model.PokemonStatCrossRef
 import kr.pe.ssun.cokedex.database.model.PokemonTypeCrossRef
-import kr.pe.ssun.cokedex.database.model.SpeciesVarietyCrossRef
 
 @Dao
 interface PokemonDao {
@@ -27,7 +26,4 @@ interface PokemonDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(p2s: PokemonStatCrossRef)
-
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(p2v: SpeciesVarietyCrossRef)
 }

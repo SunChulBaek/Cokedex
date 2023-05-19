@@ -4,6 +4,8 @@ data class PokemonDetail(
     val id: Int,
     val name: String,
     val imageUrl: String,
+    val speciesId: Int?,
+    val isDefault: Boolean,
     val totalTypeIds: List<Int> = listOf(),
     val types: List<Type>,
     val weight: Int,

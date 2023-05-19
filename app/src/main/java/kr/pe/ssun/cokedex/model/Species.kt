@@ -4,5 +4,6 @@ data class Species(
     override val id: Int,
     val name: String? = null,
     val ecId: Int? = null,
+    val vIds: List<Int>? = null,
     override val fromDB: Boolean = false
 ) : Loadable(id, fromDB)

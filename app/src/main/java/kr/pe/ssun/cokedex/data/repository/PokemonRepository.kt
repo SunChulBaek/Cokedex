@@ -24,7 +24,6 @@ class PokemonRepository @Inject constructor(
     private val statDao: StatDao,
     private val valueDao: ValueDao,
     private val evolutionChainDao: EvolutionChainDao,
-    private val varietyDao: VarietyDao,
 ) {
     companion object {
         const val DUMMY_ID = 0
@@ -46,11 +45,6 @@ class PokemonRepository @Inject constructor(
                         val entity = species.asNameEntity()
 
                         Timber.d("[sunchulbaek] Species(id = $id) varieties = ${species.getVarietyIds()}")
-                        species.getVarietyIds().forEach { varietyId ->
-                            pokemonDao.insert(SpeciesVarietyCrossRef(id, varietyId))
-                            varietyDao.insert(VarietyEntity(varietyId, id))
-                        }
-
                         speciesDao.insert(entity)
                         emit(entity.asExternalModel())
                     }
@@ -151,9 +145,6 @@ class PokemonRepository @Inject constructor(
             fullPokemon.stats.forEach { stat ->
                 Timber.i("[sunchulbaek] Stat(sId = ${stat.value.sId}) DB에 저장되어 ${if (stat.stat != null) "있음" else "있지않음"}")
             }
-            fullPokemon.varieties.forEach { variety ->
-                Timber.i("[sunchulbaek] Variety(sId = ${variety.id}) DB에 저장되어 있음")
-            }
             emit(fullPokemon.asExternalModel())
         } ?: run {
             Timber.e("[sunchulbaek] Pokemon(id = ${id}) DB에 저장되어 있지 않음")
@@ -170,7 +161,6 @@ class PokemonRepository @Inject constructor(
                         )
                     },
                     types = typeDao.findById(pokemon.getTypeIds().toIntArray()),
-                    varieties = varietyDao.findBySpeciesId(species?.id ?: DUMMY_ID),
                 )
                 pokemonDao.insert(entity)
                 pokemon.stats.forEach { stat ->
@@ -190,7 +180,9 @@ class PokemonRepository @Inject constructor(
                         tId = type.getId()
                     ))
                 }
-                emit(entity2.asExternalModel())
+                emit(entity2.asExternalModel().copy(
+                    speciesId = pokemon.species.getId()
+                ))
             }
         }
     }

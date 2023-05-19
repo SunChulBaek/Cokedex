@@ -8,7 +8,7 @@ import kr.pe.ssun.cokedex.model.Species
 import kr.pe.ssun.cokedex.util.IoDispatcher
 import javax.inject.Inject
 
-class GetNameUseCase @Inject constructor(
+class GetSpeciesUseCase @Inject constructor(
     @IoDispatcher dispatcher: CoroutineDispatcher,
     private val repository: PokemonRepository
 ) : FlowUseCase<Int, Species>(dispatcher) {

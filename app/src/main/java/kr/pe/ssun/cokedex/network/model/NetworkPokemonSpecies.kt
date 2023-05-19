@@ -17,4 +17,5 @@ fun NetworkPokemonSpecies.asNameEntity() = SpeciesEntity(
     id = id,
     name = names.getNameX() ?: name,
     ecId = evolutionChain.getId(),
+    vIds = getVarietyIds(),
 )

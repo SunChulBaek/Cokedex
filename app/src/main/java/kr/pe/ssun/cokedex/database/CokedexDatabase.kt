@@ -10,18 +10,15 @@ import kr.pe.ssun.cokedex.database.dao.PokemonItemDao
 import kr.pe.ssun.cokedex.database.dao.StatDao
 import kr.pe.ssun.cokedex.database.dao.TypeDao
 import kr.pe.ssun.cokedex.database.dao.ValueDao
-import kr.pe.ssun.cokedex.database.dao.VarietyDao
 import kr.pe.ssun.cokedex.database.model.EvolutionChainEntity
 import kr.pe.ssun.cokedex.database.model.SpeciesEntity
 import kr.pe.ssun.cokedex.database.model.PokemonEntity
 import kr.pe.ssun.cokedex.database.model.PokemonItemEntity
 import kr.pe.ssun.cokedex.database.model.PokemonStatCrossRef
 import kr.pe.ssun.cokedex.database.model.PokemonTypeCrossRef
-import kr.pe.ssun.cokedex.database.model.SpeciesVarietyCrossRef
 import kr.pe.ssun.cokedex.database.model.StatEntity
 import kr.pe.ssun.cokedex.database.model.TypeEntity
 import kr.pe.ssun.cokedex.database.model.ValueEntity
-import kr.pe.ssun.cokedex.database.model.VarietyEntity
 import kr.pe.ssun.cokedex.database.util.IdsConverter
 import kr.pe.ssun.cokedex.database.util.StatsConverter
 import kr.pe.ssun.cokedex.database.util.TypesConverter
@@ -34,11 +31,9 @@ import kr.pe.ssun.cokedex.database.util.TypesConverter
         TypeEntity::class,
         StatEntity::class,
         ValueEntity::class,
-        VarietyEntity::class,
         EvolutionChainEntity::class,
         PokemonStatCrossRef::class,
         PokemonTypeCrossRef::class,
-        SpeciesVarietyCrossRef::class,
     ],
     version = 1,
     exportSchema = false
@@ -56,5 +51,4 @@ abstract class CokedexDatabase : RoomDatabase() {
     abstract fun statDao(): StatDao
     abstract fun valueDao(): ValueDao
     abstract fun evolutionChainDao(): EvolutionChainDao
-    abstract fun varietyDao(): VarietyDao
 }
