@@ -16,6 +16,4 @@ data class PokemonEntity(
     @ColumnInfo(name = "order") val order: Int,
     @ColumnInfo(name = "weight") val weight: Int,
     @ColumnInfo(name = "typeIds") val typeIds: List<Int>,
-    @ColumnInfo(name = "abilityIds") val abilityIds: List<Int>,
-    @ColumnInfo(name = "moveIds") val moveIds: List<Int>,
 )

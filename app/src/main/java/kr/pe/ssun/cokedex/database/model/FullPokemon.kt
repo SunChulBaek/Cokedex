@@ -8,18 +8,22 @@ import kr.pe.ssun.cokedex.model.Stat
 import kr.pe.ssun.cokedex.model.Type
 
 data class FullPokemon(
-    @Embedded val pokemon: PokemonEntity,
+    @Embedded
+    val pokemon: PokemonEntity,
+
     @Relation(
         parentColumn = "p_id",
         entityColumn = "p_id"
     )
     val species: SpeciesEntity?,
+
     @Relation(
         parentColumn = "p_id",
         entityColumn = "p_id",
         entity = ValueEntity::class
     )
     val stats: List<ValueWithStat>,
+
     @Relation(
         parentColumn = "p_id",
         entityColumn = "t_id",
