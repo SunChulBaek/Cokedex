@@ -4,7 +4,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kr.pe.ssun.cokedex.database.dao.AbilityDao
 import kr.pe.ssun.cokedex.database.dao.EvolutionChainDao
 import kr.pe.ssun.cokedex.database.dao.SpeciesDao
 import kr.pe.ssun.cokedex.database.dao.PokemonDao
@@ -45,11 +44,6 @@ object DaosModule {
     fun providesValueDao(
         database: CokedexDatabase,
     ): ValueDao = database.valueDao()
-
-    @Provides
-    fun providesAbilityDao(
-        database: CokedexDatabase,
-    ): AbilityDao = database.abilityDao()
 
     @Provides
     fun providesEvolutionChainDao(

@@ -7,7 +7,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kr.pe.ssun.cokedex.database.dao.AbilityDao
 import kr.pe.ssun.cokedex.database.dao.EvolutionChainDao
 import kr.pe.ssun.cokedex.database.dao.SpeciesDao
 import kr.pe.ssun.cokedex.database.dao.PokemonDao
@@ -53,7 +52,6 @@ object ApiModule {
         typeDao: TypeDao,
         statDao: StatDao,
         valueDao: ValueDao,
-        abilityDao: AbilityDao,
         evolutionChainDao: EvolutionChainDao,
     ): PokemonRepository {
         return PokemonRepository(
@@ -64,7 +62,6 @@ object ApiModule {
             typeDao = typeDao,
             statDao = statDao,
             valueDao = valueDao,
-            abilityDao = abilityDao,
             evolutionChainDao = evolutionChainDao,
         )
     }

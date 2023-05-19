@@ -22,17 +22,11 @@ fun PokemonDetailLoadingProgress(
 ) = Column(
     modifier = modifier.background(Color(0xFFe0e0e0)),
 ) {
-    // Type, Stat, Ability, Move의 로딩 상태를 표시함
+    // Type 로딩 상태를 표시함
     val totalTypeIds = pokemon?.totalTypeIds
-    val totalStatIds = pokemon?.stats?.map { it.id }
-    val totalAbilityIds = pokemon?.totalAbilityIds
-    val totalMoveIds = pokemon?.totalMoveIds
 
     listOf(
         Pair(pokemon?.types, totalTypeIds),
-        Pair(pokemon?.stats, totalStatIds),
-        Pair(pokemon?.abilities, totalAbilityIds),
-        //Pair(pokemon?.moves, totalMoveIds)
     ).forEach { (items, ids) ->
         LoadingProgress(
             modifier = Modifier

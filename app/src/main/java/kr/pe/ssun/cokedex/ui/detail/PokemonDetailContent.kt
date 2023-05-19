@@ -51,8 +51,6 @@ fun PokemonDetailContent(
     val imageUrl = pokemon?.imageUrl ?: loading?.imageUrl
     val colorStart = Color(success?.colorStart ?: loading?.colorStart ?: 0x00000000)
     val colorEnd = Color(success?.colorEnd ?: loading?.colorEnd ?: 0x00000000)
-    val totalAbilitiesCount = pokemon?.totalAbilityIds?.size ?: 0
-    val totalMovesCount = pokemon?.totalMoveIds?.size ?: 0
 
     Column(
         modifier = Modifier
@@ -155,50 +153,6 @@ fun PokemonDetailContent(
                 pokemon = pokemon,
             )
             Spacer(modifier = Modifier.height(10.dp))
-            // 스탯
-            Text(text = "Base Stats", color = Color.White)
-            pokemon?.stats?.forEach { stat ->
-                Row {
-                    Text(text = stat.name ?: "", color = Color.White)
-                    Spacer(modifier = Modifier.width(10.dp))
-                    Text(
-                        text = stat.value.toString(),
-                        modifier = Modifier.weight(1f),
-                        color = Color.White
-                    )
-                }
-            }
-            Spacer(modifier = Modifier.height(10.dp))
-            // abilities
-            Text(
-                text = "Abilities ${pokemon?.abilities?.size ?: 0}/$totalAbilitiesCount",
-                color = Color.White
-            )
-            pokemon?.abilities?.forEach { ability ->
-                Row {
-                    Text(text = ability.name ?: "", color = Color.White)
-                    Spacer(modifier = Modifier.width(10.dp))
-                    Text(
-                        text = ability.flavor ?: "",
-                        modifier = Modifier.weight(1f),
-                        color = Color.White
-                    )
-                }
-            }
-            Spacer(modifier = Modifier.height(10.dp))
-            // moves
-//            Text(text = "Moves ${pokemon?.moves?.size ?: 0}/$totalMovesCount", color = Color.White)
-//            pokemon?.moves?.forEach { move ->
-//                Row {
-//                    Text(text = move.name ?: "", color = Color.White)
-//                    Spacer(modifier = Modifier.width(10.dp))
-//                    Text(
-//                        text = move.flavor ?: "",
-//                        modifier = Modifier.weight(1f),
-//                        color = Color.White
-//                    )
-//                }
-//            }
         }
 
         // 프로그레스

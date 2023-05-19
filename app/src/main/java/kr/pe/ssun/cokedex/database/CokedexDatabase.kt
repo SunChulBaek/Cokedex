@@ -3,7 +3,6 @@ package kr.pe.ssun.cokedex.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import kr.pe.ssun.cokedex.database.dao.AbilityDao
 import kr.pe.ssun.cokedex.database.dao.EvolutionChainDao
 import kr.pe.ssun.cokedex.database.dao.SpeciesDao
 import kr.pe.ssun.cokedex.database.dao.PokemonDao
@@ -11,10 +10,8 @@ import kr.pe.ssun.cokedex.database.dao.PokemonItemDao
 import kr.pe.ssun.cokedex.database.dao.StatDao
 import kr.pe.ssun.cokedex.database.dao.TypeDao
 import kr.pe.ssun.cokedex.database.dao.ValueDao
-import kr.pe.ssun.cokedex.database.model.AbilityEntity
 import kr.pe.ssun.cokedex.database.model.EvolutionChainEntity
 import kr.pe.ssun.cokedex.database.model.SpeciesEntity
-import kr.pe.ssun.cokedex.database.model.PokemonAbilityCrossRef
 import kr.pe.ssun.cokedex.database.model.PokemonEntity
 import kr.pe.ssun.cokedex.database.model.PokemonItemEntity
 import kr.pe.ssun.cokedex.database.model.PokemonStatCrossRef
@@ -32,12 +29,10 @@ import kr.pe.ssun.cokedex.database.util.TypesConverter
         PokemonEntity::class,
         SpeciesEntity::class,
         TypeEntity::class,
-        AbilityEntity::class,
         StatEntity::class,
         ValueEntity::class,
         EvolutionChainEntity::class,
         PokemonStatCrossRef::class,
-        PokemonAbilityCrossRef::class,
         PokemonTypeCrossRef::class,
     ],
     version = 1,
@@ -55,6 +50,5 @@ abstract class CokedexDatabase : RoomDatabase() {
     abstract fun typeDao(): TypeDao
     abstract fun statDao(): StatDao
     abstract fun valueDao(): ValueDao
-    abstract fun abilityDao(): AbilityDao
     abstract fun evolutionChainDao(): EvolutionChainDao
 }

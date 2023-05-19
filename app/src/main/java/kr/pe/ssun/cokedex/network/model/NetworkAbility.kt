@@ -1,7 +1,6 @@
 package kr.pe.ssun.cokedex.network.model
 
 import com.google.gson.annotations.SerializedName
-import kr.pe.ssun.cokedex.model.Ability
 import java.util.Locale
 
 data class NetworkAbility(
@@ -15,12 +14,6 @@ data class NetworkAbility(
     @SerializedName("flavor_text_entries") val flavorTextEntries: List<NetworkAbilityFlavorText> = listOf(),
     @SerializedName("pokemon") val pokemon: List<NetworkAbilityPokemon> = listOf(),
 ) {
-    fun asExternalModel() = Ability(
-        id = id,
-        name = names.getNameX(),
-        flavor = this.getFlavor()
-    )
-
     fun getFlavor(): String? = (flavorTextEntries.firstOrNull {
         it.language.name == Locale.getDefault().language
     }?.flavorText ?: flavorTextEntries.firstOrNull {
