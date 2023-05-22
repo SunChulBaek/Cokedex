@@ -50,6 +50,7 @@ fun PokemonDetailContent(
     val pokemon = success?.pokemon
     val id = pokemon?.id ?: loading?.id ?: 0
     val name = pokemon?.name ?: loading?.name ?: ""
+    val form = pokemon?.form
     val imageUrl = pokemon?.imageUrl ?: loading?.imageUrl
     val varietyIds = pokemon?.varietyIds ?: listOf()
     val colorStart = Color(success?.colorStart ?: loading?.colorStart ?: 0x00000000)
@@ -112,7 +113,7 @@ fun PokemonDetailContent(
                 )
             }
             // 이름
-            Text(text = name, color = Color.White)
+            Text(text = "$name${ if (form?.name!= null) " (${form.name})" else "" }" , color = Color.White)
             Spacer(modifier = Modifier.height(10.dp))
             // 타입
             Row {
@@ -177,6 +178,6 @@ fun PokemonDetailContent(
         // 프로그레스
         PokemonDetailLoadingProgress(modifier = Modifier
             .fillMaxWidth()
-            .height(16.dp), pokemon = pokemon)
+            .height(20.dp), pokemon = pokemon)
     }
 }

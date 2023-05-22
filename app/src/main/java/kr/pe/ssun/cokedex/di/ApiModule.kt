@@ -8,6 +8,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kr.pe.ssun.cokedex.database.dao.EvolutionChainDao
+import kr.pe.ssun.cokedex.database.dao.FormDao
 import kr.pe.ssun.cokedex.database.dao.SpeciesDao
 import kr.pe.ssun.cokedex.database.dao.PokemonDao
 import kr.pe.ssun.cokedex.database.dao.PokemonItemDao
@@ -53,6 +54,7 @@ object ApiModule {
         statDao: StatDao,
         valueDao: ValueDao,
         evolutionChainDao: EvolutionChainDao,
+        formDao: FormDao,
     ): PokemonRepository {
         return PokemonRepository(
             network = apiService,
@@ -63,6 +65,7 @@ object ApiModule {
             statDao = statDao,
             valueDao = valueDao,
             evolutionChainDao = evolutionChainDao,
+            formDao = formDao,
         )
     }
 }

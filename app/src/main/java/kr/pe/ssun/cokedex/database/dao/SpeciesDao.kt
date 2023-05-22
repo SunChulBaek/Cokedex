@@ -7,8 +7,8 @@ import kr.pe.ssun.cokedex.database.model.SpeciesEntity
 
 @Dao
 interface SpeciesDao {
-    @Query("SELECT * FROM name WHERE p_id = :pokemonId")
-    fun findById(pokemonId: Int): SpeciesEntity?
+    @Query("SELECT * FROM name WHERE s_id = :speciesId")
+    fun findById(speciesId: Int): SpeciesEntity?
 
     @Insert
     fun insert(name: SpeciesEntity)

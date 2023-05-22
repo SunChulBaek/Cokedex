@@ -13,9 +13,12 @@ import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kr.pe.ssun.cokedex.domain.GetEvolutionChainUseCase
+import kr.pe.ssun.cokedex.domain.GetFormUseCase
 import kr.pe.ssun.cokedex.domain.GetSpeciesUseCase
 import kr.pe.ssun.cokedex.domain.GetPokemonDetailUseCase
 import kr.pe.ssun.cokedex.domain.GetTypeUseCase
+import kr.pe.ssun.cokedex.model.EvolutionChain
+import kr.pe.ssun.cokedex.model.Form
 import kr.pe.ssun.cokedex.model.Species
 import kr.pe.ssun.cokedex.model.Type
 import kr.pe.ssun.cokedex.navigation.PokemonDetailArgs
@@ -29,6 +32,7 @@ class PokemonDetailViewModel @Inject constructor(
     getTypeUseCase: GetTypeUseCase,
     getSpeciesUseCase: GetSpeciesUseCase,
     getEvolutionChainUseCase: GetEvolutionChainUseCase,
+    getFormUseCase: GetFormUseCase,
 ) : ViewModel() {
 
     companion object {
@@ -43,6 +47,8 @@ class PokemonDetailViewModel @Inject constructor(
 
     private val evolutionChainId = MutableStateFlow(DUMMY_ID)
 
+    private val formId = MutableStateFlow(DUMMY_ID)
+
     private val typeFlow = typeIds.flatMapConcat { it.asFlow() }
         .map { typeId ->
             getTypeUseCase(typeId).first().getOrNull() ?: Type(DUMMY_ID)
@@ -55,7 +61,12 @@ class PokemonDetailViewModel @Inject constructor(
 
     private val evolutionChainFlow = evolutionChainId
         .map { ecId ->
-            getEvolutionChainUseCase(ecId).first().getOrNull()?.chains ?: listOf()
+            getEvolutionChainUseCase(ecId).first().getOrNull() ?: EvolutionChain(DUMMY_ID)
+        }
+
+    private val formFlow = formId
+        .map { formId ->
+            getFormUseCase(formId).first().getOrNull() ?: Form(DUMMY_ID)
         }
 
     private var types: List<Type> = mutableListOf()
@@ -64,8 +75,9 @@ class PokemonDetailViewModel @Inject constructor(
         typeFlow,
         speciesFlow,
         evolutionChainFlow,
+        formFlow,
         getPokemonDetailUseCase(args.id)
-    ) { type, species, evolutionChains, result ->
+    ) { type, species, evolutionChains, form, result ->
         val pokemon = result.getOrNull()?.copy()
 
         // 더미 아이템 하나만 있을 때 캐시 안된 Type api 호출하도록
@@ -90,6 +102,11 @@ class PokemonDetailViewModel @Inject constructor(
             evolutionChainId.emit(species.ecId ?: pokemon?.evolutionChainId ?: DUMMY_ID)
         }
 
+        // Form api 호출
+        if (formId.value == DUMMY_ID && pokemon?.formId != null) {
+            formId.emit(pokemon.formId)
+        }
+
         when {
             pokemon != null -> {
                 // Type 중복되지 않게 아이템 추가
@@ -97,14 +114,20 @@ class PokemonDetailViewModel @Inject constructor(
                     types = types.filterNot { it.id == DUMMY_ID }.plus(type).sortedBy { it.id }
                 }
                 if (species.id != DUMMY_ID) {
-                    Timber.d("[sunchulbaek] ${species.id}, ${species.name}")
+                    Timber.d("[sunchulbaek] sId = ${species.id}, sName = ${species.name}, ecId = ${species.ecId}")
+                }
+                if (form.id != DUMMY_ID) {
+                    Timber.d("[sunchulbaek] fId = ${form.id} fName = ${form.name}")
                 }
 
                 PokemonUiState.Success(
                     pokemon = pokemon.copy(
-                        name = if (pokemon.isDefault) (species.name ?: pokemon.name) else pokemon.name,
+                        name = species.name ?: pokemon.name,
+                        species = species,
+                        form = form,
                         types = types,
-                        evolutionChains = evolutionChains,
+                        evolutionChainId = species.ecId,
+                        evolutionChain = evolutionChains,
                         varietyIds = species.vIds ?: listOf()
                     ),
                     colorStart = args.colorStart,

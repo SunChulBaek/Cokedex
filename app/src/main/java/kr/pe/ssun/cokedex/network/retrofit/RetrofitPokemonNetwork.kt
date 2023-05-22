@@ -6,6 +6,7 @@ import kr.pe.ssun.cokedex.network.model.NetworkAbility
 import kr.pe.ssun.cokedex.network.model.NetworkEvolutionChain
 import kr.pe.ssun.cokedex.network.model.NetworkMove
 import kr.pe.ssun.cokedex.network.model.NetworkPokemon
+import kr.pe.ssun.cokedex.network.model.NetworkPokemonForm
 import kr.pe.ssun.cokedex.network.model.NetworkPokemonSpecies
 import kr.pe.ssun.cokedex.network.model.NetworkStat
 import kr.pe.ssun.cokedex.network.model.NetworkType
@@ -50,6 +51,11 @@ interface RetrofitPokemonNetworkApi {
     suspend fun getAbility(
         @Path("id") id: Int,
     ): NetworkAbility
+
+    @GET("pokemon-form/{id}")
+    suspend fun getForm(
+        @Path("id") id: Int,
+    ): NetworkPokemonForm
 
     @GET("pokemon")
     suspend fun getPokemonList(
@@ -104,6 +110,10 @@ class RetrofitSsunNetwork @Inject constructor() : PokemonNetworkDataSource {
     override suspend fun getAbility(
         id: Int,
     ): NetworkAbility = networkApi.getAbility(id)
+
+    override suspend fun getForm(
+        id: Int
+    ): NetworkPokemonForm = networkApi.getForm(id)
 
     override suspend fun getPokemonList(
         limit: Int?,

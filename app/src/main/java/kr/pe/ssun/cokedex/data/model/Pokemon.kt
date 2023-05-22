@@ -6,6 +6,7 @@ import kr.pe.ssun.cokedex.network.model.NetworkPokemon
 fun NetworkPokemon.asEntity() = PokemonEntity(
     id = id,
     sId = species.getId(),
+    fId = forms.first().getId(),
     name = name,
     baseExp = baseExp,
     height = height,

@@ -38,9 +38,9 @@ fun PokemonEvolutionChains(
 }
 
 fun maxEvolutionChainLength(pokemon: PokemonDetail?) =
-    pokemon?.evolutionChains?.size?.let { size ->
+    pokemon?.evolutionChain?.chains?.size?.let { size ->
         when {
-            size > 0 -> pokemon.evolutionChains.maxOf { it.size }
+            size > 0 -> pokemon.evolutionChain.chains.maxOf { it.size }
             else -> 0
         }
     } ?: 0
@@ -109,7 +109,7 @@ fun isActivePokemon(id: Int, pokemon: PokemonDetail?) =
 // Evolution Chain에서 현재 상세 페이지로 들어온 포켓몬 포함한 이전 포켓몬 id
 // ex) 이상해풀(id=2)로 들어왔으면 [1, 2] (이상해꽃은 제외)
 private fun activePokemonIds(pokemon: PokemonDetail?): List<Int> {
-    val chain = pokemon?.evolutionChains?.firstOrNull { chain ->
+    val chain = pokemon?.evolutionChain?.chains?.firstOrNull { chain ->
         chain.map { it.first }.contains(pokemon.id)
     }?.map { (id, _) -> id }
 
@@ -132,7 +132,7 @@ private fun columnPokemonIds(
     columnIndex: Int,
     action: @Composable (Int, Int) -> Unit = { _, _ ->}
 ): List<Int> {
-    val list = (pokemon?.evolutionChains?.filter { chain ->
+    val list = (pokemon?.evolutionChain?.chains?.filter { chain ->
         chain.size > columnIndex
     }?.map { chain ->
         chain[columnIndex]
@@ -159,10 +159,10 @@ private fun prevNodeIndex(
     itemsByColumn: List<List<Int>>,
     columnIndex: Int
 ): Int {
-    val prevNodeIndex = (pokemon?.evolutionChains?.firstOrNull { chain ->
+    val prevNodeIndex = (pokemon?.evolutionChain?.chains?.firstOrNull { chain ->
         chain.map { (id, _) -> id }.contains(pId)
     }?.indexOfFirst { (id, _) -> id == pId } ?: 0) - 1
-    val prevNodeId = pokemon?.evolutionChains?.firstOrNull { chain ->
+    val prevNodeId = pokemon?.evolutionChain?.chains?.firstOrNull { chain ->
         chain.map { (id, _) -> id }.contains(pId)
     }?.map { (id, _) -> id}?.get(prevNodeIndex)
 

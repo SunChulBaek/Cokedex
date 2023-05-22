@@ -24,6 +24,7 @@ class PokemonRepository @Inject constructor(
     private val statDao: StatDao,
     private val valueDao: ValueDao,
     private val evolutionChainDao: EvolutionChainDao,
+    private val formDao: FormDao,
 ) {
     companion object {
         const val DUMMY_ID = 0
@@ -95,16 +96,16 @@ class PokemonRepository @Inject constructor(
         }
     }
 
-    fun getEvolutionChain(id: Int): Flow<EvolutionChains> = flow {
+    fun getEvolutionChain(id: Int): Flow<EvolutionChain> = flow {
         val entities = evolutionChainDao.findById(id)
         if (entities.isNotEmpty()) {
             Timber.i("[sunchulbaek] EvolutionChain(id = $id) DB에 저장되어 있음")
-            emit(entities.asExternalModel())
+            emit(entities.asExternalModel(fromDB = true))
         } else {
             when (id) {
                 DUMMY_ID -> {
                     Timber.d("[sunchulbaek] EvolutionChain(id = 0) 은 무시")
-                    emit(EvolutionChains())
+                    emit(EvolutionChain(DUMMY_ID))
                 }
 
                 else -> {
@@ -114,6 +115,27 @@ class PokemonRepository @Inject constructor(
                         evolutionChainDao.insert(chain)
                     }
                     emit(result.asExternalModel())
+                }
+            }
+        }
+    }
+
+    fun getForm(id: Int): Flow<Form> = flow {
+        formDao.findById(id)?.let { form ->
+            Timber.i("[sunchulbaek] Form(id = $id) DB에 저장되어 있음")
+            emit(form.asExternalModel(fromDB = true))
+        } ?: run {
+            when (id) {
+                DUMMY_ID -> {
+                    Timber.d("[sunchulbaek] Form(id = 0) 은 무시")
+                    emit(Form(DUMMY_ID))
+                }
+                else -> {
+                    Timber.e("[sunchulbaek] Stat(id = $id) DB에 저장되어 있지 않음. API 콜")
+                    network.getForm(id).asEntity().let { form ->
+                        formDao.insert(form)
+                        emit(form.asExternalModel())
+                    }
                 }
             }
         }
@@ -142,18 +164,14 @@ class PokemonRepository @Inject constructor(
             fullPokemon.types.forEach { type ->
                 Timber.i("[sunchulbaek] Type(id = ${type.id}) DB에 저장되어 있음")
             }
-            fullPokemon.stats.forEach { stat ->
-                Timber.i("[sunchulbaek] Stat(sId = ${stat.value.sId}) DB에 저장되어 ${if (stat.stat != null) "있음" else "있지않음"}")
-            }
             emit(fullPokemon.asExternalModel())
         } ?: run {
             Timber.e("[sunchulbaek] Pokemon(id = ${id}) DB에 저장되어 있지 않음")
             network.getPokemonDetail(id).let { pokemon ->
                 val entity = pokemon.asEntity()
-                val species = speciesDao.findById(pokemon.id)
                 val entity2 = FullPokemon(
-                    pokemon = pokemon.asEntity(),
-                    species = species,
+                    pokemon = entity,
+                    species = speciesDao.findById(pokemon.id),
                     stats = pokemon.stats.map { stat ->
                         ValueWithStat(
                             value = ValueEntity(pokemon.id, stat.stat.getId(), stat.baseStat),
@@ -161,6 +179,7 @@ class PokemonRepository @Inject constructor(
                         )
                     },
                     types = typeDao.findById(pokemon.getTypeIds().toIntArray()),
+                    form = formDao.findById(pokemon.forms.firstOrNull()?.getId())
                 )
                 pokemonDao.insert(entity)
                 pokemon.stats.forEach { stat ->
@@ -180,9 +199,7 @@ class PokemonRepository @Inject constructor(
                         tId = type.getId()
                     ))
                 }
-                emit(entity2.asExternalModel().copy(
-                    speciesId = pokemon.species.getId()
-                ))
+                emit(entity2.asExternalModel())
             }
         }
     }

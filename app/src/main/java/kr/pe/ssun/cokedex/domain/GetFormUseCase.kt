@@ -4,17 +4,16 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kr.pe.ssun.cokedex.data.repository.PokemonRepository
-import kr.pe.ssun.cokedex.model.EvolutionChain
+import kr.pe.ssun.cokedex.model.Form
 import kr.pe.ssun.cokedex.util.IoDispatcher
 import javax.inject.Inject
 
-class GetEvolutionChainUseCase @Inject constructor(
+class GetFormUseCase @Inject constructor(
     @IoDispatcher dispatcher: CoroutineDispatcher,
     private val repository: PokemonRepository
-) : FlowUseCase<Int, EvolutionChain>(dispatcher) {
-
-    override fun execute(parameters: Int): Flow<Result<EvolutionChain>> =
-        repository.getEvolutionChain(parameters)
+) : FlowUseCase<Int, Form>(dispatcher) {
+    override fun execute(parameters: Int): Flow<Result<Form>> =
+        repository.getForm(parameters)
             .map {
                 Result.success(it)
             }

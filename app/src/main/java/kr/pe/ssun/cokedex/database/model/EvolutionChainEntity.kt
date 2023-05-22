@@ -2,8 +2,7 @@ package kr.pe.ssun.cokedex.database.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import kr.pe.ssun.cokedex.data.model.EvolutionChains
-import timber.log.Timber
+import kr.pe.ssun.cokedex.model.EvolutionChain
 
 @Entity(
     tableName = "evolution_chain",
@@ -17,7 +16,8 @@ data class EvolutionChainEntity(
     @ColumnInfo(name = "is_leaf") val isLeaf: Boolean,
 )
 
-fun List<EvolutionChainEntity>.asExternalModel() = EvolutionChains(
+fun List<EvolutionChainEntity>.asExternalModel(fromDB: Boolean = false) = EvolutionChain(
+    id = firstOrNull()?.cId ?: 0,
     chains = filter { it.isLeaf }.map { leaf ->
         val list = mutableListOf<Pair<Int, String>>()
         var entry: EvolutionChainEntity? = leaf
@@ -26,5 +26,6 @@ fun List<EvolutionChainEntity>.asExternalModel() = EvolutionChains(
             entry = firstOrNull { it.pId == entry?.prevId }
         }
         list.apply { reverse() }
-    }
+    },
+    fromDB = fromDB
 )

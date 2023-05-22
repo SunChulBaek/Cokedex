@@ -5,6 +5,7 @@ import kr.pe.ssun.cokedex.network.model.NetworkAbility
 import kr.pe.ssun.cokedex.network.model.NetworkEvolutionChain
 import kr.pe.ssun.cokedex.network.model.NetworkMove
 import kr.pe.ssun.cokedex.network.model.NetworkPokemon
+import kr.pe.ssun.cokedex.network.model.NetworkPokemonForm
 import kr.pe.ssun.cokedex.network.model.NetworkPokemonSpecies
 import kr.pe.ssun.cokedex.network.model.NetworkStat
 import kr.pe.ssun.cokedex.network.model.NetworkType
@@ -33,6 +34,10 @@ interface PokemonNetworkDataSource {
     suspend fun getAbility(
         id: Int,
     ): NetworkAbility
+
+    suspend fun getForm(
+        id: Int
+    ): NetworkPokemonForm
 
     suspend fun getPokemonList(
         limit: Int? = null,
