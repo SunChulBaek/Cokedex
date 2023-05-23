@@ -33,7 +33,9 @@ abstract class FlowUseCase<in P, R>(
 ) {
     operator fun invoke(parameters: P): Flow<Result<R>> = execute(parameters)
         .catch { e ->
-            Timber.e("[sunchulbaek] ${e.message}")
+            e.stackTrace.forEach {
+                Timber.e("[sunchulbaek] $e")
+            }
             emit(Result.failure(Exception(e)))
         }
         .flowOn(coroutineDispatcher)
