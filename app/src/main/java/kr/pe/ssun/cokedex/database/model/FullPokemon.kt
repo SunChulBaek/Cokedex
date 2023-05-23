@@ -6,6 +6,7 @@ import androidx.room.Relation
 import kr.pe.ssun.cokedex.model.PokemonDetail
 import kr.pe.ssun.cokedex.model.Stat
 import kr.pe.ssun.cokedex.model.Type
+import kr.pe.ssun.cokedex.ui.common.getImageUrl
 
 data class FullPokemon(
     @Embedded
@@ -41,7 +42,7 @@ data class FullPokemon(
 fun FullPokemon.asExternalModel() = PokemonDetail(
     id = pokemon.id,
     name = species?.name ?: (pokemon.name ?: ""),
-    imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png",
+    imageUrl = getImageUrl(pokemon.id),
     isDefault = pokemon.isDefault,
     weight = pokemon.weight,
     height = pokemon.height,

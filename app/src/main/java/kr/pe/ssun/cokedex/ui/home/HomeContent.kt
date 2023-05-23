@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import kr.pe.ssun.cokedex.model.Pokemon
+import kr.pe.ssun.cokedex.ui.common.getImageUrl
 import kr.pe.ssun.cokedex.util.InfiniteGridHandler
 import timber.log.Timber
 
@@ -59,13 +60,13 @@ fun HomeContent(
                                 id = shortcuts[index],
                                 name = "테스트",
                                 fallbackName = "테스트",
-                                imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${shortcuts[index]}.png",
+                                imageUrl = getImageUrl(shortcuts[index]),
                             )
                         )}
                 ) {
                     SubcomposeAsyncImage(
                         modifier = Modifier.size(35.dp).align(Alignment.Center),
-                        model = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${shortcuts[index]}.png",
+                        model = getImageUrl(shortcuts[index]),
                         contentDescription = null
                     )
                 }

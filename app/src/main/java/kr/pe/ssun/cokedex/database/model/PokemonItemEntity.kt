@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kr.pe.ssun.cokedex.model.Pokemon
+import kr.pe.ssun.cokedex.ui.common.getImageUrl
 
 @Entity(
     tableName = "pokemon_item"
@@ -19,6 +20,6 @@ fun List<PokemonItemEntity>.asExternalModel() = map { item ->
         id = item.id,
         name = item.name,
         fallbackName = item.name,
-        imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${item.id}.png",
+        imageUrl = getImageUrl(item.id),
     )
 }

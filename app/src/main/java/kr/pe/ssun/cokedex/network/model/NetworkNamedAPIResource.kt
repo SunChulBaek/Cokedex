@@ -2,6 +2,7 @@ package kr.pe.ssun.cokedex.network.model
 
 import com.google.gson.annotations.SerializedName
 import kr.pe.ssun.cokedex.model.Pokemon
+import kr.pe.ssun.cokedex.ui.common.getImageUrl
 
 // https://pokeapi.co/docs/v2#namedapiresource
 data class NetworkNamedAPIResource(
@@ -21,5 +22,5 @@ fun NetworkNamedAPIResource.asExternalModel() = Pokemon(
     id = getId(),
     name = this.name ?: "",
     fallbackName = this.name ?: "",
-    imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${getId()}.png",
+    imageUrl = getImageUrl(getId()),
 )

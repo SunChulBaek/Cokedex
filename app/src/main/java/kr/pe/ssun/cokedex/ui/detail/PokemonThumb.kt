@@ -25,6 +25,7 @@ import androidx.core.graphics.drawable.toBitmap
 import coil.compose.SubcomposeAsyncImage
 import kr.pe.ssun.cokedex.model.Pokemon
 import kr.pe.ssun.cokedex.model.PokemonDetail
+import kr.pe.ssun.cokedex.ui.common.getImageUrl
 import kr.pe.ssun.cokedex.util.MyPalette
 import kr.pe.ssun.cokedex.util.asSp
 
@@ -51,7 +52,7 @@ fun PokemonThumb(
                     id = id,
                     name = "name",
                     fallbackName = "name",
-                    imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/$id.png",
+                    imageUrl = getImageUrl(id),
                     colorStart = colorStart,
                     colorEnd = colorEnd
                 )) }
@@ -63,7 +64,7 @@ fun PokemonThumb(
                 .align(Alignment.TopCenter)
                 .padding(top = 5.dp)
                 .size(size - 20.dp),
-            model = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/$id.png",
+            model = getImageUrl(id),
             loading = {
                 Box(Modifier.size(size - 20.dp)) {
                     CircularProgressIndicator(
