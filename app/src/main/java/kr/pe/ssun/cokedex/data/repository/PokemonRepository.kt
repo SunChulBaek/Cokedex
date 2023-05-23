@@ -141,9 +141,17 @@ class PokemonRepository @Inject constructor(
         }
     }
 
-    fun getPokemonList(limit: Int, offset: Int): Flow<List<Pokemon>> = flow {
-        val indexes = (offset until offset + limit).toList().toIntArray()
-        Timber.d("[sunchulbaek] Pokemon List limit = $limit, offset = $offset, ids = ${indexes.toList()}")
+    fun getPokemonList(limit: Int?, offset: Int?): Flow<List<Pokemon>> = flow {
+        if (limit == null && offset == null) {
+            val cachedPokemonList = pokemonItemDao.selectAll()
+            if (cachedPokemonList.isNotEmpty()) {
+                Timber.d("[sunchulbaek] cache size = ${cachedPokemonList.size}")
+                emit(cachedPokemonList.asExternalModel())
+                return@flow
+            }
+        }
+        val indexes = ((offset ?: 0) until (offset ?: 0) + (limit ?: 20)).toList().toIntArray()
+        Timber.d("[sunchulbaek][onLoadMore] Pokemon List limit = $limit, offset = $offset, ids = ${indexes.toList()}")
         val pokemonList = pokemonItemDao.findByIndex(indexes)
         if (pokemonList.isNotEmpty()) {
             Timber.i("[sunchulbaek] Pokemon List(offset = $offset, limit = $limit) DB에 저장되어 있음(size = ${pokemonList.size})")
@@ -151,7 +159,7 @@ class PokemonRepository @Inject constructor(
             emit(pokemonList.asExternalModel())
         } else {
             Timber.e("[sunchulbaek] Pokemon List(offset = $offset, limit = $limit) DB에 저장되어 있지 않음")
-            network.getPokemonList(limit = limit, offset = offset).asEntity(offset = offset).let { entities ->
+            network.getPokemonList(limit = limit, offset = offset).asEntity(offset = (offset ?: 0)).let { entities ->
                 pokemonItemDao.insert(entities)
                 emit(entities.asExternalModel())
             }
