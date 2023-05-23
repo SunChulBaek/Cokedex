@@ -82,25 +82,36 @@ private fun RowScope.DrawEvolutionLines(
                     drawContent()
                 }
             ) {
-                val levelUp: Int? = try { trigger.toInt() } catch (e: Throwable) { null }
-                if (levelUp != null) {
-                    Text(
-                        text = "Level Up",
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .background(if (isActivePokemon(id, pokemon)) accentColor else normalColor),
-                        style = TextStyle(fontSize = 10.dp.asSp())
-                    )
-                } else {
-                    Box(
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .size(15.dp)
-                            .background(if (isActivePokemon(id, pokemon)) accentColor else normalColor)
-                    ) {
+                Box(modifier = Modifier
+                    .align(Alignment.Center)
+                    .size(15.dp)
+                    .background(
+                        if (isActivePokemon(
+                                id,
+                                pokemon
+                            )
+                        ) accentColor else normalColor
+                    )) {
+                    val levelUp: Int? = try { trigger.toInt() } catch (e: Throwable) { null }
+                    if (levelUp != null) {
+                        Text(
+                            modifier = Modifier.align(Alignment.Center),
+                            text = "Lv",
+                            style = TextStyle(fontSize = 10.dp.asSp())
+                        )
+                    } else {
                         SubcomposeAsyncImage(
                             modifier = Modifier.fillMaxSize(),
                             model = getItemImageUrl(trigger),
+                            error = {
+                                Box(modifier = Modifier.fillMaxSize()) {
+                                    Text(
+                                        modifier = Modifier.align(Alignment.Center),
+                                        text = "?",
+                                        style = TextStyle(fontSize = 10.dp.asSp())
+                                    )
+                                }
+                            },
                             contentDescription = null
                         )
                     }
