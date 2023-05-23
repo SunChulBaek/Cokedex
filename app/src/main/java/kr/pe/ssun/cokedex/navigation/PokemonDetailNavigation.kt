@@ -22,13 +22,13 @@ const val pokemonDetailUrlArg = "imageUrl"
 const val pokemonDetailColorStartArg = "colorStart"
 const val pokemonDetailColorEndArg = "colorEnd"
 
-internal class PokemonDetailArgs(val id: Int, val name: String, val imageUrl: String, val colorStart: Long, val colorEnd: Long) {
+internal class PokemonDetailArgs(val id: Int, val name: String, val imageUrl: String, val colorStart: Int, val colorEnd: Int) {
     constructor(savedStateHandle: SavedStateHandle) : this(
         id = Uri.decode(checkNotNull(savedStateHandle[pokemonDetailIdArg])).toInt(),
         name = Uri.decode(checkNotNull(savedStateHandle[pokemonDetailNameArg])),
         imageUrl = Uri.decode(checkNotNull(savedStateHandle[pokemonDetailUrlArg])).run { String(Base64.decode(this, 0)) },
-        colorStart = Uri.decode(checkNotNull(savedStateHandle[pokemonDetailColorStartArg])).toLong(),
-        colorEnd = Uri.decode(checkNotNull(savedStateHandle[pokemonDetailColorEndArg])).toLong(),
+        colorStart = Uri.decode(checkNotNull(savedStateHandle[pokemonDetailColorStartArg])).toInt(),
+        colorEnd = Uri.decode(checkNotNull(savedStateHandle[pokemonDetailColorEndArg])).toInt(),
     )
 }
 

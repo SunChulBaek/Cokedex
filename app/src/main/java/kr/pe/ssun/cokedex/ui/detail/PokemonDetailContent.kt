@@ -23,15 +23,22 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.core.graphics.drawable.toBitmap
 import coil.compose.SubcomposeAsyncImage
 import kr.pe.ssun.cokedex.model.Pokemon
+import kr.pe.ssun.cokedex.util.MyPalette
 import timber.log.Timber
 import java.text.DecimalFormat
 
@@ -53,9 +60,8 @@ fun PokemonDetailContent(
     val form = pokemon?.form
     val imageUrl = pokemon?.imageUrl ?: loading?.imageUrl
     val varietyIds = pokemon?.varietyIds ?: listOf()
-    val colorStart = Color(success?.colorStart ?: loading?.colorStart ?: 0x00000000)
-    val colorEnd = Color(success?.colorEnd ?: loading?.colorEnd ?: 0x00000000)
-    Timber.d("[sunchulbaek] id = $id, varieties = $varietyIds")
+    var colorStart by remember { mutableStateOf(success?.colorStart ?: loading?.colorStart ?: Color.Transparent.toArgb()) }
+    var colorEnd by remember { mutableStateOf( success?.colorEnd ?: loading?.colorEnd ?: Color.Transparent.toArgb()) }
 
     Column(
         modifier = Modifier
@@ -70,7 +76,7 @@ fun PokemonDetailContent(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             TopAppBar(
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = colorStart),
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(colorStart)),
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = null)
@@ -89,7 +95,7 @@ fun PokemonDetailContent(
                     .fillMaxWidth()
                     .wrapContentHeight()
                     .background(
-                        brush = Brush.verticalGradient(listOf(colorStart, colorEnd)),
+                        brush = Brush.verticalGradient(listOf(Color(colorStart), Color(colorEnd))),
                         shape = RoundedCornerShape(bottomStart = 50.dp, bottomEnd = 50.dp)
                     )
             ) {
@@ -108,6 +114,22 @@ fun PokemonDetailContent(
                             modifier = Modifier.padding(25.dp),
                             color = MaterialTheme.colorScheme.primary
                         )
+                    },
+                    onSuccess = {
+                        if (colorStart == Color.Transparent.toArgb() && colorEnd == Color.Transparent.toArgb()) {
+                            MyPalette.getPalette(it.result.drawable.toBitmap()) { palette ->
+                                if (palette != null) {
+                                    colorStart = palette.getDominantColor(Color.Transparent.toArgb())
+                                    colorEnd = palette.getLightVibrantColor(Color.Transparent.toArgb())
+                                    if (colorStart == 0) {
+                                        colorStart = colorEnd
+                                    }
+                                    if (colorEnd == 0) {
+                                        colorEnd = colorStart
+                                    }
+                                }
+                            }
+                        }
                     },
                     contentDescription = "thumbnail"
                 )

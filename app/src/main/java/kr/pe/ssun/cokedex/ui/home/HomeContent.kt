@@ -60,8 +60,6 @@ fun HomeContent(
                                 name = "테스트",
                                 fallbackName = "테스트",
                                 imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${shortcuts[index]}.png",
-                                colorStart = Color(0xFFf44336).toArgb(),
-                                colorEnd = Color(0xFF2196f3).toArgb()
                             )
                         )}
                 ) {
