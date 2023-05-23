@@ -20,8 +20,8 @@ class GetPokemonListUseCase @Inject constructor(
 
     override fun execute(parameters: GetPokemonListParam?): Flow<Result<List<Pokemon>>> =
         repository.getPokemonList(
-            limit = parameters?.limit ?: 20,
-            offset = parameters?.offset ?: 0
+            limit = parameters?.limit,
+            offset = parameters?.offset
         ).map { pokemonList ->
             Result.success(pokemonList)
         }
