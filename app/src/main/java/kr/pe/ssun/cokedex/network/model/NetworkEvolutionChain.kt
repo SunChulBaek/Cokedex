@@ -16,7 +16,6 @@ fun NetworkEvolutionChain.asEntity(): List<EvolutionChainEntity> {
     while (queue.isNotEmpty()) {
         val node = queue.removeFirst()
         if (!map.contains(node.species.getId())) {
-            Timber.d("[sunchulbaek] item = ${node.evolutionDetails.firstOrNull()?.item?.name}")
             map[node.species.getId()] = Triple(
                 null,
                 node.evolutionDetails.firstOrNull()?.item?.name ?: "0", // TODO
@@ -29,7 +28,6 @@ fun NetworkEvolutionChain.asEntity(): List<EvolutionChainEntity> {
             }
         }
         node.evolvesTo.forEach { evolveTo ->
-            Timber.d("[sunchulbaek] item = ${node.evolutionDetails.firstOrNull()?.item?.name}")
             queue.add(evolveTo)
             map[evolveTo.species.getId()] = Triple(
                 node.species.getId(),

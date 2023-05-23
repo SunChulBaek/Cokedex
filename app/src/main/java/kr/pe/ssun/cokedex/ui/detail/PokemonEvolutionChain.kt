@@ -85,13 +85,8 @@ private fun RowScope.DrawEvolutionLines(
                 Box(modifier = Modifier
                     .align(Alignment.Center)
                     .size(15.dp)
-                    .background(
-                        if (isActivePokemon(
-                                id,
-                                pokemon
-                            )
-                        ) accentColor else normalColor
-                    )) {
+                    .background(if (isActivePokemon(id, pokemon)) accentColor else normalColor)
+                ) {
                     val levelUp: Int? = try { trigger.toInt() } catch (e: Throwable) { null }
                     if (levelUp != null) {
                         Text(
