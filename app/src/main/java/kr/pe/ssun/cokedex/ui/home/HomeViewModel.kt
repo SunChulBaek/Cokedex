@@ -17,6 +17,7 @@ import kr.pe.ssun.cokedex.model.Pokemon
 import kr.pe.ssun.cokedex.domain.GetPokemonListParam
 import kr.pe.ssun.cokedex.domain.GetPokemonListUseCase
 import kr.pe.ssun.cokedex.model.Species
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -65,7 +66,10 @@ class HomeViewModel @Inject constructor(
 
         // 리스트 통합
         pokemonListResult.getOrNull()?.let { pokemonList ->
+            Timber.d("[sunchulbaek] HomeViewModel.pokemonList size = ${pokemonList.size}")
             list.addAll(pokemonList.filterNot { list.contains(it) })
+        } ?: run {
+            Timber.d("[sunchulbaek] HomeViewModel.pokemonList is null")
         }
 
         // 이름 정보 요청
