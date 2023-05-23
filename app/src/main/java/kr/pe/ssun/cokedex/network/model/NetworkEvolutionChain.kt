@@ -2,6 +2,7 @@ package kr.pe.ssun.cokedex.network.model
 
 import com.google.gson.annotations.SerializedName
 import kr.pe.ssun.cokedex.database.model.EvolutionChainEntity
+import timber.log.Timber
 
 data class NetworkEvolutionChain(
     @SerializedName("id") val id: Int,
@@ -15,7 +16,12 @@ fun NetworkEvolutionChain.asEntity(): List<EvolutionChainEntity> {
     while (queue.isNotEmpty()) {
         val node = queue.removeFirst()
         if (!map.contains(node.species.getId())) {
-            map[node.species.getId()] = Triple(null, node.species.name!!, false)
+            Timber.d("[sunchulbaek] item = ${node.evolutionDetails.firstOrNull()?.item?.name}")
+            map[node.species.getId()] = Triple(
+                null,
+                node.evolutionDetails.firstOrNull()?.item?.name ?: "0", // TODO
+                false
+            )
         }
         if (node.evolvesTo.isEmpty()) {
             map[node.species.getId()]?.copy(third = true)?.let { leaf ->
@@ -23,21 +29,23 @@ fun NetworkEvolutionChain.asEntity(): List<EvolutionChainEntity> {
             }
         }
         node.evolvesTo.forEach { evolveTo ->
+            Timber.d("[sunchulbaek] item = ${node.evolutionDetails.firstOrNull()?.item?.name}")
             queue.add(evolveTo)
             map[evolveTo.species.getId()] = Triple(
                 node.species.getId(),
-                evolveTo.species.name!!,
+                evolveTo.evolutionDetails.firstOrNull()?.item?.name ?: "0", // TODO
                 false
             )
         }
     }
-    return map.map { node ->
+    return map.map { (key, value) ->
+        val (prevId, sName, isLeaf) = value
         EvolutionChainEntity(
             cId = this.id,
-            pId = node.key,
-            name = node.value.second,
-            prevId = node.value.first,
-            isLeaf = node.value.third,
+            pId = key,
+            trigger = sName,
+            prevId = prevId,
+            isLeaf = isLeaf,
         )
     }
 }

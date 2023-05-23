@@ -1,23 +1,32 @@
 package kr.pe.ssun.cokedex.ui.detail
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import coil.compose.SubcomposeAsyncImage
 import kr.pe.ssun.cokedex.model.Pokemon
 import kr.pe.ssun.cokedex.model.PokemonDetail
+import kr.pe.ssun.cokedex.ui.common.getItemImageUrl
 import kr.pe.ssun.cokedex.util.asPx
+import kr.pe.ssun.cokedex.util.asSp
 
 @Composable
 fun PokemonEvolutionChains(
@@ -57,7 +66,7 @@ private fun RowScope.DrawEvolutionLines(
 ) = if (columnIndex > 0) {
     val sizePx = size.asPx()
     Box(Modifier.weight(1f)) {
-        columnPokemonIds(pokemon, columnIndex) { index, id ->
+        columnPokemonIdTriggers(pokemon, columnIndex) { index, (id, trigger) ->
             val prevNodeIndex = prevNodeIndex(id, pokemon, itemsByColumn, columnIndex)
             Box(modifier = Modifier
                 .padding(top = size * prevNodeIndex)
@@ -73,7 +82,29 @@ private fun RowScope.DrawEvolutionLines(
                     drawContent()
                 }
             ) {
-                // TODO : 진화 트리거 표시
+                val levelUp: Int? = try { trigger.toInt() } catch (e: Throwable) { null }
+                if (levelUp != null) {
+                    Text(
+                        text = "Level Up",
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .background(if (isActivePokemon(id, pokemon)) accentColor else normalColor),
+                        style = TextStyle(fontSize = 10.dp.asSp())
+                    )
+                } else {
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .size(15.dp)
+                            .background(if (isActivePokemon(id, pokemon)) accentColor else normalColor)
+                    ) {
+                        SubcomposeAsyncImage(
+                            modifier = Modifier.fillMaxSize(),
+                            model = getItemImageUrl(trigger),
+                            contentDescription = null
+                        )
+                    }
+                }
             }
         }
     }
@@ -89,7 +120,7 @@ private fun DrawPokemons(
     accentColor: Color,
     onClick: (Pokemon) -> Unit,
 ) = Column(modifier = Modifier.width(size)) {
-    val items = columnPokemonIds(pokemon, columnIndex) { _, id ->
+    val items = columnPokemonIdTriggers(pokemon, columnIndex) { _, (id, trigger) ->
         PokemonThumb(
             id = id,
             pokemon = pokemon,
@@ -100,7 +131,7 @@ private fun DrawPokemons(
             onClick = onClick,
         )
     }
-    itemsByColumn.add(items)
+    itemsByColumn.add(items.map { it.first })
 }
 
 fun isActivePokemon(id: Int, pokemon: PokemonDetail?) =
@@ -127,18 +158,18 @@ private fun activePokemonIds(pokemon: PokemonDetail?): List<Int> {
 //               - 카스쿤(268) - 독케일(269)
 // columnIndex = 1 일 때 [266, 268]
 @Composable
-private fun columnPokemonIds(
+private fun columnPokemonIdTriggers(
     pokemon: PokemonDetail?,
     columnIndex: Int,
-    action: @Composable (Int, Int) -> Unit = { _, _ ->}
-): List<Int> {
+    action: @Composable (Int, Pair<Int, String>) -> Unit = { _, _ ->}
+): List<Pair<Int, String>> {
     val list = (pokemon?.evolutionChain?.chains?.filter { chain ->
         chain.size > columnIndex
     }?.map { chain ->
         chain[columnIndex]
-    }?.fold(listOf<Int>()) { acc, (id, _) ->
-        if (!acc.contains(id)) {
-            acc.plus(id)
+    }?.fold(listOf<Pair<Int, String>>()) { acc, (id, trigger) ->
+        if (!acc.map { it.first }.contains(id)) {
+            acc.plus(Pair(id, trigger))
         } else {
             acc
         }
