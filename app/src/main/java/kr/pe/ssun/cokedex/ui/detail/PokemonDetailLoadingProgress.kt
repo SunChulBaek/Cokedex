@@ -41,7 +41,7 @@ fun PokemonDetailLoadingProgress(
             pokemon?.form?.let { form -> this.add(form) }
         }, listOf(pokemon?.formId ?: 0)),
         // Type
-        Triple("Type", pokemon?.types, pokemon?.totalTypeIds),
+        Triple("Type", pokemon?.types, pokemon?.totalTypeIds ?: listOf(0)),
         // Species
         Triple("Species", mutableListOf<Species>().apply {
             pokemon?.species?.let { species -> this.add(species) }
