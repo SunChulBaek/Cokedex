@@ -11,14 +11,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import androidx.paging.LoadState
+import androidx.paging.compose.collectAsLazyPagingItems
 import kr.pe.ssun.cokedex.R
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import kr.pe.ssun.cokedex.domain.GetPokemonListParam
 import kr.pe.ssun.cokedex.navigation.pokemonDetailNavigationRoute
 import kr.pe.ssun.cokedex.ui.common.DefaultScreen
-import timber.log.Timber
 
 // 백 키 관련
 const val BACK_PRESS_DELAY_TIME: Long = 2000
@@ -26,7 +25,7 @@ var backKeyPressedTime: Long = 0
 var toast: Toast? = null
 
 // 하단탭에 대한 네비게이션만 처리
-@OptIn(ExperimentalAnimationApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
@@ -34,9 +33,10 @@ fun HomeScreen(
     showToast: (String) -> Toast,
     onBack: () -> Unit
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val navController = rememberAnimatedNavController()
     val snackbarHostState = remember { SnackbarHostState() }
+    val pokemonList = viewModel.pagingFlow.collectAsLazyPagingItems()
+    val firstLoad = pokemonList.loadState.refresh // 최초 로딩 상태
 
     // 백키 2회에 종료 처리
     BackCloseHandler(navController, showToast, onBack)
@@ -48,20 +48,14 @@ fun HomeScreen(
     ) { innerPadding ->
         DefaultScreen(
             modifier = Modifier.padding(innerPadding),
-            isLoading = uiState is HomeUiState.Loading,
-            isError = uiState is HomeUiState.Error
+            isLoading = firstLoad is LoadState.Loading,
+            isError = firstLoad is LoadState.Error
         ) {
             HomeContent(
-                uiState = uiState,
+                uiState = pokemonList,
                 onClick = { pokemon ->
                     navigate(pokemonDetailNavigationRoute, pokemon)
                 },
-                onLoadMore = {
-                    Timber.d("[sunchulbaek] HomeScreen.onLoadMore(offset = ${(uiState as HomeUiState.Success).offset})")
-                    viewModel.param.value = GetPokemonListParam(
-                        offset = (uiState as HomeUiState.Success).offset,
-                    )
-                }
             )
         }
     }
@@ -92,7 +86,7 @@ fun BackCloseHandler(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyTopAppBar() = TopAppBar(
-    colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = MaterialTheme.colorScheme.primary),
+    colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.primary),
     title = { Text(stringResource(R.string.app_name))},
     navigationIcon = {
         IconButton(onClick = { }) {

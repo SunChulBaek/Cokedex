@@ -7,6 +7,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
 import kr.pe.ssun.cokedex.database.dao.EvolutionChainDao
 import kr.pe.ssun.cokedex.database.dao.FormDao
 import kr.pe.ssun.cokedex.database.dao.SpeciesDao
@@ -15,6 +16,7 @@ import kr.pe.ssun.cokedex.database.dao.PokemonItemDao
 import kr.pe.ssun.cokedex.database.dao.StatDao
 import kr.pe.ssun.cokedex.database.dao.TypeDao
 import kr.pe.ssun.cokedex.database.dao.ValueDao
+import kr.pe.ssun.cokedex.util.IoDispatcher
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import javax.inject.Singleton
@@ -46,6 +48,7 @@ object ApiModule {
     @Singleton
     @Provides
     fun providesFakeRepository(
+        @IoDispatcher dispatcher: CoroutineDispatcher,
         apiService: RetrofitSsunNetwork,
         pokemonItemDao: PokemonItemDao,
         pokemonDao: PokemonDao,
@@ -57,6 +60,7 @@ object ApiModule {
         formDao: FormDao,
     ): PokemonRepository {
         return PokemonRepository(
+            dispatcher = dispatcher,
             network = apiService,
             pokemonItemDao = pokemonItemDao,
             pokemonDao = pokemonDao,

@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
@@ -26,6 +27,7 @@ import androidx.core.graphics.drawable.toBitmap
 import coil.compose.SubcomposeAsyncImage
 import kr.pe.ssun.cokedex.model.Pokemon
 import kr.pe.ssun.cokedex.util.MyPalette
+import kr.pe.ssun.cokedex.util.asSp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,6 +38,7 @@ fun PokemonGridItem(
 ) {
     var colorStart by remember { mutableStateOf(Color.Transparent.toArgb()) }
     var colorEnd by remember { mutableStateOf(Color.Transparent.toArgb()) }
+
     Card(
         modifier = modifier,
         onClick = { onClick(colorStart, colorEnd) }
@@ -63,6 +66,18 @@ fun PokemonGridItem(
                         CircularProgressIndicator(
                             modifier = Modifier.align(Alignment.Center),
                             color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                },
+                error = {
+                    Box(
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        Text(
+                            modifier = Modifier.align(Alignment.Center),
+                            text = "?",
+                            color = Color(0xFF03a9f4),
+                            style = TextStyle(fontSize = 50.dp.asSp())
                         )
                     }
                 },

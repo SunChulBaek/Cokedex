@@ -1,7 +1,9 @@
 package kr.pe.ssun.cokedex.data.repository
 
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kr.pe.ssun.cokedex.data.model.EvolutionChains
 import kr.pe.ssun.cokedex.data.model.asEntity
 import kr.pe.ssun.cokedex.database.dao.*
@@ -16,6 +18,7 @@ import javax.inject.Singleton
 
 @Singleton
 class PokemonRepository @Inject constructor(
+    private val dispatcher: CoroutineDispatcher,
     private val network: PokemonNetworkDataSource,
     private val pokemonItemDao: PokemonItemDao,
     private val pokemonDao: PokemonDao,
@@ -52,7 +55,7 @@ class PokemonRepository @Inject constructor(
                 }
             }
         }
-    }
+    }.flowOn(dispatcher)
 
     fun getType(id: Int): Flow<Type> = flow {
         typeDao.findById(id)?.let { type ->
@@ -73,7 +76,7 @@ class PokemonRepository @Inject constructor(
                 }
             }
         }
-    }
+    }.flowOn(dispatcher)
 
     fun getStat(id: Int, value: Int): Flow<Stat> = flow {
         statDao.findById(id)?.let { stat ->
@@ -94,7 +97,7 @@ class PokemonRepository @Inject constructor(
                 }
             }
         }
-    }
+    }.flowOn(dispatcher)
 
     fun getEvolutionChain(id: Int): Flow<EvolutionChain> = flow {
         val entities = evolutionChainDao.findById(id)
@@ -118,7 +121,7 @@ class PokemonRepository @Inject constructor(
                 }
             }
         }
-    }
+    }.flowOn(dispatcher)
 
     fun getForm(id: Int): Flow<Form> = flow {
         formDao.findById(id)?.let { form ->
@@ -139,7 +142,7 @@ class PokemonRepository @Inject constructor(
                 }
             }
         }
-    }
+    }.flowOn(dispatcher)
 
     fun getPokemonList(limit: Int?, offset: Int?): Flow<List<Pokemon>> = flow {
         if (limit == null && offset == null) {
@@ -164,7 +167,7 @@ class PokemonRepository @Inject constructor(
                 emit(entities.asExternalModel())
             }
         }
-    }
+    }.flowOn(dispatcher)
 
     fun getPokemonDetail(id: Int): Flow<PokemonDetail> = flow {
         pokemonDao.findById(id)?.let { fullPokemon ->
@@ -210,5 +213,5 @@ class PokemonRepository @Inject constructor(
                 emit(entity2.asExternalModel())
             }
         }
-    }
+    }.flowOn(dispatcher)
 }
