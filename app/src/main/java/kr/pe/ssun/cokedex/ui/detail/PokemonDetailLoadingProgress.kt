@@ -2,11 +2,13 @@ package kr.pe.ssun.cokedex.ui.detail
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -28,7 +30,7 @@ import timber.log.Timber
 fun PokemonDetailLoadingProgress(
     modifier: Modifier = Modifier,
     pokemon: PokemonDetail?
-) = Column(
+) = Row(
     modifier = modifier.background(Color(0xFFe0e0e0)),
 ) {
     // Form, Type, Species, Evolution Chain 로딩 상태를 표시함
@@ -52,7 +54,9 @@ fun PokemonDetailLoadingProgress(
         LoadingProgress(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f),
+                .weight(items?.size?.let {
+                    if (it > 0) it.toFloat() else 1f
+                } ?: run { 1f }),
             label = label,
             items = items,
             totalId = ids,
@@ -72,13 +76,8 @@ private fun LoadingProgress(
     modifier = modifier,
     verticalAlignment = Alignment.CenterVertically
 ) {
-    Text(
-        modifier = Modifier.width(20.dp).background(Color.White).border(0.3.dp, Color.Black),
-        text = label,
-        style = TextStyle(fontSize = 5.dp.asSp(), color = Color.Black)
-    )
     totalId?.forEach { id ->
-        Spacer(
+        Box(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxHeight()
@@ -90,6 +89,17 @@ private fun LoadingProgress(
                     }
                 )
                 .border(0.3.dp, Color.Black)
-        )
+        ) {
+            Text(
+                modifier = Modifier.padding(start = 5.dp).align(Alignment.CenterStart),
+                text = label,
+                style = TextStyle(fontSize = 7.dp.asSp()),
+                color = when (items?.findById(id)?.fromDB) {
+                    true -> Color.White
+                    false -> Color.White
+                    else -> Color.Black
+                },
+            )
+        }
     }
 }

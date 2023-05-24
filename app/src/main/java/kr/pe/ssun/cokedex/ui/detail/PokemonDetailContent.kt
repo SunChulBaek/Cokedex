@@ -202,6 +202,6 @@ fun PokemonDetailContent(
         // 프로그레스
         PokemonDetailLoadingProgress(modifier = Modifier
             .fillMaxWidth()
-            .height(20.dp), pokemon = pokemon)
+            .height(10.dp), pokemon = pokemon)
     }
 }
