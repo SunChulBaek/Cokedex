@@ -39,7 +39,6 @@ import androidx.core.graphics.drawable.toBitmap
 import coil.compose.SubcomposeAsyncImage
 import kr.pe.ssun.cokedex.model.Pokemon
 import kr.pe.ssun.cokedex.util.MyPalette
-import timber.log.Timber
 import java.text.DecimalFormat
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -136,6 +135,9 @@ fun PokemonDetailContent(
             }
             // 이름
             Text(text = "$name${ if (form?.name!= null) " (${form.name})" else "" }" , color = Color.White)
+            pokemon?.species?.flavorText?.let { flavor ->
+                Text(text = "$flavor", color = Color.White)
+            }
             Spacer(modifier = Modifier.height(10.dp))
             // 타입
             Row {
