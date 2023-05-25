@@ -1,6 +1,7 @@
 package kr.pe.ssun.cokedex.ui.detail
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -8,17 +9,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -38,6 +38,7 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.core.graphics.drawable.toBitmap
 import coil.compose.SubcomposeAsyncImage
 import kr.pe.ssun.cokedex.model.Pokemon
+import kr.pe.ssun.cokedex.ui.common.PokemonProgressIndicator
 import kr.pe.ssun.cokedex.util.MyPalette
 import java.text.DecimalFormat
 
@@ -109,10 +110,9 @@ fun PokemonDetailContent(
                     },
                     model = imageUrl,
                     loading = {
-                        CircularProgressIndicator(
-                            modifier = Modifier.padding(25.dp),
-                            color = MaterialTheme.colorScheme.primary
-                        )
+                        Box {
+                            PokemonProgressIndicator(modifier = Modifier.size(200.dp).align(Alignment.Center))
+                        }
                     },
                     onSuccess = {
                         if (colorStart == Color.Transparent.toArgb() && colorEnd == Color.Transparent.toArgb()) {

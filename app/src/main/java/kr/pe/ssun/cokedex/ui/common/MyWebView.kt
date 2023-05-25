@@ -55,6 +55,6 @@ fun MyWebView(modifier: Modifier = Modifier, url: String, onBack: () -> Unit) {
         LoadingState.Finished -> if (webViewProgress == WEBVIEW_PROGRESS_ERROR) {
             ErrorScreen()
         }
-        else -> LoadingScreen(progress = webViewProgress / 100f)
+        else -> LoadingScreen()
     }
 }

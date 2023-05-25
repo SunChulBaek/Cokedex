@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,6 +24,7 @@ import androidx.core.graphics.drawable.toBitmap
 import coil.compose.SubcomposeAsyncImage
 import kr.pe.ssun.cokedex.model.Pokemon
 import kr.pe.ssun.cokedex.model.PokemonDetail
+import kr.pe.ssun.cokedex.ui.common.PokemonProgressIndicator
 import kr.pe.ssun.cokedex.ui.common.getImageUrl
 import kr.pe.ssun.cokedex.util.MyPalette
 import kr.pe.ssun.cokedex.util.asSp
@@ -67,10 +67,7 @@ fun PokemonThumb(
             model = getImageUrl(id),
             loading = {
                 Box(Modifier.size(size - 20.dp)) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.align(Alignment.Center),
-                        color = Color(0xFF03a9f4),
-                    )
+                    PokemonProgressIndicator()
                 }
             },
             error = {

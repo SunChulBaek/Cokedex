@@ -3,27 +3,19 @@ package kr.pe.ssun.cokedex.ui.common
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 
 @Composable
-fun LoadingScreen(backgroundColor: Color = MaterialTheme.colorScheme.background, progress: Float? = null) {
+fun LoadingScreen(backgroundColor: Color = MaterialTheme.colorScheme.background) {
     Box(modifier = Modifier.background(backgroundColor).fillMaxSize()) {
-        if (progress != null) {
-            CircularProgressIndicator(
-                progress = progress,
-                modifier = Modifier.align(Alignment.Center),
-                color = MaterialTheme.colorScheme.primary
-            )
-        } else {
-            CircularProgressIndicator(
-                modifier = Modifier.align(Alignment.Center),
-                color = MaterialTheme.colorScheme.primary
-            )
-        }
+        PokemonProgressIndicator(
+            modifier = Modifier.align(Alignment.Center).size(200.dp),
+        )
     }
 }
