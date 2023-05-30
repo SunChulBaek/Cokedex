@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.EaseInOutBack
 import androidx.compose.animation.core.EaseOutBounce
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
@@ -19,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,6 +40,7 @@ import kr.pe.ssun.cokedex.ui.common.PokemonProgressIndicator
 import kr.pe.ssun.cokedex.ui.common.getImageUrl
 import kr.pe.ssun.cokedex.util.MyPalette
 import kr.pe.ssun.cokedex.util.asSp
+import timber.log.Timber
 
 @Composable
 fun PokemonThumb(
@@ -49,7 +52,7 @@ fun PokemonThumb(
     isActive: () -> Boolean = { false },
     onClick: (Pokemon) -> Unit = { },
 ) {
-    var finished by remember { mutableStateOf(false) }
+    var finished by rememberSaveable { mutableStateOf(false) }
     val scale = remember { Animatable(0.3f) }
     var colorStart by remember { mutableStateOf(Color.Transparent.toArgb()) }
     var colorEnd by remember { mutableStateOf(Color.Transparent.toArgb()) }
@@ -90,28 +93,28 @@ fun PokemonThumb(
                 }
             },
             onSuccess = {
-                finished = true
                 scope.launch {
-                    scale.animateTo(
-                        targetValue = 1f,
-                        animationSpec = tween(
-                            1000,
-                            easing = EaseOutBounce
-                        )
-                    )
-                }
-                MyPalette.getPalette(it.result.drawable.toBitmap()) { palette ->
-                    if (palette != null) {
-                        colorStart = palette.getDominantColor(Color.Transparent.toArgb())
-                        colorEnd = palette.getLightVibrantColor(Color.Transparent.toArgb())
-                        if (colorStart == 0) {
-                            colorStart = colorEnd
-                        }
-                        if (colorEnd == 0) {
-                            colorEnd = colorStart
+                    if (finished) {
+                        scale.animateTo(1f, tween(0, easing = LinearEasing))
+                    } else {
+                        finished = true
+                        scale.animateTo(1f, tween(1000, easing = EaseOutBounce))
+                    }
+
+                    MyPalette.getPalette(it.result.drawable.toBitmap()) { palette ->
+                        if (palette != null) {
+                            colorStart = palette.getDominantColor(Color.Transparent.toArgb())
+                            colorEnd = palette.getLightVibrantColor(Color.Transparent.toArgb())
+                            if (colorStart == 0) {
+                                colorStart = colorEnd
+                            }
+                            if (colorEnd == 0) {
+                                colorEnd = colorStart
+                            }
                         }
                     }
                 }
+
             },
             onError = {
                 finished = true
