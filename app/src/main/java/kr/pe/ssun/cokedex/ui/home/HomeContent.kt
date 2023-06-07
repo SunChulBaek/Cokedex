@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import kr.pe.ssun.cokedex.model.Pokemon
+import kr.pe.ssun.cokedex.ui.theme.DeepPurple50
 
 @Composable
 fun HomeContent(
@@ -22,7 +23,7 @@ fun HomeContent(
     uiState: LazyPagingItems<Pokemon>,
     onClick: (Pokemon) -> Unit,
 ) = Column(
-    modifier = modifier.background(Color(0xFF212121))
+    modifier = modifier.background(DeepPurple50)
 ) {
     // 개발용 UI
     HomeShortcuts(
@@ -37,10 +38,10 @@ fun HomeContent(
             .fillMaxWidth()
             .weight(1f),
         state = gridState,
-        columns = GridCells.Fixed(2),
-        contentPadding = PaddingValues(16.dp), // 테두리
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+        columns = GridCells.Fixed(5),
+        contentPadding = PaddingValues(8.dp), // 테두리
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         items(
             count = uiState.itemCount,
@@ -48,12 +49,7 @@ fun HomeContent(
             val item = uiState[index]!!
             PokemonGridItem(
                 item = item,
-                onClick = { colorStart, colorEnd ->
-                    onClick(item.copy(
-                        colorStart = colorStart,
-                        colorEnd = colorEnd
-                    ))
-                }
+                onClick = { onClick(item) }
             )
         }
     }
