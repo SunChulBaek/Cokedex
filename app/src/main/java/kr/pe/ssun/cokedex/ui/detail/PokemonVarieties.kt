@@ -29,7 +29,7 @@ fun PokemonVarieties(
                 if (index <= (pokemon?.varietyIds?.size ?: 0) - 1) {
                     PokemonThumb(
                         id = pokemon?.varietyIds?.get(index)!!,
-                        pokemon = pokemon,
+                        hostId = pokemon.id,
                         size = size,
                         normalColor = Color.White,
                         accentColor = Color(0xFF03a9f4),

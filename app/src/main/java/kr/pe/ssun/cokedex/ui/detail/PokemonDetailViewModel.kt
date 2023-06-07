@@ -129,7 +129,32 @@ class PokemonDetailViewModel @Inject constructor(
                         evolutionChainId = species.ecId,
                         evolutionChain = evolutionChains,
                         varietyIds = species.vIds ?: listOf()
-                    ),
+                    ), // 프로그레스 표시용. 리스트에 보이는 것은 아래 items로 구성
+                    items = mutableListOf<PokemonDetailItem>().apply {
+                        add(PokemonDetailImage(id = pokemon.id))
+                        add(PokemonDetailName(
+                            id = pokemon.id,
+                            name = "${species.name ?: pokemon.name}${if (form.name != null) " (${form.name})" else ""}")
+                        )
+                        add(PokemonDetailStat(
+                            weight = pokemon.weight.toFloat() / 10,
+                            types = pokemon.types,
+                            height = pokemon.height.toFloat() / 10
+                        ))
+                        if (pokemon.species?.flavorText != null) {
+                            add(
+                                PokemonDetailFlavorText(
+                                    flavorText = pokemon.species.flavorText
+                                )
+                            )
+                        }
+                        if (maxEvolutionChainLength(evolutionChain = evolutionChains) > 1) {
+                            add(PokemonDetailEvolution(pokemon.copy(evolutionChain = evolutionChains)))
+                        }
+                        if (pokemon.varietyIds.size > 1) {
+                            add(PokemonDetailVarieties(pokemon))
+                        }
+                    },
                     colorStart = args.colorStart,
                     colorEnd = args.colorEnd
                 )

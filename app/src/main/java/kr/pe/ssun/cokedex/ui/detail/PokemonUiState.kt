@@ -4,7 +4,8 @@ import kr.pe.ssun.cokedex.model.PokemonDetail
 
 sealed interface PokemonUiState {
     data class Success(
-        val pokemon: PokemonDetail,
+        val pokemon: PokemonDetail, // 프로그레스 표시용
+        val items: List<PokemonDetailItem>,
         val colorStart: Int,
         val colorEnd: Int,
     ) : PokemonUiState

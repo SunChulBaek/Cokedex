@@ -2,7 +2,6 @@ package kr.pe.ssun.cokedex.ui.detail
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.EaseInOutBack
 import androidx.compose.animation.core.EaseOutBounce
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
@@ -35,17 +34,15 @@ import androidx.core.graphics.drawable.toBitmap
 import coil.compose.SubcomposeAsyncImage
 import kotlinx.coroutines.launch
 import kr.pe.ssun.cokedex.model.Pokemon
-import kr.pe.ssun.cokedex.model.PokemonDetail
 import kr.pe.ssun.cokedex.ui.common.PokemonProgressIndicator
 import kr.pe.ssun.cokedex.ui.common.getImageUrl
 import kr.pe.ssun.cokedex.util.MyPalette
 import kr.pe.ssun.cokedex.util.asSp
-import timber.log.Timber
 
 @Composable
 fun PokemonThumb(
-    id: Int,
-    pokemon: PokemonDetail?,
+    id: Int, // 썸네일 포켓몬 id
+    hostId: Int?, // 상세 페이지의 주인 포켓몬 id
     size: Dp,
     normalColor: Color,
     accentColor: Color,
@@ -62,7 +59,7 @@ fun PokemonThumb(
         .clip(CircleShape)
         .background(if (isActive()) accentColor else normalColor)
         .run {
-            if (pokemon?.id != null && pokemon.id != id) {
+            if (hostId != null && hostId != id) {
                 clickable { onClick(Pokemon(
                     id = id,
                     name = "name",
@@ -119,7 +116,7 @@ fun PokemonThumb(
             onError = {
                 finished = true
             },
-            contentDescription = pokemon?.name
+            contentDescription = null
         )
         Text(
             modifier = Modifier
