@@ -15,25 +15,26 @@ import kr.pe.ssun.cokedex.model.PokemonDetail
 @Composable
 fun PokemonVarieties(
     modifier: Modifier = Modifier,
-    pokemon: PokemonDetail?,
+    varietyIds: List<Int>?,
+    hostId: Int?,
     size: Dp = 60.dp,
     onClick: (Pokemon) -> Unit,
 ) = Column(modifier = modifier) {
-    (0 until (((pokemon?.varietyIds?.size ?: 0) - 1) / 3) + 1).forEach { i ->
+    (0 until (((varietyIds?.size ?: 0) - 1) / 3) + 1).forEach { i ->
         Row {
             (0 until 3).forEach { j ->
                 if (j > 0) {
                     Spacer(modifier = Modifier.weight(1f))
                 }
                 val index = (i * 3) + j
-                if (index <= (pokemon?.varietyIds?.size ?: 0) - 1) {
+                if (index <= (varietyIds?.size ?: 0) - 1) {
                     PokemonThumb(
-                        id = pokemon?.varietyIds?.get(index)!!,
-                        hostId = pokemon.id,
+                        id = varietyIds?.get(index)!!,
+                        hostId = hostId,
                         size = size,
                         normalColor = Color.White,
                         accentColor = Color(0xFF03a9f4),
-                        isActive = { pokemon.id == pokemon.varietyIds[index] },
+                        isActive = { hostId == varietyIds[index] },
                         onClick = onClick,
                     )
                 } else {

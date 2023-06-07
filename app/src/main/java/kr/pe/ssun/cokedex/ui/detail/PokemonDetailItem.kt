@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import coil.compose.SubcomposeAsyncImage
+import kr.pe.ssun.cokedex.model.EvolutionChain
 import kr.pe.ssun.cokedex.model.Pokemon
 import kr.pe.ssun.cokedex.model.PokemonDetail
 import kr.pe.ssun.cokedex.model.Type
@@ -167,7 +168,8 @@ data class PokemonDetailFlavorText(
 }
 
 class PokemonDetailEvolution(
-    val pokemon: PokemonDetail
+    val evolutionChain: EvolutionChain,
+    val hostId: Int
 ) : PokemonDetailItem {
 
     @Composable
@@ -189,15 +191,16 @@ class PokemonDetailEvolution(
         Spacer(modifier = Modifier.height(20.dp))
         PokemonEvolutionChains(
             modifier = Modifier.padding(horizontal = 30.dp),
-            evolutionChain = pokemon.evolutionChain,
-            hostId = pokemon.id,
+            evolutionChain = evolutionChain,
+            hostId = hostId,
             onClick = onClick
         )
     }
 }
 
 class PokemonDetailVarieties(
-    val pokemon: PokemonDetail
+    val varietyIds: List<Int>?,
+    val hostId: Int,
 ) : PokemonDetailItem {
 
     @Composable
@@ -219,7 +222,8 @@ class PokemonDetailVarieties(
         Spacer(modifier = Modifier.height(20.dp))
         PokemonVarieties(
             modifier = Modifier.padding(horizontal = 30.dp),
-            pokemon = pokemon,
+            varietyIds = varietyIds,
+            hostId = hostId,
             onClick = onClick
         )
     }

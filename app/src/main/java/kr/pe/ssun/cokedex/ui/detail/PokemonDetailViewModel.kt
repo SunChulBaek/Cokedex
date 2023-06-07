@@ -141,18 +141,18 @@ class PokemonDetailViewModel @Inject constructor(
                             types = pokemon.types,
                             height = pokemon.height.toFloat() / 10
                         ))
-                        if (pokemon.species?.flavorText != null) {
+                        if (species.flavorText != null) {
                             add(
                                 PokemonDetailFlavorText(
-                                    flavorText = pokemon.species.flavorText
+                                    flavorText = species.flavorText
                                 )
                             )
                         }
                         if (maxEvolutionChainLength(evolutionChain = evolutionChains) > 1) {
-                            add(PokemonDetailEvolution(pokemon.copy(evolutionChain = evolutionChains)))
+                            add(PokemonDetailEvolution(evolutionChain = evolutionChains, hostId = pokemon.id))
                         }
-                        if (pokemon.varietyIds.size > 1) {
-                            add(PokemonDetailVarieties(pokemon))
+                        if ((species.vIds?.size ?: 0) > 1) {
+                            add(PokemonDetailVarieties(varietyIds = species.vIds, hostId = pokemon.id))
                         }
                     },
                     colorStart = args.colorStart,
