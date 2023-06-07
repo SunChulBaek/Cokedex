@@ -45,6 +45,7 @@ fun HomeContent(
     ) {
         items(
             count = uiState.itemCount,
+            key = { index -> uiState[index]!!.id }
         ) { index ->
             val item = uiState[index]!!
             PokemonGridItem(
