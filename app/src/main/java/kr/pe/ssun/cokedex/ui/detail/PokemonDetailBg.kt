@@ -25,6 +25,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.delay
 import kr.pe.ssun.cokedex.ui.theme.CokedexTheme
 import kr.pe.ssun.cokedex.util.asPx
 import kotlin.math.PI
@@ -32,6 +33,8 @@ import kotlin.math.tan
 
 private const val lineAlpha = 0.05f
 private const val lineAlphaAccent = 0.1f
+private const val noiseHeight = 100f
+private const val timeUnit = 500
 
 @Composable
 fun PokemonDetailBg(
@@ -41,17 +44,51 @@ fun PokemonDetailBg(
     strokeWidth: Float = 5f,
     content: @Composable BoxScope.() -> Unit,
 ) {
-    val left = remember { Animatable(0f) }
     val screenWidthPx = Dp(LocalConfiguration.current.screenWidthDp.toFloat()).asPx()
+    val screenHeightPx = Dp(LocalConfiguration.current.screenHeightDp.toFloat()).asPx()
     val screenWidthFactor = (screenWidthPx / tileSize).toInt() // 애니메이션 걸리는 현상 없애기 위해서 Int로 자름
+
+    val left = remember { Animatable(0f) }
+    val top = remember { Animatable(-noiseHeight) }
+    val bottom = remember { Animatable(screenHeightPx) }
+
     LaunchedEffect(left) {
-        left.animateTo((tileSize * screenWidthFactor).toFloat(), animationSpec = infiniteRepeatable(
-            animation = tween(
-                7_000,
-                easing = LinearEasing
+        left.animateTo(
+            targetValue = (tileSize * screenWidthFactor).toFloat(),
+            animationSpec = infiniteRepeatable(
+                animation = tween(
+                    7_000,
+                    easing = LinearEasing
+                )
             )
-        ))
+        )
     }
+
+    LaunchedEffect(top) {
+        top.animateTo(
+            targetValue = screenHeightPx,
+            animationSpec = infiniteRepeatable(
+                tween(
+                    timeUnit,
+                    timeUnit * 4,
+                    easing = LinearEasing
+                )
+            ))
+    }
+
+    LaunchedEffect(bottom) {
+        delay(timeUnit * 2L)
+        bottom.animateTo(
+            targetValue = -noiseHeight,
+            animationSpec = infiniteRepeatable(
+                tween(
+                    timeUnit,
+                    timeUnit * 4,
+                    easing = LinearEasing
+                )
+            ))
+    }
+
     Box(
         modifier = modifier
             .background(
@@ -68,7 +105,12 @@ fun PokemonDetailBg(
             .drawWithContent {
                 val height = tileSize * tan(60 * PI / 180)
                 translate(left = left.value) {
-                    clipRect(left = -size.width, top = 0f, right = size.width, bottom = size.height) {
+                    clipRect(
+                        left = -size.width,
+                        top = 0f,
+                        right = size.width,
+                        bottom = size.height
+                    ) {
                         // 왼쪽위 -> 오른쪽 아래
                         for (i in -(size.height.toInt() / tileSize)..size.width.toInt() / tileSize) {
                             drawLine(
@@ -114,6 +156,34 @@ fun PokemonDetailBg(
                                 strokeWidth = strokeWidth
                             )
                         }
+                    }
+                }
+                translate(top = top.value) {
+                    clipRect(left = 0f, top = 0f, right = size.width, bottom = noiseHeight) {
+                        drawRect(
+                            brush = Brush.linearGradient(
+                                colors = listOf(
+                                    Color.White.copy(alpha = 0.5f),
+                                    Color.White.copy(0.1f)
+                                ),
+                                start = Offset(0f, 0f),
+                                end = Offset(0f, noiseHeight)
+                            )
+                        )
+                    }
+                }
+                translate(top = bottom.value) {
+                    clipRect(left = 0f, top = 0f, right = size.width, bottom = noiseHeight) {
+                        drawRect(
+                            brush = Brush.linearGradient(
+                                colors = listOf(
+                                    Color.White.copy(alpha = 0.5f),
+                                    Color.White.copy(0.1f)
+                                ),
+                                start = Offset(0f, 0f),
+                                end = Offset(0f, noiseHeight)
+                            )
+                        )
                     }
                 }
                 drawContent()
