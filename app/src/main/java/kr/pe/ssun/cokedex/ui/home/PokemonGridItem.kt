@@ -21,8 +21,8 @@ import androidx.constraintlayout.compose.Dimension
 import coil.compose.SubcomposeAsyncImage
 import kr.pe.ssun.cokedex.model.Pokemon
 import kr.pe.ssun.cokedex.ui.common.PokemonProgressIndicator
-import kr.pe.ssun.cokedex.ui.theme.DeepPurple100
-import kr.pe.ssun.cokedex.ui.theme.DeepPurple50
+import kr.pe.ssun.cokedex.ui.theme.Green100
+import kr.pe.ssun.cokedex.ui.theme.Green50
 import kr.pe.ssun.cokedex.util.asSp
 
 @Composable
@@ -35,7 +35,7 @@ fun PokemonGridItem(
         modifier = modifier
             .background(
                 Brush.radialGradient(
-                    colors = listOf(DeepPurple100, DeepPurple50),
+                    colors = listOf(Green100, Green50),
                 )
             )
             .padding(4.dp)
@@ -84,7 +84,7 @@ fun PokemonGridItem(
                     end.linkTo(parent.end)
                     bottom.linkTo(parent.bottom)
                 }
-                .background(DeepPurple100, RoundedCornerShape(4.dp))
+                .background(Green100, RoundedCornerShape(4.dp))
                 .padding(horizontal = 2.dp),
             text = item.id.toString(),
             color = Color.White,

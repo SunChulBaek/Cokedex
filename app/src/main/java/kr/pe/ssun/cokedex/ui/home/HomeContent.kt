@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import kr.pe.ssun.cokedex.model.Pokemon
-import kr.pe.ssun.cokedex.ui.theme.DeepPurple50
+import kr.pe.ssun.cokedex.ui.theme.Green50
 
 @Composable
 fun HomeContent(
@@ -23,7 +23,7 @@ fun HomeContent(
     uiState: LazyPagingItems<Pokemon>,
     onClick: (Pokemon) -> Unit,
 ) = Column(
-    modifier = modifier.background(DeepPurple50)
+    modifier = modifier.background(Green50)
 ) {
     // 개발용 UI
     HomeShortcuts(
