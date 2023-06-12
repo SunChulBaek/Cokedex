@@ -9,6 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -86,7 +87,12 @@ fun BackCloseHandler(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyTopAppBar() = TopAppBar(
-    colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.primary),
+    colors = TopAppBarDefaults.topAppBarColors(
+        containerColor = MaterialTheme.colorScheme.primary,
+        navigationIconContentColor = Color.Black,
+        titleContentColor = Color.Black,
+        actionIconContentColor = Color.Black
+    ),
     title = { Text(stringResource(R.string.app_name))},
     navigationIcon = {
         IconButton(onClick = { }) {
