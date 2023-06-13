@@ -54,4 +54,8 @@ fun HomeContent(
             )
         }
     }
+    HomeLoadingProgress(
+        modifier = Modifier.fillMaxWidth().height(10.dp),
+        uiState = uiState,
+    )
 }

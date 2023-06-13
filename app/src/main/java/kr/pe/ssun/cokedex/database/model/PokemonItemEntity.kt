@@ -15,11 +15,12 @@ data class PokemonItemEntity(
     @ColumnInfo("name") val name: String,
 )
 
-fun List<PokemonItemEntity>.asExternalModel() = map { item ->
+fun List<PokemonItemEntity>.asExternalModel(fromDB: Boolean = false) = map { item ->
     Pokemon(
         id = item.id,
         name = item.name,
         fallbackName = item.name,
         imageUrl = getImageUrl(item.id),
+        fromDB = fromDB,
     )
 }

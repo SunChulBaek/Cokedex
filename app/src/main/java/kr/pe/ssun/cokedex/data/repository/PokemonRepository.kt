@@ -4,7 +4,6 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import kr.pe.ssun.cokedex.data.model.EvolutionChains
 import kr.pe.ssun.cokedex.data.model.asEntity
 import kr.pe.ssun.cokedex.database.dao.*
 import kr.pe.ssun.cokedex.database.model.*
@@ -149,7 +148,7 @@ class PokemonRepository @Inject constructor(
             val cachedPokemonList = pokemonItemDao.selectAll()
             if (cachedPokemonList.isNotEmpty()) {
                 Timber.d("[sunchulbaek] cache size = ${cachedPokemonList.size}")
-                emit(cachedPokemonList.asExternalModel())
+                emit(cachedPokemonList.asExternalModel(fromDB = true))
                 return@flow
             }
         }
@@ -159,7 +158,7 @@ class PokemonRepository @Inject constructor(
         if (pokemonList.isNotEmpty()) {
             Timber.i("[sunchulbaek] Pokemon List(offset = $offset, limit = $limit) DB에 저장되어 있음(size = ${pokemonList.size})")
             Timber.i("[sunchulbaek] Pokemon List = ${pokemonList.map { it.id }}")
-            emit(pokemonList.asExternalModel())
+            emit(pokemonList.asExternalModel(fromDB = true))
         } else {
             Timber.e("[sunchulbaek] Pokemon List(offset = $offset, limit = $limit) DB에 저장되어 있지 않음")
             network.getPokemonList(limit = limit, offset = offset).asEntity(offset = (offset ?: 0)).let { entities ->
