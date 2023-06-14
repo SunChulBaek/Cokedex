@@ -30,8 +30,7 @@ import kr.pe.ssun.cokedex.ui.theme.CokedexTheme
 import kr.pe.ssun.cokedex.ui.theme.Green200
 import kr.pe.ssun.cokedex.ui.theme.Green50
 import kr.pe.ssun.cokedex.util.asPx
-import kotlin.math.PI
-import kotlin.math.tan
+import kr.pe.ssun.cokedex.util.tanDeg
 
 private const val lineAlpha = 0.05f
 private const val lineAlphaAccent = 0.1f
@@ -105,7 +104,7 @@ fun PokemonDetailBg(
                 )
             )
             .drawWithContent {
-                val height = tileSize * tan(60 * PI / 180)
+                val height = tileSize * tanDeg(60)
                 translate(left = left.value) {
                     clipRect(
                         left = -size.width,
@@ -122,7 +121,7 @@ fun PokemonDetailBg(
                                     y = 0f
                                 ),
                                 end = Offset(
-                                    x = (size.height / tan(60 * PI / 180) + (i * tileSize).toFloat()).toFloat(),
+                                    x = (size.height / tanDeg(60) + (i * tileSize).toFloat()).toFloat(),
                                     y = size.height
                                 ),
                                 strokeWidth = strokeWidth
@@ -137,7 +136,7 @@ fun PokemonDetailBg(
                                     y = 0f
                                 ),
                                 end = Offset(
-                                    x = (-size.height / tan(60 * PI / 180) + (i * tileSize)).toFloat(),
+                                    x = (-size.height / tanDeg(60) + (i * tileSize)).toFloat(),
                                     y = size.height
                                 ),
                                 strokeWidth = strokeWidth
