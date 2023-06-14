@@ -55,6 +55,9 @@ fun PokemonDetailContent(
                 pokemon = pokemon
             )
         }
-        CancelButton(modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 15.dp))
+        CancelButton(
+            modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 15.dp),
+            onClick = { onBack() }
+        )
     }
 }
