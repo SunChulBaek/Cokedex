@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import kr.pe.ssun.cokedex.ui.theme.CokedexTheme
+import kr.pe.ssun.cokedex.ui.theme.Green100
 import kr.pe.ssun.cokedex.ui.theme.Green200
 import kr.pe.ssun.cokedex.ui.theme.Green50
 import kr.pe.ssun.cokedex.util.asPx
@@ -95,7 +96,7 @@ fun PokemonDetailBg(
             .background(
                 brush = Brush.linearGradient(
                     colors = listOf(
-                        Green50,
+                        Green100,
                         Green200,
                         Color(0xFF80cbc4),
                     ),
