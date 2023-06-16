@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 import kr.pe.ssun.cokedex.model.Species
 
 @Entity(
-    tableName = "name"
+    tableName = "species"
 )
 data class SpeciesEntity(
     @PrimaryKey @ColumnInfo(name = "s_id") val id: Int,
