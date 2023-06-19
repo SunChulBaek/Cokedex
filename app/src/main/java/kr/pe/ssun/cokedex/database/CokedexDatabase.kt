@@ -26,6 +26,8 @@ import kr.pe.ssun.cokedex.database.model.StatEntity
 import kr.pe.ssun.cokedex.database.model.TypeEntity
 import kr.pe.ssun.cokedex.database.model.ValueEntity
 import kr.pe.ssun.cokedex.database.util.IdsConverter
+import kr.pe.ssun.cokedex.database.util.LangValueConverter
+import kr.pe.ssun.cokedex.database.util.LangValueVersionConverter
 import kr.pe.ssun.cokedex.database.util.StatsConverter
 import kr.pe.ssun.cokedex.database.util.TypesConverter
 
@@ -51,6 +53,8 @@ import kr.pe.ssun.cokedex.database.util.TypesConverter
     IdsConverter::class,
     TypesConverter::class,
     StatsConverter::class,
+    LangValueConverter::class,
+    LangValueVersionConverter::class,
 )
 abstract class CokedexDatabase : RoomDatabase() {
     abstract fun pokemonItemDao(): PokemonItemDao

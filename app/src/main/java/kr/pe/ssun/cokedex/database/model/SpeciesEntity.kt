@@ -10,16 +10,27 @@ import kr.pe.ssun.cokedex.model.Species
 )
 data class SpeciesEntity(
     @PrimaryKey @ColumnInfo(name = "s_id") val id: Int,
-    @ColumnInfo(name = "name") val name: String,
-    @ColumnInfo(name = "flavor_text") val flavorText: String?,
+    @ColumnInfo(name = "names") val names: List<LangValue>,
+    @ColumnInfo(name = "flavor_texts") val flavorTexts: List<LangValueVersion>,
     @ColumnInfo(name = "ec_id") val ecId: Int? = null,
     @ColumnInfo(name = "v_ids") val vIds: List<Int>? = null
 )
 
+data class LangValue(
+    val lang: String,
+    val value: String,
+)
+
+data class LangValueVersion(
+    val lang: String,
+    val value: String,
+    val version: String,
+)
+
 fun SpeciesEntity.asExternalModel(fromDB: Boolean = false) = Species(
     id = id,
-    name = name,
-    flavorText = flavorText,
+    names = names,
+    flavorTexts = flavorTexts,
     ecId = ecId,
     vIds = vIds,
     fromDB = fromDB

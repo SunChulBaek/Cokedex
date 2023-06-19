@@ -41,7 +41,7 @@ data class FullPokemon(
 
 fun FullPokemon.asExternalModel() = PokemonDetail(
     id = pokemon.id,
-    name = species?.name ?: (pokemon.name ?: ""),
+    name = pokemon.name ?: "",
     imageUrl = getImageUrl(pokemon.id),
     isDefault = pokemon.isDefault,
     weight = pokemon.weight,

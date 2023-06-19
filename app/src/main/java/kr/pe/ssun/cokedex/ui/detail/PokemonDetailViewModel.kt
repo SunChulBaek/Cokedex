@@ -114,7 +114,13 @@ class PokemonDetailViewModel @Inject constructor(
                     types = types.filterNot { it.id == DUMMY_ID }.plus(type).sortedBy { it.id }
                 }
                 if (species.id != DUMMY_ID) {
-                    Timber.d("[sunchulbaek] sId = ${species.id}, sName = ${species.name}, ecId = ${species.ecId}")
+                    Timber.d("[sunchulbaek] sId = ${species.id}, ecId = ${species.ecId}")
+                    species.names.forEach { name ->
+                        Timber.d("[sunchulbaek] sId = ${species.id}, lang = ${name.lang}, name = ${name.value}")
+                    }
+                    species.flavorTexts.forEach { flavorText ->
+                        Timber.d("[sunchulbaek] sId = ${species.id}, version = ${flavorText.version}, lang = ${flavorText.lang}, flavorText = ${flavorText.value}")
+                    }
                 }
                 if (form.id != DUMMY_ID) {
                     Timber.d("[sunchulbaek] fId = ${form.id} fName = ${form.name}")
@@ -122,7 +128,7 @@ class PokemonDetailViewModel @Inject constructor(
 
                 PokemonUiState.Success(
                     pokemon = pokemon.copy(
-                        name = species.name ?: pokemon.name,
+                        name = species.getName() ?: pokemon.name,
                         species = species,
                         form = form,
                         types = types,
@@ -134,17 +140,17 @@ class PokemonDetailViewModel @Inject constructor(
                         add(PokemonDetailImage(id = pokemon.id))
                         add(PokemonDetailName(
                             id = pokemon.id,
-                            name = "${species.name ?: pokemon.name}${if (form.name != null) " (${form.name})" else ""}")
+                            name = "${species.getName() ?: pokemon.name}${if (form.name != null) " (${form.name})" else ""}")
                         )
                         add(PokemonDetailStat(
                             weight = pokemon.weight.toFloat() / 10,
                             types = pokemon.types,
                             height = pokemon.height.toFloat() / 10
                         ))
-                        if (species.flavorText != null) {
+                        if (species.getFlavorText() != null) {
                             add(
                                 PokemonDetailFlavorText(
-                                    flavorText = species.flavorText
+                                    flavorText = species.getFlavorText() ?: ""
                                 )
                             )
                         }

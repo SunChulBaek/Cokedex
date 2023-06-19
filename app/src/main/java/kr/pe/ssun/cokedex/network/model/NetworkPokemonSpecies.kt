@@ -2,6 +2,8 @@ package kr.pe.ssun.cokedex.network.model
 
 import com.google.gson.annotations.SerializedName
 import kr.pe.ssun.cokedex.database.model.FlavorTextEntity
+import kr.pe.ssun.cokedex.database.model.LangValue
+import kr.pe.ssun.cokedex.database.model.LangValueVersion
 import kr.pe.ssun.cokedex.database.model.NameEntity
 import kr.pe.ssun.cokedex.database.model.SpeciesEntity
 
@@ -18,8 +20,8 @@ data class NetworkPokemonSpecies(
 
 fun NetworkPokemonSpecies.asEntity() = SpeciesEntity(
     id = id,
-    name = names.getNameX() ?: name,
-    flavorText = flavorTextEntries.getFlavorText(),
+    names =  names.map { LangValue(it.language.name!!, it.name) },
+    flavorTexts = flavorTextEntries.map { LangValueVersion(it.language.name!!, it.flavorText, it.version.name!!) },
     ecId = evolutionChain.getId(),
     vIds = getVarietyIds(),
 )

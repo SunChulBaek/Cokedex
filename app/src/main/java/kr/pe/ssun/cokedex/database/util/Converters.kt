@@ -1,6 +1,9 @@
 package kr.pe.ssun.cokedex.database.util
 
 import androidx.room.TypeConverter
+import com.google.gson.Gson
+import kr.pe.ssun.cokedex.database.model.LangValue
+import kr.pe.ssun.cokedex.database.model.LangValueVersion
 
 class IdsConverter {
     @TypeConverter
@@ -37,4 +40,20 @@ class StatsConverter {
     fun statsToString(value: List<Pair<String, Int>>) = value.fold("") { acc, stat ->
         "$acc${ if (acc.isNotBlank()) ":" else "" }${stat.first},${stat.second}"
     }
+}
+
+class LangValueConverter {
+    @TypeConverter
+    fun listToJson(value: List<LangValue>?) = Gson().toJson(value)
+
+    @TypeConverter
+    fun jsonToList(value: String) = Gson().fromJson(value, Array<LangValue>::class.java).toList()
+}
+
+class LangValueVersionConverter {
+    @TypeConverter
+    fun listToJson(value: List<LangValueVersion>?) = Gson().toJson(value)
+
+    @TypeConverter
+    fun jsonToList(value: String) = Gson().fromJson(value, Array<LangValueVersion>::class.java).toList()
 }
