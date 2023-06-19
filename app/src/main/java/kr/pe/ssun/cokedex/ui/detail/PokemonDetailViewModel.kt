@@ -140,8 +140,10 @@ class PokemonDetailViewModel @Inject constructor(
                         add(PokemonDetailImage(id = pokemon.id))
                         add(PokemonDetailName(
                             id = pokemon.id,
-                            name = "${species.getName() ?: pokemon.name}${if (form.getName() != null) " (${form.getName()})" else ""}")
-                        )
+                            name = pokemon.name,
+                            species = species,
+                            form = form
+                        ))
                         add(PokemonDetailStat(
                             weight = pokemon.weight.toFloat() / 10,
                             types = types,
@@ -150,7 +152,7 @@ class PokemonDetailViewModel @Inject constructor(
                         if (species.getFlavorText() != null) {
                             add(
                                 PokemonDetailFlavorText(
-                                    flavorText = species.getFlavorText() ?: ""
+                                    species = species
                                 )
                             )
                         }

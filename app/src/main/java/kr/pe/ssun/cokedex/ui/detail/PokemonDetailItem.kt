@@ -24,7 +24,9 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import coil.compose.SubcomposeAsyncImage
 import kr.pe.ssun.cokedex.model.EvolutionChain
+import kr.pe.ssun.cokedex.model.Form
 import kr.pe.ssun.cokedex.model.Pokemon
+import kr.pe.ssun.cokedex.model.Species
 import kr.pe.ssun.cokedex.model.Type
 import kr.pe.ssun.cokedex.ui.common.PokemonProgressIndicator
 import kr.pe.ssun.cokedex.ui.detail.PokemonDetailItem.Companion.STAT_FONT_SIZE
@@ -77,7 +79,9 @@ data class PokemonDetailImage(
 
 data class PokemonDetailName(
     val id: Int,
-    val name: String
+    val name: String,
+    val species: Species? = null,
+    val form: Form? = null,
 ) : PokemonDetailItem {
 
     @Composable
@@ -88,7 +92,7 @@ data class PokemonDetailName(
     ) {
         Text(
             modifier = Modifier.align(Alignment.Center),
-            text = "${String.format("%04d", id)} $name",
+            text = "${String.format("%04d", id)} ${species?.getName() ?: name} ${if (form?.getName() != null) "(${form.getName()})" else ""}",
             style = TextStyle(fontSize = if (name.contains("(")) 20.dp.asSp() else 30.dp.asSp()),
             color = Color.White,
         )
@@ -154,13 +158,13 @@ data class PokemonDetailStat(
 }
 
 data class PokemonDetailFlavorText(
-    val flavorText: String
+    val species: Species
 ) : PokemonDetailItem {
 
     @Composable
     override fun ItemContent(onClick: (Pokemon) -> Unit) = Text(
         modifier = Modifier.padding(horizontal = 16.dp),
-        text = flavorText,
+        text = species.getFlavorText() ?: "",
         style = TextStyle(fontSize = 16.dp.asSp()),
         color = Color.White,
     )

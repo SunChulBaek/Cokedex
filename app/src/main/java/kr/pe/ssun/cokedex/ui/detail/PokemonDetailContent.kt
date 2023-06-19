@@ -28,7 +28,7 @@ fun PokemonDetailContent(
         PokemonDetailImage(id = loading?.id ?: 0),
         PokemonDetailName(
             id = loading?.id ?: 0,
-            name = loading?.name ?: ""
+            name = loading?.name ?: "",
         )
     )
     PokemonDetailBg(modifier = Modifier.fillMaxSize()) {
