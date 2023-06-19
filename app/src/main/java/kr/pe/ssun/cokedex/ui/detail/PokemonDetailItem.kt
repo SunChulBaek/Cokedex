@@ -93,7 +93,7 @@ data class PokemonDetailName(
         Text(
             modifier = Modifier.align(Alignment.Center),
             text = "${String.format("%04d", id)} ${species?.getName() ?: name} ${if (form?.getName() != null) "(${form.getName()})" else ""}",
-            style = TextStyle(fontSize = if (name.contains("(")) 20.dp.asSp() else 30.dp.asSp()),
+            style = TextStyle(fontSize = if (form?.getName() != null) 20.dp.asSp() else 30.dp.asSp()),
             color = Color.White,
         )
     }
