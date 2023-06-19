@@ -144,7 +144,7 @@ class PokemonDetailViewModel @Inject constructor(
                         )
                         add(PokemonDetailStat(
                             weight = pokemon.weight.toFloat() / 10,
-                            types = pokemon.types,
+                            types = types,
                             height = pokemon.height.toFloat() / 10
                         ))
                         if (species.getFlavorText() != null) {

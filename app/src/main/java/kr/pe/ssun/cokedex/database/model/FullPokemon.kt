@@ -58,7 +58,7 @@ fun FullPokemon.asExternalModel() = PokemonDetail(
     form = form?.asExternalModel(),
     // Type
     totalTypeIds = pokemon.typeIds,
-    types = types.map { type -> Type(type.id, type.name) },
+    types = types.map { type -> Type(type.id, type.names) },
     // Evolution Chain
     evolutionChainId = species?.ecId,
     evolutionChain = null,

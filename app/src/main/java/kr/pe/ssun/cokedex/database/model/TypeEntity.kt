@@ -10,11 +10,11 @@ import kr.pe.ssun.cokedex.model.Type
 )
 data class TypeEntity(
     @PrimaryKey @ColumnInfo(name = "t_id") val id: Int,
-    @ColumnInfo(name = "name") val name: String?,
+    @ColumnInfo(name = "names") val names: List<LangValue>,
 )
 
 fun TypeEntity.asExternalModel(fromDB: Boolean = false) = Type(
     id = id,
-    name = name,
+    names = names,
     fromDB = fromDB,
 )

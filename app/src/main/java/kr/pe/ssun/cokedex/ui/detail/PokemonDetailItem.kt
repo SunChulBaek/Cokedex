@@ -25,7 +25,6 @@ import androidx.constraintlayout.compose.Dimension
 import coil.compose.SubcomposeAsyncImage
 import kr.pe.ssun.cokedex.model.EvolutionChain
 import kr.pe.ssun.cokedex.model.Pokemon
-import kr.pe.ssun.cokedex.model.PokemonDetail
 import kr.pe.ssun.cokedex.model.Type
 import kr.pe.ssun.cokedex.ui.common.PokemonProgressIndicator
 import kr.pe.ssun.cokedex.ui.detail.PokemonDetailItem.Companion.STAT_FONT_SIZE
@@ -145,7 +144,7 @@ data class PokemonDetailStat(
                     )
                 }
                 Text(
-                    text = type.name ?: "",
+                    text = type.getName() ?: "",
                     style = TextStyle(fontSize = STAT_FONT_SIZE.dp.asSp()),
                     color = Color.White,
                 )
