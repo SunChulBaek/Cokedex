@@ -19,6 +19,8 @@ object DatabaseModule {
     ): CokedexDatabase = Room.databaseBuilder(
         context,
         CokedexDatabase::class.java,
-        "cokedex-database"
-    ).build()
+        "cokedex-database.db"
+    )
+        .createFromAsset("database/cokedex-database.db")
+        .build()
 }

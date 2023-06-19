@@ -10,8 +10,6 @@ import kr.pe.ssun.cokedex.database.model.*
 import kr.pe.ssun.cokedex.model.*
 import kr.pe.ssun.cokedex.network.PokemonNetworkDataSource
 import kr.pe.ssun.cokedex.network.model.asEntity
-import kr.pe.ssun.cokedex.network.model.asFlavorTextEntities
-import kr.pe.ssun.cokedex.network.model.asNameEntities
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -23,8 +21,6 @@ class PokemonRepository @Inject constructor(
     private val pokemonItemDao: PokemonItemDao,
     private val pokemonDao: PokemonDao,
     private val speciesDao: SpeciesDao,
-    private val nameDao: NameDao,
-    private val flavorTextDao: FlavorTextDao,
     private val typeDao: TypeDao,
     private val statDao: StatDao,
     private val valueDao: ValueDao,
@@ -51,8 +47,6 @@ class PokemonRepository @Inject constructor(
                         val entity = species.asEntity()
 
                         Timber.d("[sunchulbaek] Species(id = $id) varieties = ${species.getVarietyIds()}")
-                        nameDao.insert(species.asNameEntities())
-                        flavorTextDao.insert(species.asFlavorTextEntities())
                         speciesDao.insert(entity)
                         emit(entity.asExternalModel())
                     }

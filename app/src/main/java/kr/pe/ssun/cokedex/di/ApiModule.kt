@@ -9,9 +9,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kr.pe.ssun.cokedex.database.dao.EvolutionChainDao
-import kr.pe.ssun.cokedex.database.dao.FlavorTextDao
 import kr.pe.ssun.cokedex.database.dao.FormDao
-import kr.pe.ssun.cokedex.database.dao.NameDao
 import kr.pe.ssun.cokedex.database.dao.SpeciesDao
 import kr.pe.ssun.cokedex.database.dao.PokemonDao
 import kr.pe.ssun.cokedex.database.dao.PokemonItemDao
@@ -55,8 +53,6 @@ object ApiModule {
         pokemonItemDao: PokemonItemDao,
         pokemonDao: PokemonDao,
         speciesDao: SpeciesDao,
-        nameDao: NameDao,
-        flavorTextDao: FlavorTextDao,
         typeDao: TypeDao,
         statDao: StatDao,
         valueDao: ValueDao,
@@ -69,8 +65,6 @@ object ApiModule {
             pokemonItemDao = pokemonItemDao,
             pokemonDao = pokemonDao,
             speciesDao = speciesDao,
-            nameDao = nameDao,
-            flavorTextDao = flavorTextDao,
             typeDao = typeDao,
             statDao = statDao,
             valueDao = valueDao,

@@ -4,9 +4,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import kr.pe.ssun.cokedex.database.dao.EvolutionChainDao
-import kr.pe.ssun.cokedex.database.dao.FlavorTextDao
 import kr.pe.ssun.cokedex.database.dao.FormDao
-import kr.pe.ssun.cokedex.database.dao.NameDao
 import kr.pe.ssun.cokedex.database.dao.SpeciesDao
 import kr.pe.ssun.cokedex.database.dao.PokemonDao
 import kr.pe.ssun.cokedex.database.dao.PokemonItemDao
@@ -14,9 +12,7 @@ import kr.pe.ssun.cokedex.database.dao.StatDao
 import kr.pe.ssun.cokedex.database.dao.TypeDao
 import kr.pe.ssun.cokedex.database.dao.ValueDao
 import kr.pe.ssun.cokedex.database.model.EvolutionChainEntity
-import kr.pe.ssun.cokedex.database.model.FlavorTextEntity
 import kr.pe.ssun.cokedex.database.model.FormEntity
-import kr.pe.ssun.cokedex.database.model.NameEntity
 import kr.pe.ssun.cokedex.database.model.SpeciesEntity
 import kr.pe.ssun.cokedex.database.model.PokemonEntity
 import kr.pe.ssun.cokedex.database.model.PokemonItemEntity
@@ -36,8 +32,6 @@ import kr.pe.ssun.cokedex.database.util.TypesConverter
         PokemonItemEntity::class,
         PokemonEntity::class,
         SpeciesEntity::class,
-        NameEntity::class,
-        FlavorTextEntity::class,
         TypeEntity::class,
         StatEntity::class,
         ValueEntity::class,
@@ -65,6 +59,4 @@ abstract class CokedexDatabase : RoomDatabase() {
     abstract fun valueDao(): ValueDao
     abstract fun evolutionChainDao(): EvolutionChainDao
     abstract fun formDao(): FormDao
-    abstract fun nameDao(): NameDao
-    abstract fun flavorTextDao(): FlavorTextDao
 }
