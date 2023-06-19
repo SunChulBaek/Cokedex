@@ -21,5 +21,6 @@ object DatabaseModule {
         CokedexDatabase::class.java,
         "cokedex-database.db"
     )
+        .createFromAsset("database/cokedex-database.db")
         .build()
 }

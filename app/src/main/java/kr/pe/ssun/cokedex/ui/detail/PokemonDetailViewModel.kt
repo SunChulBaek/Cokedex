@@ -123,7 +123,7 @@ class PokemonDetailViewModel @Inject constructor(
                     }
                 }
                 if (form.id != DUMMY_ID) {
-                    Timber.d("[sunchulbaek] fId = ${form.id} fName = ${form.name}")
+                    Timber.d("[sunchulbaek] fId = ${form.id} fName = ${form.getName()}")
                 }
 
                 PokemonUiState.Success(
@@ -140,7 +140,7 @@ class PokemonDetailViewModel @Inject constructor(
                         add(PokemonDetailImage(id = pokemon.id))
                         add(PokemonDetailName(
                             id = pokemon.id,
-                            name = "${species.getName() ?: pokemon.name}${if (form.name != null) " (${form.name})" else ""}")
+                            name = "${species.getName() ?: pokemon.name}${if (form.getName() != null) " (${form.getName()})" else ""}")
                         )
                         add(PokemonDetailStat(
                             weight = pokemon.weight.toFloat() / 10,

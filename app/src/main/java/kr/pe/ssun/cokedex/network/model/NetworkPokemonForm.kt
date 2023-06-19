@@ -2,6 +2,7 @@ package kr.pe.ssun.cokedex.network.model
 
 import com.google.gson.annotations.SerializedName
 import kr.pe.ssun.cokedex.database.model.FormEntity
+import kr.pe.ssun.cokedex.database.model.LangValue
 
 data class NetworkPokemonForm(
     @SerializedName("id") val id: Int,
@@ -18,5 +19,7 @@ data class NetworkPokemonForm(
 
 fun NetworkPokemonForm.asEntity() = FormEntity(
     id = id,
-    name = formNames.getNameX()
+    names = formNames.map { name ->
+        LangValue(name.language.name!!, name.name)
+    }
 )

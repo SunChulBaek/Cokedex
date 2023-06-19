@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -38,6 +39,11 @@ fun HomeScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val pokemonList = viewModel.pagingFlow.collectAsLazyPagingItems()
     val firstLoad = pokemonList.loadState.refresh // 최초 로딩 상태
+    //val xxx = viewModel.namesFlow.collectAsStateWithLifecycle(initialValue = null)
+
+//    LaunchedEffect(pokemonList.loadState) {
+//        viewModel.namesIds.emit(pokemonList.itemSnapshotList.items.map { it.id })
+//    }
 
     // 백키 2회에 종료 처리
     BackCloseHandler(navController, showToast, onBack)

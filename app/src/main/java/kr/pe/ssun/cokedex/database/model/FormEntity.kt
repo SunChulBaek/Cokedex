@@ -10,11 +10,11 @@ import kr.pe.ssun.cokedex.model.Form
 )
 data class FormEntity(
     @PrimaryKey @ColumnInfo("f_id") val id: Int,
-    @ColumnInfo("name") val name: String?,
+    @ColumnInfo("names") val names: List<LangValue> = listOf(),
 )
 
 fun FormEntity.asExternalModel(fromDB: Boolean = false) = Form(
     id = id,
-    name = name,
+    names = names,
     fromDB = fromDB
 )

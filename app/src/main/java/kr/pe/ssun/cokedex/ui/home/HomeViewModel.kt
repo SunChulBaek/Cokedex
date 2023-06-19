@@ -37,9 +37,9 @@ class HomeViewModel @Inject constructor(
         ) // 다양한 진화 형태..
     }
 
-    private val namesIds = MutableStateFlow(listOf(DUMMY_ID))
+    val namesIds = MutableStateFlow(listOf(DUMMY_ID))
 
-    private val namesFlow = namesIds.flatMapConcat { it.asFlow() }
+    val namesFlow = namesIds.flatMapConcat { it.asFlow() }
         .map { nameId ->
             getSpeciesUseCase(nameId).first().getOrNull() ?: Species(DUMMY_ID)
         }
