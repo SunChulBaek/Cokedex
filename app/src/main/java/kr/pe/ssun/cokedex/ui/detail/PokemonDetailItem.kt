@@ -1,5 +1,14 @@
 package kr.pe.ssun.cokedex.ui.detail
 
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -9,6 +18,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -52,9 +62,22 @@ data class PokemonDetailImage(
             .fillMaxWidth()
             .wrapContentHeight()
     ) {
+        val animation = rememberInfiniteTransition()
+        val offset = animation.animateFloat(
+            initialValue = 0f,
+            targetValue = 5f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(
+                    durationMillis = 1000,
+                    easing = LinearOutSlowInEasing
+                ),
+                repeatMode = RepeatMode.Reverse
+            )
+        )
         val imageRef = createRef()
         SubcomposeAsyncImage(
             modifier = Modifier
+                .offset(y = offset.value.dp)
                 .constrainAs(imageRef) {
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
