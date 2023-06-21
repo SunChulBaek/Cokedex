@@ -105,87 +105,89 @@ fun PokemonDetailBg(
                 )
             )
             .drawWithContent {
-                val height = tileSize * tanDeg(60)
-                translate(left = left.value) {
-                    clipRect(
-                        left = -size.width,
-                        top = 0f,
-                        right = size.width,
-                        bottom = size.height
-                    ) {
-                        // 왼쪽위 -> 오른쪽 아래
-                        for (i in -(size.height.toInt() / tileSize)..size.width.toInt() / tileSize) {
-                            drawLine(
-                                color = lineColor.copy(alpha = if (i % 4 == 0) lineAlphaAccent else lineAlpha),
-                                start = Offset(
-                                    x = (i * tileSize).toFloat(),
-                                    y = 0f
-                                ),
-                                end = Offset(
-                                    x = (size.height / tanDeg(60) + (i * tileSize).toFloat()).toFloat(),
-                                    y = size.height
-                                ),
-                                strokeWidth = strokeWidth
-                            )
+                clipRect {
+                    val height = tileSize * tanDeg(60)
+                    translate(left = left.value) {
+                        clipRect(
+                            left = -size.width,
+                            top = 0f,
+                            right = size.width,
+                            bottom = size.height
+                        ) {
+                            // 왼쪽위 -> 오른쪽 아래
+                            for (i in -(size.height.toInt() / tileSize)..size.width.toInt() / tileSize) {
+                                drawLine(
+                                    color = lineColor.copy(alpha = if (i % 4 == 0) lineAlphaAccent else lineAlpha),
+                                    start = Offset(
+                                        x = (i * tileSize).toFloat(),
+                                        y = 0f
+                                    ),
+                                    end = Offset(
+                                        x = (size.height / tanDeg(60) + (i * tileSize).toFloat()).toFloat(),
+                                        y = size.height
+                                    ),
+                                    strokeWidth = strokeWidth
+                                )
+                            }
+                            // 오른쪽위 -> 왼쪽 아래
+                            for (i in 0..(size.width + size.height).toInt() / tileSize) {
+                                drawLine(
+                                    color = lineColor.copy(alpha = if (i % 4 == 0) lineAlphaAccent else lineAlpha),
+                                    start = Offset(
+                                        x = (i * tileSize).toFloat(),
+                                        y = 0f
+                                    ),
+                                    end = Offset(
+                                        x = (-size.height / tanDeg(60) + (i * tileSize)).toFloat(),
+                                        y = size.height
+                                    ),
+                                    strokeWidth = strokeWidth
+                                )
+                            }
+                            // 직선
+                            for (i in 0..(size.height / height * 2).toInt()) {
+                                drawLine(
+                                    color = lineColor.copy(alpha = if (i % 4 == 0) lineAlphaAccent else lineAlpha),
+                                    start = Offset(
+                                        x = -size.width,
+                                        y = (i * height / 2).toFloat()
+                                    ),
+                                    end = Offset(
+                                        x = size.width,
+                                        y = (i * height / 2).toFloat()
+                                    ),
+                                    strokeWidth = strokeWidth
+                                )
+                            }
                         }
-                        // 오른쪽위 -> 왼쪽 아래
-                        for (i in 0..(size.width + size.height).toInt() / tileSize) {
-                            drawLine(
-                                color = lineColor.copy(alpha = if (i % 4 == 0) lineAlphaAccent else lineAlpha),
-                                start = Offset(
-                                    x = (i * tileSize).toFloat(),
-                                    y = 0f
-                                ),
-                                end = Offset(
-                                    x = (-size.height / tanDeg(60) + (i * tileSize)).toFloat(),
-                                    y = size.height
-                                ),
-                                strokeWidth = strokeWidth
-                            )
-                        }
-                        // 직선
-                        for (i in 0..(size.height / height * 2).toInt()) {
-                            drawLine(
-                                color = lineColor.copy(alpha = if (i % 4 == 0) lineAlphaAccent else lineAlpha),
-                                start = Offset(
-                                    x = -size.width,
-                                    y = (i * height / 2).toFloat()
-                                ),
-                                end = Offset(
-                                    x = size.width,
-                                    y = (i * height / 2).toFloat()
-                                ),
-                                strokeWidth = strokeWidth
+                    }
+                    translate(top = top.value) {
+                        clipRect(left = 0f, top = 0f, right = size.width, bottom = noiseHeight) {
+                            drawRect(
+                                brush = Brush.linearGradient(
+                                    colors = listOf(
+                                        Color.White.copy(alpha = 0.5f),
+                                        Color.White.copy(0.1f)
+                                    ),
+                                    start = Offset(0f, 0f),
+                                    end = Offset(0f, noiseHeight)
+                                )
                             )
                         }
                     }
-                }
-                translate(top = top.value) {
-                    clipRect(left = 0f, top = 0f, right = size.width, bottom = noiseHeight) {
-                        drawRect(
-                            brush = Brush.linearGradient(
-                                colors = listOf(
-                                    Color.White.copy(alpha = 0.5f),
-                                    Color.White.copy(0.1f)
-                                ),
-                                start = Offset(0f, 0f),
-                                end = Offset(0f, noiseHeight)
+                    translate(top = bottom.value) {
+                        clipRect(left = 0f, top = 0f, right = size.width, bottom = noiseHeight) {
+                            drawRect(
+                                brush = Brush.linearGradient(
+                                    colors = listOf(
+                                        Color.White.copy(alpha = 0.5f),
+                                        Color.White.copy(0.1f)
+                                    ),
+                                    start = Offset(0f, 0f),
+                                    end = Offset(0f, noiseHeight)
+                                )
                             )
-                        )
-                    }
-                }
-                translate(top = bottom.value) {
-                    clipRect(left = 0f, top = 0f, right = size.width, bottom = noiseHeight) {
-                        drawRect(
-                            brush = Brush.linearGradient(
-                                colors = listOf(
-                                    Color.White.copy(alpha = 0.5f),
-                                    Color.White.copy(0.1f)
-                                ),
-                                start = Offset(0f, 0f),
-                                end = Offset(0f, noiseHeight)
-                            )
-                        )
+                        }
                     }
                 }
                 drawContent()
