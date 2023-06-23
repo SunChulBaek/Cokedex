@@ -11,5 +11,5 @@ interface SpeciesDao {
     suspend fun findById(speciesId: Int): SpeciesEntity?
 
     @Insert
-    suspend fun insert(name: SpeciesEntity)
+    suspend fun insert(species: SpeciesEntity)
 }

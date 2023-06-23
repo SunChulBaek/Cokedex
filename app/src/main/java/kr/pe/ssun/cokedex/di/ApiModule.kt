@@ -8,14 +8,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
-import kr.pe.ssun.cokedex.database.dao.EvolutionChainDao
-import kr.pe.ssun.cokedex.database.dao.FormDao
-import kr.pe.ssun.cokedex.database.dao.SpeciesDao
-import kr.pe.ssun.cokedex.database.dao.PokemonDao
-import kr.pe.ssun.cokedex.database.dao.PokemonItemDao
-import kr.pe.ssun.cokedex.database.dao.StatDao
-import kr.pe.ssun.cokedex.database.dao.TypeDao
-import kr.pe.ssun.cokedex.database.dao.ValueDao
+import kr.pe.ssun.cokedex.database.PokemonLocalDataSource
 import kr.pe.ssun.cokedex.util.IoDispatcher
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -49,27 +42,13 @@ object ApiModule {
     @Provides
     fun providesFakeRepository(
         @IoDispatcher dispatcher: CoroutineDispatcher,
+        local: PokemonLocalDataSource,
         apiService: RetrofitSsunNetwork,
-        pokemonItemDao: PokemonItemDao,
-        pokemonDao: PokemonDao,
-        speciesDao: SpeciesDao,
-        typeDao: TypeDao,
-        statDao: StatDao,
-        valueDao: ValueDao,
-        evolutionChainDao: EvolutionChainDao,
-        formDao: FormDao,
     ): PokemonRepository {
         return PokemonRepository(
             dispatcher = dispatcher,
+            local = local,
             network = apiService,
-            pokemonItemDao = pokemonItemDao,
-            pokemonDao = pokemonDao,
-            speciesDao = speciesDao,
-            typeDao = typeDao,
-            statDao = statDao,
-            valueDao = valueDao,
-            evolutionChainDao = evolutionChainDao,
-            formDao = formDao,
         )
     }
 }

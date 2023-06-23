@@ -11,5 +11,5 @@ interface FormDao {
     suspend fun findById(formId: Int?): FormEntity?
 
     @Insert
-    suspend fun insert(name: FormEntity)
+    suspend fun insert(form: FormEntity)
 }
