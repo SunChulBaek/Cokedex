@@ -8,11 +8,11 @@ import kr.pe.ssun.cokedex.database.model.TypeEntity
 @Dao
 interface TypeDao {
     @Query("SELECT * FROM type WHERE t_id = :typeId")
-    fun findById(typeId: Int): TypeEntity?
+    suspend fun findById(typeId: Int): TypeEntity?
 
     @Query("SELECT * FROM type WHERE t_id IN (:typeIds)")
-    fun findById(typeIds: IntArray): List<TypeEntity>
+    suspend fun findById(typeIds: IntArray): List<TypeEntity>
 
     @Insert
-    fun insert(type: TypeEntity)
+    suspend fun insert(type: TypeEntity)
 }

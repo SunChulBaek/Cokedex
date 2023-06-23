@@ -8,8 +8,8 @@ import kr.pe.ssun.cokedex.database.model.EvolutionChainEntity
 @Dao
 interface EvolutionChainDao {
     @Query("SELECT * FROM evolution_chain WHERE c_id = :ecId")
-    fun findById(ecId: Int): List<EvolutionChainEntity>
+    suspend fun findById(ecId: Int): List<EvolutionChainEntity>
 
     @Insert
-    fun insert(chain: EvolutionChainEntity)
+    suspend fun insert(chain: EvolutionChainEntity)
 }

@@ -9,11 +9,11 @@ import kr.pe.ssun.cokedex.database.model.ValueWithStat
 @Dao
 interface ValueDao {
     @Query("SELECT * FROM value WHERE p_id = :pokemonId AND s_id = :statId")
-    fun findById(pokemonId: Int, statId: Int): ValueEntity?
+    suspend fun findById(pokemonId: Int, statId: Int): ValueEntity?
 
     @Query("SELECT * FROM value WHERE p_id = :pokemonId AND s_id IN (:statIds)")
-    fun findById(pokemonId: Int, statIds: IntArray): List<ValueWithStat>
+    suspend fun findById(pokemonId: Int, statIds: IntArray): List<ValueWithStat>
 
     @Insert
-    fun insert(value: ValueEntity)
+    suspend fun insert(value: ValueEntity)
 }

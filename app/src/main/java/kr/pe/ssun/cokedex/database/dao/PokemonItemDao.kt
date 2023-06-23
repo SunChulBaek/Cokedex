@@ -9,11 +9,11 @@ import kr.pe.ssun.cokedex.database.model.PokemonItemEntity
 @Dao
 interface PokemonItemDao {
     @Query("SELECT * FROM pokemon_item")
-    fun selectAll(): List<PokemonItemEntity>
+    suspend fun selectAll(): List<PokemonItemEntity>
 
     @Query("SELECT * FROM pokemon_item WHERE indexx in (:indexx)")
-    fun findByIndex(indexx: IntArray): List<PokemonItemEntity>
+    suspend fun findByIndex(indexx: IntArray): List<PokemonItemEntity>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(items: List<PokemonItemEntity>)
+    suspend fun insert(items: List<PokemonItemEntity>)
 }

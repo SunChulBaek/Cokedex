@@ -8,8 +8,8 @@ import kr.pe.ssun.cokedex.database.model.FormEntity
 @Dao
 interface FormDao {
     @Query("SELECT * FROM form WHERE f_id = :formId")
-    fun findById(formId: Int?): FormEntity?
+    suspend fun findById(formId: Int?): FormEntity?
 
     @Insert
-    fun insert(name: FormEntity)
+    suspend fun insert(name: FormEntity)
 }

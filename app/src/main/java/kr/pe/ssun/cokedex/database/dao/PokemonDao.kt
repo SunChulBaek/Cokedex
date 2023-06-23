@@ -16,14 +16,14 @@ interface PokemonDao {
     @Transaction
     @RewriteQueriesToDropUnusedColumns
     @Query("SELECT * FROM pokemon WHERE p_id = :pokemonId")
-    fun findById(pokemonId: Int): FullPokemon?
+    suspend fun findById(pokemonId: Int): FullPokemon?
 
     @Insert
-    fun insert(pokemon: PokemonEntity)
+    suspend fun insert(pokemon: PokemonEntity)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(p2t: PokemonTypeCrossRef)
+    suspend fun insert(p2t: PokemonTypeCrossRef)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(p2s: PokemonStatCrossRef)
+    suspend fun insert(p2s: PokemonStatCrossRef)
 }
