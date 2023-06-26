@@ -151,9 +151,9 @@ class PokemonRepository @Inject constructor(
             Timber.d("[sunchulbaek] 검색!!!")
             val searchList = local.getAllSpecies().filter { species ->
                 species.names.map { name ->
-                    name.value
+                    name.value.lowercase()
                 }.any {
-                    it.contains(search)
+                    it.contains(search.lowercase())
                 }
             }
             Timber.d("[sunchulbaek] search size = ${searchList.size}")
