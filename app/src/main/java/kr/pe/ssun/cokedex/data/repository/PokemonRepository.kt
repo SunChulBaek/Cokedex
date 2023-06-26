@@ -10,6 +10,7 @@ import kr.pe.ssun.cokedex.database.model.*
 import kr.pe.ssun.cokedex.model.*
 import kr.pe.ssun.cokedex.network.PokemonNetworkDataSource
 import kr.pe.ssun.cokedex.network.model.asEntity
+import kr.pe.ssun.cokedex.ui.common.getImageUrl
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -135,15 +136,38 @@ class PokemonRepository @Inject constructor(
         }
     }.flowOn(dispatcher)
 
-    fun getPokemonList(limit: Int?, offset: Int?): Flow<List<Pokemon>> = flow {
-        if (limit == null && offset == null) {
+    fun getPokemonList(limit: Int?, offset: Int?, search: String?): Flow<List<Pokemon>> = flow {
+        Timber.d("[sunchulbaek] getPokemonList(limit = $limit, offset = $offset, search = $search)")
+        if (limit == null && offset == null && search.isNullOrBlank()) {
+            // 최초 로딩
             val cachedPokemonList = local.getPokemonItems()
             if (cachedPokemonList.isNotEmpty()) {
                 Timber.d("[sunchulbaek] cache size = ${cachedPokemonList.size}")
                 emit(cachedPokemonList.asExternalModel(fromDB = true))
                 return@flow
             }
+        } else if (limit == null && offset == null && !search.isNullOrBlank()) {
+            // 검색
+            Timber.d("[sunchulbaek] 검색!!!")
+            val searchList = local.getAllSpecies().filter { species ->
+                species.names.map { name ->
+                    name.value
+                }.any {
+                    it.contains(search)
+                }
+            }
+            Timber.d("[sunchulbaek] search size = ${searchList.size}")
+            emit(searchList.map { item ->
+                Pokemon(
+                    id = item.id,
+                    name = "name",
+                    fallbackName = "name",
+                    imageUrl = getImageUrl(item.id),
+                    fromDB = true,
+                ) })
+            return@flow
         }
+
         val indexes = ((offset ?: 0) until (offset ?: 0) + (limit ?: 20)).toList()
         Timber.d("[sunchulbaek][onLoadMore] Pokemon List limit = $limit, offset = $offset, ids = ${indexes.toList()}")
         val pokemonList = local.getPokemonItems(indexes)

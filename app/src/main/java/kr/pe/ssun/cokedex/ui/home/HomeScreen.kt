@@ -18,6 +18,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import kr.pe.ssun.cokedex.R
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import kotlinx.coroutines.launch
 import kr.pe.ssun.cokedex.navigation.pokemonDetailNavigationRoute
 import kr.pe.ssun.cokedex.ui.common.DefaultScreen
 
@@ -39,11 +40,9 @@ fun HomeScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val pokemonList = viewModel.pagingFlow.collectAsLazyPagingItems()
     val firstLoad = pokemonList.loadState.refresh // 최초 로딩 상태
-    //val xxx = viewModel.namesFlow.collectAsStateWithLifecycle(initialValue = null)
+    val searchResult = viewModel.searchResult.collectAsStateWithLifecycle()
 
-//    LaunchedEffect(pokemonList.loadState) {
-//        viewModel.namesIds.emit(pokemonList.itemSnapshotList.items.map { it.id })
-//    }
+    val scope = rememberCoroutineScope()
 
     // 백키 2회에 종료 처리
     BackCloseHandler(navController, showToast, onBack)
@@ -60,6 +59,12 @@ fun HomeScreen(
         ) {
             HomeContent(
                 uiState = pokemonList,
+                searchResult = searchResult.value,
+                onSearch = { newText ->
+                    scope.launch {
+                        viewModel.search.emit(newText)
+                    }
+                },
                 onClick = { pokemon ->
                     navigate(pokemonDetailNavigationRoute, pokemon)
                 },

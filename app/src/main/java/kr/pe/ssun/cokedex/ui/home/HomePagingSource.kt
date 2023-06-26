@@ -28,7 +28,7 @@ class HomePagingSource @Inject constructor(
             val page = params.key
             val offset = if (page != null) page * LIMIT else null
             val limit = offset?.let { LIMIT } ?: run { null }
-            val response = repository.getPokemonList(offset = offset, limit = limit).first()
+            val response = repository.getPokemonList(offset = offset, limit = limit, search = null).first()
             Timber.d("[sunchulbaek] HomePagingSource(offset = $offset) result = ${response.map { it.id }}")
             LoadResult.Page(
                 data = response,

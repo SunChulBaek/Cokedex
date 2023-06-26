@@ -1,15 +1,18 @@
 package kr.pe.ssun.cokedex.ui.home
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
-import androidx.paging.map
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
+import kr.pe.ssun.cokedex.domain.GetPokemonListParam
 import kr.pe.ssun.cokedex.domain.GetSpeciesUseCase
 import kr.pe.ssun.cokedex.domain.GetPokemonListUseCase
 import kr.pe.ssun.cokedex.model.Species
@@ -50,4 +53,14 @@ class HomeViewModel @Inject constructor(
         config = PagingConfig(pageSize = 20),
         pagingSourceFactory = { pagingSource }
     ).flow
+
+    val search = MutableStateFlow("")
+
+    val searchResult = search.map { search ->
+        getPokemonListUseCase(GetPokemonListParam(search = search)).first().getOrNull() ?: listOf()
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = listOf()
+    )
 }

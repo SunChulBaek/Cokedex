@@ -10,6 +10,9 @@ interface SpeciesDao {
     @Query("SELECT * FROM species WHERE s_id = :speciesId")
     suspend fun findById(speciesId: Int): SpeciesEntity?
 
+    @Query("SELECT * FROM species")
+    suspend fun selectAll(): List<SpeciesEntity>
+
     @Insert
     suspend fun insert(species: SpeciesEntity)
 }

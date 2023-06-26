@@ -42,6 +42,8 @@ class PokemonLocalDataSource @Inject constructor(
     // Species
     suspend fun getSpecies(id: Int): SpeciesEntity? = speciesDao.findById(id)
 
+    suspend fun getAllSpecies(): List<SpeciesEntity> = speciesDao.selectAll()
+
     suspend fun insertSpecies(species: SpeciesEntity) = speciesDao.insert(species)
 
     // Type

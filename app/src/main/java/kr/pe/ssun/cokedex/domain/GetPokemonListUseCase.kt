@@ -11,6 +11,7 @@ import javax.inject.Inject
 data class GetPokemonListParam(
     val limit: Int? = null,
     val offset: Int? = null,
+    val search: String? = null,
 )
 
 class GetPokemonListUseCase @Inject constructor(
@@ -21,7 +22,8 @@ class GetPokemonListUseCase @Inject constructor(
     override fun execute(parameters: GetPokemonListParam?): Flow<Result<List<Pokemon>>> =
         repository.getPokemonList(
             limit = parameters?.limit,
-            offset = parameters?.offset
+            offset = parameters?.offset,
+            search = parameters?.search,
         ).map { pokemonList ->
             Result.success(pokemonList)
         }
