@@ -25,15 +25,6 @@ jobs:
           echo "releaseStorePassword=${{ secrets.RELEASE_STORE_PASSWORD }}" >> keystore.properties
       - name: Download Dependencies
         run: ./gradlew androidDependencies
-      - name: Cache Gradle and wrapper
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
       - name: Check Dependency Updates
         run: ./gradlew dependencyUpdates -Drevision=release -DoutputFormatter=plain
       - name: Build Binary
