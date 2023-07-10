@@ -50,7 +50,7 @@ jobs:
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: Fokedex-${{ github.run_number }}
+          name: Cokedex-${{ github.run_number }}
           path: app/build/outputs/apk/release/*.apk
       - name: Slack Upload Artifacts
         uses: MeilCli/slack-upload-file@v3
