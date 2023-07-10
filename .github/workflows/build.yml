@@ -24,7 +24,7 @@ jobs:
             ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
       - name: Decode Keystore
-        run: echo ${{ secrets.BASE64_KEYSTORE }} | base64 -d > android/keystore
+        run: echo ${{ secrets.BASE64_KEYSTORE }} | base64 -d > keystore
       - name: Create Keystore Properties
         run: |
           echo "releaseKeyAlias=${{ secrets.RELEASE_KEY_ALIAS }}" > android/keystore.properties
