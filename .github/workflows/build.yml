@@ -14,15 +14,6 @@ jobs:
         with:
           distribution: 'corretto'
           java-version: 17
-      - name: Check Dependency Updates
-        run: ./gradlew androidDependencies
-      - name: Cache Gradle and wrapper
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
       - name: Decode Keystore
         run: echo ${{ secrets.BASE64_KEYSTORE }} | base64 -d > keystore
       - name: Create Keystore Properties
@@ -31,6 +22,19 @@ jobs:
           echo "releaseKeyPassword=${{ secrets.RELEASE_KEY_PASSWORD }}" >> android/keystore.properties
           echo "releaseKeyStore=keystore" >> android/keystore.properties
           echo "releaseStorePassword=${{ secrets.RELEASE_STORE_PASSWORD }}" >> android/keystore.properties
+      - name: Download Dependencies
+        run: ./gradlew androidDependencies
+      - name: Cache Gradle and wrapper
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: Check Dependency Updates
+        run: ./gradlew dependencyUpdates -Drevision=release -DoutputFormatter=plain
       - name: Build Binary
         run: ./gradlew assembleRelease
       - name: Send Slack Message
