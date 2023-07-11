@@ -1,4 +1,5 @@
-# ComposeSingleTemplate [![CircleCI](https://dl.circleci.com/status-badge/img/gh/SunChulBaek/ComposeSingleTemplate/tree/main.svg?style=shield)](https://dl.circleci.com/status-badge/redirect/gh/SunChulBaek/ComposeSingleTemplate/tree/main)
+# Cokedex ![Build Badge](https://github.com/SunChulBaek/Cokedex/actions/workflows/build.yml/badge.svg)
+* Android Compose 버전 포켓몬 도감 ([Flutter 버전](https://github.com/SunChulBaek/Fokedex))
 * Architecture
   * [Compose](https://developer.android.com/jetpack/compose?hl=ko)
   * [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel)
