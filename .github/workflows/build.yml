@@ -9,7 +9,7 @@
 #   SLACK_TOKEN
 #   SLACK_WEBHOOK_URL
 # vars:
-#   APP_NAME
+#   APK_NAME
 
 name: Build
 
