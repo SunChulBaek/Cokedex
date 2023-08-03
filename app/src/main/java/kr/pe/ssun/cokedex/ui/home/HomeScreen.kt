@@ -104,10 +104,5 @@ fun MyTopAppBar() = TopAppBar(
         titleContentColor = Color.Black,
         actionIconContentColor = Color.Black
     ),
-    title = { Text(stringResource(R.string.app_name))},
-    navigationIcon = {
-        IconButton(onClick = { }) {
-            Icon(Icons.Default.Menu, "Menu")
-        }
-    }
+    title = { Text(stringResource(R.string.app_name))}
 )

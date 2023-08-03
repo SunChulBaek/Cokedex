@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.map
@@ -56,7 +57,7 @@ class HomeViewModel @Inject constructor(
 
     val search = MutableStateFlow("")
 
-    val searchResult = search.map { search ->
+    val searchResult = search.debounce(300).map { search ->
         getPokemonListUseCase(GetPokemonListParam(search = search)).first().getOrNull() ?: listOf()
     }.stateIn(
         scope = viewModelScope,

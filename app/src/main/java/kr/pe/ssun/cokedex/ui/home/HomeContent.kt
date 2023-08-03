@@ -1,5 +1,11 @@
 package kr.pe.ssun.cokedex.ui.home
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,8 +17,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -25,6 +35,7 @@ import androidx.paging.compose.LazyPagingItems
 import kr.pe.ssun.cokedex.model.Pokemon
 import kr.pe.ssun.cokedex.ui.theme.Green50
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun HomeContent(
     modifier: Modifier = Modifier,
@@ -51,7 +62,22 @@ fun HomeContent(
             text = newText
             onSearch(newText.text)
         },
-        placeholder = { Text("Search") }
+        placeholder = { Text("Search") },
+        maxLines = 1,
+        trailingIcon = {
+            AnimatedVisibility(
+                text.text.isNotBlank(),
+                enter = scaleIn() + fadeIn(),
+                exit = scaleOut() + fadeOut()
+            ) {
+                IconButton(onClick = {
+                    text = TextFieldValue("")
+                    onSearch("")
+                }) {
+                    Icon(Icons.Default.Clear, "Clear")
+                }
+            }
+        }
     )
 
     Box(
