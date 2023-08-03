@@ -19,6 +19,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import kr.pe.ssun.cokedex.R
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import kotlinx.coroutines.launch
+import kr.pe.ssun.cokedex.BuildConfig
 import kr.pe.ssun.cokedex.navigation.pokemonDetailNavigationRoute
 import kr.pe.ssun.cokedex.ui.common.DefaultScreen
 
@@ -104,5 +105,5 @@ fun MyTopAppBar() = TopAppBar(
         titleContentColor = Color.Black,
         actionIconContentColor = Color.Black
     ),
-    title = { Text(stringResource(R.string.app_name))}
+    title = { Text(stringResource(R.string.app_name)+"${if (BuildConfig.VERSION_CODE > 1) "(${BuildConfig.VERSION_CODE}))" else ""}")}
 )
