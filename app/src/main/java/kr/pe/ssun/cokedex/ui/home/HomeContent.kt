@@ -85,36 +85,13 @@ fun HomeContent(
             .fillMaxWidth()
             .weight(1f)
     ) {
-        // 전체 리스트
         val gridState = rememberLazyGridState()
-        LazyVerticalGrid(
-            modifier = Modifier.fillMaxSize(),
-            state = gridState,
-            columns = GridCells.Fixed(5),
-            contentPadding = PaddingValues(8.dp), // 테두리
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp),
-        ) {
-            items(
-                count = uiState.itemCount,
-                key = { index -> uiState[index]!!.id }
-            ) { index ->
-                val item = uiState[index]!!
-                PokemonGridItem(
-                    item = item,
-                    onClick = { onClick(item) }
-                )
-            }
-        }
-
-        // 검색 결과
-        val gridState2 = rememberLazyGridState()
         if (searchResult.isNotEmpty()) {
             LazyVerticalGrid(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(Green50),
-                state = gridState2,
+                state = gridState,
                 columns = GridCells.Fixed(5),
                 contentPadding = PaddingValues(8.dp), // 테두리
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
