@@ -62,7 +62,7 @@ fun HomeContent(
             text = newText
             onSearch(newText.text)
         },
-        placeholder = { Text("Search") },
+        placeholder = { Text("Search (Name or Number)") },
         maxLines = 1,
         trailingIcon = {
             AnimatedVisibility(

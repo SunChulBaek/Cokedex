@@ -154,7 +154,9 @@ class PokemonRepository @Inject constructor(
                     name.value.lowercase()
                 }.any {
                     it.contains(search.lowercase())
-                }
+                }.or(
+                    species.id.toString().contains(search)
+                )
             }
             Timber.d("[sunchulbaek] search size = ${searchList.size}")
             emit(searchList.map { item ->
