@@ -105,5 +105,5 @@ fun MyTopAppBar() = TopAppBar(
         titleContentColor = Color.Black,
         actionIconContentColor = Color.Black
     ),
-    title = { Text(stringResource(R.string.app_name)+"${if (BuildConfig.VERSION_CODE > 1) "(${BuildConfig.VERSION_CODE}))" else ""}")}
+    title = { Text(stringResource(R.string.app_name)+"${if (BuildConfig.VERSION_CODE > 1) " (${BuildConfig.VERSION_CODE})" else ""}")}
 )
