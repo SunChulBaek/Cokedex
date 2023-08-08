@@ -1,7 +1,7 @@
 package kr.pe.ssun.cokedex.network.di
 
 import kr.pe.ssun.cokedex.network.PokemonNetworkDataSource
-import kr.pe.ssun.cokedex.network.retrofit.RetrofitSsunNetwork
+import kr.pe.ssun.cokedex.network.ktor.KtorSsunNetwork
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -11,5 +11,5 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 interface SsunNetworkModule {
     @Binds
-    fun RetrofitSsunNetwork.binds(): PokemonNetworkDataSource
+    fun KtorSsunNetwork.binds(): PokemonNetworkDataSource
 }
