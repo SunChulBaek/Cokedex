@@ -41,6 +41,8 @@ class HomeViewModel @Inject constructor(
         ) // 다양한 진화 형태..
     }
 
+    val showInfo = MutableStateFlow(false);
+    
     val namesIds = MutableStateFlow(listOf(DUMMY_ID))
 
     val namesFlow = namesIds.flatMapConcat { it.asFlow() }
@@ -64,4 +66,8 @@ class HomeViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = listOf()
     )
+
+    fun toggleShowInfo() {
+        showInfo.value = !showInfo.value
+    }
 }

@@ -6,7 +6,7 @@ import androidx.compose.animation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,6 +22,7 @@ import kotlinx.coroutines.launch
 import kr.pe.ssun.cokedex.BuildConfig
 import kr.pe.ssun.cokedex.navigation.pokemonDetailNavigationRoute
 import kr.pe.ssun.cokedex.ui.common.DefaultScreen
+import kr.pe.ssun.cokedex.ui.common.SimpleDialog
 
 // 백 키 관련
 const val BACK_PRESS_DELAY_TIME: Long = 2000
@@ -43,6 +44,8 @@ fun HomeScreen(
     val firstLoad = pokemonList.loadState.refresh // 최초 로딩 상태
     val searchResult = viewModel.searchResult.collectAsStateWithLifecycle()
 
+    val showInfo = viewModel.showInfo.collectAsStateWithLifecycle()
+
     val scope = rememberCoroutineScope()
 
     // 백키 2회에 종료 처리
@@ -51,7 +54,7 @@ fun HomeScreen(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = { MyTopAppBar(showVersionInfo = {
-            showToast("v${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})")
+            viewModel.toggleShowInfo()
         })},
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { innerPadding ->
@@ -71,6 +74,18 @@ fun HomeScreen(
                 onClick = { pokemon ->
                     navigate(pokemonDetailNavigationRoute, pokemon)
                 },
+            )
+        }
+        AnimatedVisibility(
+            visible = showInfo.value,
+            enter = scaleIn() + fadeIn(),
+            exit = scaleOut() + fadeOut()
+        ) {
+            SimpleDialog(
+                title = "Pokedex with Compose",
+                message = "v${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})\nhttps://github.com/SunChulBaek/Cokedex",
+                onDismissRequest = { viewModel.toggleShowInfo() },
+                onOkClick = { viewModel.toggleShowInfo() },
             )
         }
     }
@@ -113,7 +128,7 @@ fun MyTopAppBar(
     actions = {
         IconButton(onClick = showVersionInfo) {
             Icon(
-                imageVector = Icons.Filled.MoreVert,
+                imageVector = Icons.Filled.Info,
                 contentDescription = "More",
                 tint = Color.Black
             )
