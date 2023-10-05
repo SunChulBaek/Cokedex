@@ -6,8 +6,6 @@ import androidx.compose.animation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -16,10 +14,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import kr.pe.ssun.cokedex.R
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import kotlinx.coroutines.launch
 import kr.pe.ssun.cokedex.BuildConfig
 import kr.pe.ssun.cokedex.navigation.pokemonDetailNavigationRoute
@@ -39,7 +37,7 @@ fun HomeScreen(
     showToast: (String) -> Toast,
     onBack: () -> Unit
 ) {
-    val navController = rememberAnimatedNavController()
+    val navController = rememberNavController()
     val snackbarHostState = remember { SnackbarHostState() }
     val pokemonList = viewModel.pagingFlow.collectAsLazyPagingItems()
     val firstLoad = pokemonList.loadState.refresh // 최초 로딩 상태
@@ -53,7 +51,7 @@ fun HomeScreen(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = { MyTopAppBar(showVersionInfo = {
-            showToast("${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})")
+            showToast("v${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})")
         })},
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { innerPadding ->

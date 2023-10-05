@@ -1,7 +1,6 @@
 package kr.pe.ssun.cokedex.ui.home
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
@@ -35,7 +34,6 @@ import androidx.paging.compose.LazyPagingItems
 import kr.pe.ssun.cokedex.model.Pokemon
 import kr.pe.ssun.cokedex.ui.theme.Green50
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun HomeContent(
     modifier: Modifier = Modifier,
@@ -99,9 +97,9 @@ fun HomeContent(
             ) {
                 items(
                     count = searchResult.size,
-                    key = { index -> searchResult[index]!!.id }
+                    key = { index -> searchResult[index].id }
                 ) { index ->
-                    val item = searchResult[index]!!
+                    val item = searchResult[index]
                     PokemonGridItem(
                         item = item,
                         onClick = { onClick(item) }

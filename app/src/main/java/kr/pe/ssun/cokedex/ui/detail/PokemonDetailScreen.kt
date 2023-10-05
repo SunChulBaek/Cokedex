@@ -6,7 +6,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kr.pe.ssun.cokedex.model.Pokemon
 import kr.pe.ssun.cokedex.navigation.pokemonDetailNavigationRoute
 import kr.pe.ssun.cokedex.ui.common.DefaultScreen
 
