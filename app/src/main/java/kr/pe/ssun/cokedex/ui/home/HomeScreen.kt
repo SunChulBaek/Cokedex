@@ -6,7 +6,9 @@ import androidx.compose.animation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -50,7 +52,9 @@ fun HomeScreen(
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = { MyTopAppBar() },
+        topBar = { MyTopAppBar(showVersionInfo = {
+            showToast("${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})")
+        })},
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { innerPadding ->
         DefaultScreen(
@@ -98,12 +102,23 @@ fun BackCloseHandler(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyTopAppBar() = TopAppBar(
+fun MyTopAppBar(
+    showVersionInfo: () -> Unit,
+) = TopAppBar(
     colors = TopAppBarDefaults.topAppBarColors(
         containerColor = MaterialTheme.colorScheme.primary,
         navigationIconContentColor = Color.Black,
         titleContentColor = Color.Black,
         actionIconContentColor = Color.Black
     ),
-    title = { Text(stringResource(R.string.app_name)+"${if (BuildConfig.VERSION_CODE > 1) " (${BuildConfig.VERSION_CODE})" else ""}")}
+    title = { Text(stringResource(R.string.app_name))},
+    actions = {
+        IconButton(onClick = showVersionInfo) {
+            Icon(
+                imageVector = Icons.Filled.MoreVert,
+                contentDescription = "More",
+                tint = Color.Black
+            )
+        }
+    }
 )
