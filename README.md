@@ -1,4 +1,4 @@
-# Cokedex ![Build Badge](https://github.com/SunChulBaek/Cokedex/actions/workflows/build.yml/badge.svg)
+# Cokedex <a href="https://play.google.com/store/apps/details?id=kr.pe.ssun.cokedex"><img src="./google-play-badge.png" width="150px"></a> ![Build Badge](https://github.com/SunChulBaek/Cokedex/actions/workflows/build.yml/badge.svg)
 * Android Compose 버전 포켓몬 도감 ([Flutter 버전](https://github.com/SunChulBaek/Fokedex))
 * Architecture
   * [Compose](https://developer.android.com/jetpack/compose?hl=ko)
