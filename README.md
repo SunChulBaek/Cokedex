@@ -13,5 +13,5 @@
   * [Timber](https://github.com/JakeWharton/timber)
 * Screenshots
   <p>
-    <img src="./screenshots/Screenshot_0.png" width="240px">  <img src="./screenshots/Screenshot_1.gif" width="240px">
+    <img src="./screenshots/Screenshot_0.gif" width="240px">  <img src="./screenshots/Screenshot_1.gif" width="240px">
   </p>
