@@ -11,5 +11,7 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 interface SsunNetworkModule {
     @Binds
-    fun KtorSsunNetwork.binds(): PokemonNetworkDataSource
+    fun bindKtorSsunNetwork(
+        network: KtorSsunNetwork
+    ): PokemonNetworkDataSource
 }
