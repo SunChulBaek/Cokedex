@@ -3,15 +3,12 @@ package kr.pe.ssun.cokedex.navigation
 import android.widget.Toast
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.composable
 import kr.pe.ssun.cokedex.ui.home.HomeScreen
-import com.google.accompanist.navigation.animation.composable
-import timber.log.Timber
 
 const val homeNavigationRoute = "home"
 
-@OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.homeScreen(
     enterTransition: EnterTransition = EnterTransition.None,
     exitTransition: ExitTransition = ExitTransition.None,

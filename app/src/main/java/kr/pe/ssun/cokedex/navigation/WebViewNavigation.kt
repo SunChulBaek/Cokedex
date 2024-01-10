@@ -4,13 +4,12 @@ import android.util.Base64
 import android.widget.Toast
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.NavType
+import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.google.accompanist.navigation.animation.composable
 import kr.pe.ssun.cokedex.ui.common.MyWebView
 
 const val webViewNavigationRoute = "webView"
@@ -22,7 +21,6 @@ fun NavController.navigateToWebView(url: String, navOptions: NavOptions? = null)
     this.navigate("$webViewNavigationRoute/$encoded")
 }
 
-@OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.webViewScreen(
     enterTransition: EnterTransition = EnterTransition.None,
     exitTransition: ExitTransition = ExitTransition.None,

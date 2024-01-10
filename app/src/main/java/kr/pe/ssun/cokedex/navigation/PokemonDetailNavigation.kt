@@ -5,13 +5,12 @@ import android.util.Base64
 import android.widget.Toast
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
+import androidx.navigation.compose.composable
 import kr.pe.ssun.cokedex.ui.detail.PokemonDetailRoute
-import com.google.accompanist.navigation.animation.composable
 import kr.pe.ssun.cokedex.model.Pokemon
 
 const val pokemonDetailNavigationRoute = "pokemon_detail"
@@ -37,7 +36,6 @@ fun NavController.navigateToPokemonDetail(pokemon: Pokemon, navOptions: NavOptio
     this.navigate("$pokemonDetailNavigationRoute/${pokemon.id}/${pokemon.name.ifBlank { pokemon.fallbackName }}/$encoded/${pokemon.colorStart}/${pokemon.colorEnd}", navOptions)
 }
 
-@OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.pokemonDetailScreen(
     enterTransition: EnterTransition = EnterTransition.None,
     exitTransition: ExitTransition = ExitTransition.None,

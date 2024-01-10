@@ -5,26 +5,24 @@ import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import com.google.accompanist.navigation.animation.AnimatedNavHost
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.rememberNavController
 import kr.pe.ssun.cokedex.model.Pokemon
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun MainNavHost(
     modifier: Modifier = Modifier,
-    navController: NavHostController = rememberAnimatedNavController(),
+    navController: NavHostController = rememberNavController(),
     showToast: (String) -> Toast,
     onBack: () -> Unit,
     startDestination: String = homeNavigationRoute,
 ) {
-    AnimatedNavHost(
+    NavHost(
         modifier = modifier,
         navController = navController,
         startDestination = startDestination
