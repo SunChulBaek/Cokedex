@@ -23,17 +23,17 @@ const val pokemonDetailColorEndArg = "colorEnd"
 
 internal class PokemonDetailArgs(val id: Int, val name: String, val imageUrl: String, val colorStart: Int, val colorEnd: Int) {
     constructor(savedStateHandle: SavedStateHandle) : this(
-        id = Uri.decode(checkNotNull(savedStateHandle[pokemonDetailIdArg])).toInt(),
-        name = Uri.decode(checkNotNull(savedStateHandle[pokemonDetailNameArg])),
-        imageUrl = Uri.decode(checkNotNull(savedStateHandle[pokemonDetailUrlArg])).run { String(Base64.decode(this, 0)) },
-        colorStart = Uri.decode(checkNotNull(savedStateHandle[pokemonDetailColorStartArg])).toInt(),
-        colorEnd = Uri.decode(checkNotNull(savedStateHandle[pokemonDetailColorEndArg])).toInt(),
+        id = checkNotNull(savedStateHandle[pokemonDetailIdArg]).toString().toInt(),
+        name = checkNotNull(savedStateHandle[pokemonDetailNameArg]),
+        imageUrl = Uri.decode(checkNotNull(savedStateHandle[pokemonDetailUrlArg])),
+        colorStart = checkNotNull(savedStateHandle[pokemonDetailColorStartArg]).toString().toInt(),
+        colorEnd = checkNotNull(savedStateHandle[pokemonDetailColorEndArg]).toString().toInt(),
     )
 }
 
 fun NavController.navigateToPokemonDetail(pokemon: Pokemon, navOptions: NavOptions? = null) {
-    val encoded = Base64.encodeToString(pokemon.imageUrl.toByteArray(), Base64.DEFAULT)
-    this.navigate("$pokemonDetailNavigationRoute/${pokemon.id}/${pokemon.name.ifBlank { pokemon.fallbackName }}/$encoded/${pokemon.colorStart}/${pokemon.colorEnd}", navOptions)
+    val encodedImageUrl = Uri.encode(pokemon.imageUrl)
+    this.navigate("$pokemonDetailNavigationRoute/${pokemon.id}/${pokemon.name.ifBlank { pokemon.fallbackName }}/$encodedImageUrl/${pokemon.colorStart}/${pokemon.colorEnd}", navOptions)
 }
 
 fun NavGraphBuilder.pokemonDetailScreen(
