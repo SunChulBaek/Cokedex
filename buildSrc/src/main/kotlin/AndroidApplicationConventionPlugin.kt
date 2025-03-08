@@ -25,7 +25,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                 defaultConfig {
                     applicationId = "kr.pe.ssun.cokedex"
                     targetSdk = 34
-                    versionCode = properties.getProperty("versionCode").toInt()
+                    versionCode = 53
                     versionName = properties.getProperty("versionName")
                 }
 
